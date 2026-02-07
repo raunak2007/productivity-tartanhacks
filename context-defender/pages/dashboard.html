@@ -90,6 +90,17 @@
               href="#"
               class="nav-item"
               onclick="
+                showSection('calendar');
+                return false;
+              "
+            >
+              <i class="fas fa-calendar-week"></i>
+              Calendar
+            </a>
+            <a
+              href="#"
+              class="nav-item"
+              onclick="
                 showSection('analytics');
                 return false;
               "
@@ -701,6 +712,26 @@
                   </div>
                 </div>
               </div>
+
+              <div style="margin-top: 2rem; text-align: center">
+                <button
+                  class="btn"
+                  onclick="importFromOptimizer()"
+                  style="font-size: 1rem; padding: 0.875rem 2rem"
+                >
+                  <i class="fas fa-calendar-plus"></i> Import to Calendar
+                </button>
+                <p
+                  style="
+                    color: var(--color-text-tertiary);
+                    margin-top: 0.5rem;
+                    font-size: 0.875rem;
+                  "
+                >
+                  Import the optimized schedule directly to your calendar with
+                  scheduled time slots
+                </p>
+              </div>
             </div>
           </section>
 
@@ -1102,7 +1133,379 @@
               </p>
             </div>
           </section>
+
+          <!-- Calendar Section -->
+          <section
+            id="calendarSection"
+            class="dashboard-section"
+            style="display: none"
+          >
+            <div class="content-header">
+              <div>
+                <h2><i class="fas fa-calendar-week"></i> Weekly Calendar</h2>
+                <p style="color: #666; margin-top: 0.5rem">
+                  Drag and drop tasks to schedule your week
+                </p>
+              </div>
+              <div style="display: flex; gap: 1rem; align-items: center">
+                <div class="date-navigation">
+                  <button class="btn btn-secondary" onclick="previousWeek()">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                  <span
+                    id="currentWeekDisplay"
+                    style="
+                      min-width: 200px;
+                      text-align: center;
+                      font-weight: 500;
+                    "
+                  >
+                    <!-- Week display goes here -->
+                  </span>
+                  <button class="btn btn-secondary" onclick="nextWeek()">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                  <button class="btn btn-secondary" onclick="goToToday()">
+                    Today
+                  </button>
+                </div>
+                <button class="btn" onclick="openAddEventModal()">
+                  <i class="fas fa-plus"></i> Add Event
+                </button>
+              </div>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 250px 1fr;
+                gap: 1.5rem;
+                height: calc(100vh - 250px);
+              "
+            >
+              <!-- Task List Sidebar -->
+              <div
+                class="calendar-sidebar"
+                style="
+                  background: var(--color-bg-primary);
+                  border: 1px solid var(--color-border);
+                  border-radius: var(--radius-xl);
+                  padding: var(--space-lg);
+                  overflow-y: auto;
+                "
+              >
+                <h3
+                  style="
+                    font-size: 0.875rem;
+                    font-weight: 600;
+                    margin-bottom: var(--space-md);
+                    color: var(--color-text-primary);
+                  "
+                >
+                  <i class="fas fa-tasks"></i> Unscheduled Tasks
+                </h3>
+                <div id="unscheduledTasks" class="unscheduled-tasks">
+                  <!-- Unscheduled tasks will be rendered here -->
+                </div>
+                <button
+                  class="btn btn-secondary"
+                  onclick="importFromOptimizer()"
+                  style="width: 100%; margin-top: var(--space-md)"
+                >
+                  <i class="fas fa-download"></i> Import from Optimizer
+                </button>
+              </div>
+
+              <!-- Calendar Grid -->
+              <div
+                class="calendar-container"
+                style="
+                  background: var(--color-bg-primary);
+                  border: 1px solid var(--color-border);
+                  border-radius: var(--radius-xl);
+                  padding: var(--space-lg);
+                  overflow: auto;
+                "
+              >
+                <div
+                  class="calendar-header"
+                  style="
+                    display: grid;
+                    grid-template-columns: 60px repeat(7, 1fr);
+                    gap: 1px;
+                    margin-bottom: var(--space-sm);
+                  "
+                >
+                  <div
+                    style="
+                      padding: var(--space-sm);
+                      font-size: 0.75rem;
+                      color: var(--color-text-tertiary);
+                    "
+                  ></div>
+                  <div
+                    style="
+                      padding: var(--space-sm);
+                      text-align: center;
+                      font-weight: 600;
+                      font-size: 0.875rem;
+                      color: var(--color-text-primary);
+                    "
+                  >
+                    Sun
+                  </div>
+                  <div
+                    style="
+                      padding: var(--space-sm);
+                      text-align: center;
+                      font-weight: 600;
+                      font-size: 0.875rem;
+                      color: var(--color-text-primary);
+                    "
+                  >
+                    Mon
+                  </div>
+                  <div
+                    style="
+                      padding: var(--space-sm);
+                      text-align: center;
+                      font-weight: 600;
+                      font-size: 0.875rem;
+                      color: var(--color-text-primary);
+                    "
+                  >
+                    Tue
+                  </div>
+                  <div
+                    style="
+                      padding: var(--space-sm);
+                      text-align: center;
+                      font-weight: 600;
+                      font-size: 0.875rem;
+                      color: var(--color-text-primary);
+                    "
+                  >
+                    Wed
+                  </div>
+                  <div
+                    style="
+                      padding: var(--space-sm);
+                      text-align: center;
+                      font-weight: 600;
+                      font-size: 0.875rem;
+                      color: var(--color-text-primary);
+                    "
+                  >
+                    Thu
+                  </div>
+                  <div
+                    style="
+                      padding: var(--space-sm);
+                      text-align: center;
+                      font-weight: 600;
+                      font-size: 0.875rem;
+                      color: var(--color-text-primary);
+                    "
+                  >
+                    Fri
+                  </div>
+                  <div
+                    style="
+                      padding: var(--space-sm);
+                      text-align: center;
+                      font-weight: 600;
+                      font-size: 0.875rem;
+                      color: var(--color-text-primary);
+                    "
+                  >
+                    Sat
+                  </div>
+                </div>
+                <div id="calendarGrid" class="calendar-grid">
+                  <!-- Calendar grid will be generated here -->
+                </div>
+              </div>
+            </div>
+          </section>
         </main>
+      </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div
+      id="addEventModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        class="modal-content"
+        style="
+          background: white;
+          padding: 2rem;
+          border-radius: 12px;
+          max-width: 500px;
+          width: 90%;
+          max-height: 90vh;
+          overflow-y: auto;
+        "
+      >
+        <div
+          class="modal-header"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+          "
+        >
+          <h3 style="font-size: 1.25rem; font-weight: 600">Add Event</h3>
+          <button
+            onclick="closeModal('addEventModal')"
+            style="
+              background: none;
+              border: none;
+              font-size: 1.5rem;
+              cursor: pointer;
+              color: #666;
+            "
+          >
+            &times;
+          </button>
+        </div>
+        <form onsubmit="addEvent(event)">
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label
+              style="display: block; margin-bottom: 0.5rem; font-weight: 500"
+              >Event Title</label
+            >
+            <input
+              type="text"
+              id="eventTitle"
+              required
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid var(--color-border);
+                border-radius: var(--radius-md);
+                font-size: 0.9375rem;
+              "
+            />
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label
+              style="display: block; margin-bottom: 0.5rem; font-weight: 500"
+              >Category</label
+            >
+            <select
+              id="eventCategory"
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid var(--color-border);
+                border-radius: var(--radius-md);
+                font-size: 0.9375rem;
+              "
+            >
+              <option value="Deep Work">Deep Work</option>
+              <option value="Admin">Admin</option>
+              <option value="Calls">Calls</option>
+              <option value="Communication">Communication</option>
+              <option value="Errands">Errands</option>
+              <option value="Break">Break</option>
+            </select>
+          </div>
+          <div
+            class="form-row"
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 1rem;
+              margin-bottom: 1rem;
+            "
+          >
+            <div class="form-group">
+              <label
+                style="display: block; margin-bottom: 0.5rem; font-weight: 500"
+                >Date</label
+              >
+              <input
+                type="date"
+                id="eventDate"
+                required
+                style="
+                  width: 100%;
+                  padding: 0.75rem;
+                  border: 1px solid var(--color-border);
+                  border-radius: var(--radius-md);
+                  font-size: 0.9375rem;
+                "
+              />
+            </div>
+            <div class="form-group">
+              <label
+                style="display: block; margin-bottom: 0.5rem; font-weight: 500"
+                >Start Time</label
+              >
+              <input
+                type="time"
+                id="eventTime"
+                required
+                style="
+                  width: 100%;
+                  padding: 0.75rem;
+                  border: 1px solid var(--color-border);
+                  border-radius: var(--radius-md);
+                  font-size: 0.9375rem;
+                "
+              />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 1.5rem">
+            <label
+              style="display: block; margin-bottom: 0.5rem; font-weight: 500"
+              >Duration (minutes)</label
+            >
+            <input
+              type="number"
+              id="eventDuration"
+              required
+              min="15"
+              step="15"
+              value="30"
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid var(--color-border);
+                border-radius: var(--radius-md);
+                font-size: 0.9375rem;
+              "
+            />
+          </div>
+          <div style="display: flex; gap: 1rem">
+            <button type="submit" class="btn btn-primary" style="flex: 1">
+              Add Event
+            </button>
+            <button
+              type="button"
+              onclick="closeModal('addEventModal')"
+              class="btn btn-secondary"
+              style="flex: 1"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -1743,21 +2146,31 @@
 
       // Section navigation
       window.showSection = function (section) {
-        // Update nav
+        // Hide all sections
+        document.querySelectorAll(".dashboard-section").forEach((s) => {
+          s.style.display = "none";
+        });
+
+        // Show selected section
+        const sectionId = section + "Section";
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+          targetSection.style.display = "block";
+        }
+
+        // Remove active class from all nav items
         document.querySelectorAll(".nav-item").forEach((item) => {
           item.classList.remove("active");
         });
-        if (event && event.target) {
-          event.target.closest(".nav-item").classList.add("active");
-        }
 
-        // Update sections
-        document.querySelectorAll(".dashboard-section").forEach((sec) => {
-          sec.style.display = "none";
-        });
-        const targetSection = document.getElementById(section + "Section");
-        if (targetSection) {
-          targetSection.style.display = "block";
+        // Add active class to clicked nav item
+        const clickedNav = Array.from(
+          document.querySelectorAll(".nav-item"),
+        ).find((item) =>
+          item.textContent.toLowerCase().includes(section.toLowerCase()),
+        );
+        if (clickedNav) {
+          clickedNav.classList.add("active");
         }
 
         // Refresh section content
@@ -1768,6 +2181,8 @@
           renderManagedTasks();
         } else if (section === "analytics") {
           updateCharts();
+        } else if (section === "calendar") {
+          initializeCalendar();
         }
       };
 
@@ -1887,6 +2302,9 @@
           const result = await fetchSchedule(input);
           console.log("AI Result:", result);
 
+          // Store the result for calendar import
+          lastOptimizedSchedule = result;
+
           // Hide loading
           document.getElementById("loadingState").style.display = "none";
           document.getElementById("resultsContainer").style.display = "block";
@@ -1932,6 +2350,397 @@
       window.clearInput = function () {
         document.getElementById("taskInput").value = "";
         document.getElementById("resultsContainer").style.display = "none";
+      };
+
+      // ===== CALENDAR FUNCTIONALITY =====
+
+      // Calendar data
+      let calendarEvents = [];
+      let unscheduledTasks = [];
+      let currentWeekStart = new Date();
+      let draggedItem = null;
+      let lastOptimizedSchedule = null; // Store the last optimization result
+
+      // Initialize calendar on section show
+      function initializeCalendar() {
+        // Set to start of week (Sunday)
+        currentWeekStart = getStartOfWeek(new Date());
+        loadCalendarData();
+        generateCalendarGrid();
+        updateWeekDisplay();
+        renderUnscheduledTasks();
+      }
+
+      function getStartOfWeek(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day;
+        return new Date(d.setDate(diff));
+      }
+
+      function loadCalendarData() {
+        const saved = localStorage.getItem("calendar_events");
+        if (saved) {
+          calendarEvents = JSON.parse(saved);
+        }
+
+        const savedUnscheduled = localStorage.getItem("unscheduled_tasks");
+        if (savedUnscheduled) {
+          unscheduledTasks = JSON.parse(savedUnscheduled);
+        }
+      }
+
+      function saveCalendarData() {
+        localStorage.setItem("calendar_events", JSON.stringify(calendarEvents));
+        localStorage.setItem(
+          "unscheduled_tasks",
+          JSON.stringify(unscheduledTasks),
+        );
+      }
+
+      function updateWeekDisplay() {
+        const endOfWeek = new Date(currentWeekStart);
+        endOfWeek.setDate(currentWeekStart.getDate() + 6);
+
+        const options = { month: "short", day: "numeric", year: "numeric" };
+        const display =
+          currentWeekStart.toLocaleDateString("en-US", options) +
+          " - " +
+          endOfWeek.toLocaleDateString("en-US", options);
+
+        document.getElementById("currentWeekDisplay").textContent = display;
+      }
+
+      window.previousWeek = function () {
+        currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+        generateCalendarGrid();
+        updateWeekDisplay();
+      };
+
+      window.nextWeek = function () {
+        currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+        generateCalendarGrid();
+        updateWeekDisplay();
+      };
+
+      window.goToToday = function () {
+        currentWeekStart = getStartOfWeek(new Date());
+        generateCalendarGrid();
+        updateWeekDisplay();
+      };
+
+      function generateCalendarGrid() {
+        const grid = document.getElementById("calendarGrid");
+        grid.innerHTML = "";
+
+        // Generate time slots from 8 AM to 8 PM
+        for (let hour = 8; hour <= 20; hour++) {
+          // Time label
+          const timeLabel = document.createElement("div");
+          timeLabel.className = "time-label";
+          timeLabel.textContent = formatHour(hour);
+          grid.appendChild(timeLabel);
+
+          // Day cells
+          for (let day = 0; day < 7; day++) {
+            const cell = document.createElement("div");
+            cell.className = "calendar-cell";
+            cell.dataset.hour = hour;
+            cell.dataset.day = day;
+
+            // Add drop handlers
+            cell.addEventListener("dragover", handleDragOver);
+            cell.addEventListener("drop", handleDrop);
+            cell.addEventListener("dragleave", handleDragLeave);
+            cell.addEventListener("click", () => handleCellClick(hour, day));
+
+            // Add events for this cell
+            const cellDate = new Date(currentWeekStart);
+            cellDate.setDate(currentWeekStart.getDate() + day);
+            cellDate.setHours(hour, 0, 0, 0);
+
+            const events = calendarEvents.filter((event) => {
+              const eventDate = new Date(event.startTime);
+              return (
+                eventDate.getHours() === hour &&
+                eventDate.toDateString() === cellDate.toDateString()
+              );
+            });
+
+            events.forEach((event) => {
+              const eventEl = createEventElement(event);
+              cell.appendChild(eventEl);
+            });
+
+            grid.appendChild(cell);
+          }
+        }
+      }
+
+      function formatHour(hour) {
+        const ampm = hour >= 12 ? "PM" : "AM";
+        const displayHour = hour > 12 ? hour - 12 : hour;
+        return `${displayHour}:00 ${ampm}`;
+      }
+
+      function createEventElement(event) {
+        const eventEl = document.createElement("div");
+        eventEl.className = "calendar-event";
+        eventEl.draggable = true;
+        eventEl.dataset.eventId = event.id;
+        eventEl.dataset.category = event.category;
+
+        eventEl.innerHTML = `
+          <div class="calendar-event-title">${event.title}</div>
+          <div class="calendar-event-time">${event.duration} min</div>
+          <span class="calendar-event-category">${event.category}</span>
+        `;
+
+        eventEl.addEventListener("dragstart", (e) => {
+          draggedItem = { type: "event", data: event };
+          eventEl.classList.add("dragging");
+        });
+
+        eventEl.addEventListener("dragend", (e) => {
+          eventEl.classList.remove("dragging");
+        });
+
+        eventEl.addEventListener("dblclick", () => deleteEvent(event.id));
+
+        return eventEl;
+      }
+
+      function renderUnscheduledTasks() {
+        const container = document.getElementById("unscheduledTasks");
+
+        if (unscheduledTasks.length === 0) {
+          container.innerHTML =
+            '<p style="color: var(--color-text-tertiary); font-size: 0.875rem; text-align: center; padding: var(--space-lg);">No unscheduled tasks</p>';
+          return;
+        }
+
+        container.innerHTML = "";
+        unscheduledTasks.forEach((task) => {
+          const taskEl = document.createElement("div");
+          taskEl.className = "unscheduled-task";
+          taskEl.draggable = true;
+          taskEl.dataset.category = task.category;
+
+          taskEl.innerHTML = `
+            <div class="unscheduled-task-title">${task.title}</div>
+            <div class="unscheduled-task-duration">${task.duration} min</div>
+            <span class="unscheduled-task-category">${task.category}</span>
+          `;
+
+          taskEl.addEventListener("dragstart", (e) => {
+            draggedItem = { type: "task", data: task };
+            taskEl.classList.add("dragging");
+          });
+
+          taskEl.addEventListener("dragend", (e) => {
+            taskEl.classList.remove("dragging");
+          });
+
+          container.appendChild(taskEl);
+        });
+      }
+
+      function handleDragOver(e) {
+        e.preventDefault();
+        e.currentTarget.classList.add("drag-over");
+      }
+
+      function handleDragLeave(e) {
+        e.currentTarget.classList.remove("drag-over");
+      }
+
+      function handleDrop(e) {
+        e.preventDefault();
+        const cell = e.currentTarget;
+        cell.classList.remove("drag-over");
+
+        if (!draggedItem) return;
+
+        const hour = parseInt(cell.dataset.hour);
+        const day = parseInt(cell.dataset.day);
+
+        const eventDate = new Date(currentWeekStart);
+        eventDate.setDate(currentWeekStart.getDate() + day);
+        eventDate.setHours(hour, 0, 0, 0);
+
+        if (draggedItem.type === "task") {
+          // Move from unscheduled to calendar
+          const task = draggedItem.data;
+          const newEvent = {
+            id: Date.now(),
+            title: task.title,
+            category: task.category,
+            duration: task.duration,
+            startTime: eventDate.toISOString(),
+          };
+
+          calendarEvents.push(newEvent);
+          unscheduledTasks = unscheduledTasks.filter(
+            (t) => t.title !== task.title,
+          );
+
+          saveCalendarData();
+          generateCalendarGrid();
+          renderUnscheduledTasks();
+        } else if (draggedItem.type === "event") {
+          // Move event to new time slot
+          const event = draggedItem.data;
+          const eventIndex = calendarEvents.findIndex((e) => e.id === event.id);
+          if (eventIndex !== -1) {
+            calendarEvents[eventIndex].startTime = eventDate.toISOString();
+            saveCalendarData();
+            generateCalendarGrid();
+          }
+        }
+
+        draggedItem = null;
+      }
+
+      function handleCellClick(hour, day) {
+        // Quick add event at this time
+        const eventDate = new Date(currentWeekStart);
+        eventDate.setDate(currentWeekStart.getDate() + day);
+        eventDate.setHours(hour, 0, 0, 0);
+
+        const dateStr = eventDate.toISOString().split("T")[0];
+        const timeStr = `${hour.toString().padStart(2, "0")}:00`;
+
+        document.getElementById("eventDate").value = dateStr;
+        document.getElementById("eventTime").value = timeStr;
+        openAddEventModal();
+      }
+
+      window.openAddEventModal = function () {
+        // Set default date/time if not set
+        if (!document.getElementById("eventDate").value) {
+          const now = new Date();
+          document.getElementById("eventDate").value = now
+            .toISOString()
+            .split("T")[0];
+          document.getElementById("eventTime").value =
+            `${now.getHours().toString().padStart(2, "0")}:00`;
+        }
+        openModal("addEventModal");
+      };
+
+      window.addEvent = function (e) {
+        e.preventDefault();
+
+        const title = document.getElementById("eventTitle").value;
+        const category = document.getElementById("eventCategory").value;
+        const date = document.getElementById("eventDate").value;
+        const time = document.getElementById("eventTime").value;
+        const duration = parseInt(
+          document.getElementById("eventDuration").value,
+        );
+
+        const startTime = new Date(`${date}T${time}`);
+
+        const newEvent = {
+          id: Date.now(),
+          title,
+          category,
+          duration,
+          startTime: startTime.toISOString(),
+        };
+
+        calendarEvents.push(newEvent);
+        saveCalendarData();
+        generateCalendarGrid();
+
+        // Reset form
+        document.getElementById("eventTitle").value = "";
+        document.getElementById("eventDuration").value = "30";
+
+        closeModal("addEventModal");
+      };
+
+      function deleteEvent(eventId) {
+        if (confirm("Delete this event?")) {
+          calendarEvents = calendarEvents.filter((e) => e.id !== eventId);
+          saveCalendarData();
+          generateCalendarGrid();
+        }
+      }
+
+      window.importFromOptimizer = function () {
+        if (!lastOptimizedSchedule || !lastOptimizedSchedule.flow) {
+          alert(
+            "No optimized schedule found. Please run the Schedule Optimizer first.",
+          );
+          return;
+        }
+
+        // Prompt for start time
+        const startTimeStr = prompt(
+          "Enter start time for the schedule (HH:MM in 24-hour format, e.g., 09:00):",
+          "09:00",
+        );
+        if (!startTimeStr) return;
+
+        // Parse start time
+        const [hours, minutes] = startTimeStr.split(":").map(Number);
+        if (
+          isNaN(hours) ||
+          isNaN(minutes) ||
+          hours < 0 ||
+          hours > 23 ||
+          minutes < 0 ||
+          minutes > 59
+        ) {
+          alert("Invalid time format. Please use HH:MM format.");
+          return;
+        }
+
+        // Prompt for start date
+        const today = new Date();
+        const dateStr = prompt(
+          "Enter start date (YYYY-MM-DD):",
+          today.toISOString().split("T")[0],
+        );
+        if (!dateStr) return;
+
+        const startDate = new Date(dateStr);
+        if (isNaN(startDate.getTime())) {
+          alert("Invalid date format. Please use YYYY-MM-DD format.");
+          return;
+        }
+
+        // Set start time
+        startDate.setHours(hours, minutes, 0, 0);
+        let currentTime = new Date(startDate);
+
+        // Import tasks from the flow schedule
+        let importCount = 0;
+        lastOptimizedSchedule.flow.forEach((task) => {
+          const newEvent = {
+            id: Date.now() + importCount,
+            title: task.name,
+            category: task.category || "Other",
+            duration: task.duration,
+            startTime: currentTime.toISOString(),
+          };
+
+          calendarEvents.push(newEvent);
+
+          // Move to next time slot
+          currentTime = new Date(currentTime.getTime() + task.duration * 60000);
+          importCount++;
+        });
+
+        saveCalendarData();
+
+        // Switch to calendar view and refresh
+        showSection("calendar");
+
+        alert(
+          `Successfully imported ${importCount} tasks to your calendar starting at ${startTimeStr} on ${dateStr}!`,
+        );
       };
     </script>
   </body>

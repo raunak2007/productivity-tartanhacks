@@ -644,7 +644,8 @@ textarea:focus {
 }
 
 @keyframes pulseWarning {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
   }
   50% {
@@ -660,7 +661,7 @@ textarea:focus {
   font-weight: 600;
   color: #92400e;
   font-size: 0.875rem;
-  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-family: "SF Mono", "Monaco", "Consolas", monospace;
   letter-spacing: -0.006em;
 }
 
@@ -1008,4 +1009,258 @@ textarea:focus {
   .schedule-column {
     padding: var(--space-lg);
   }
+}
+/* Calendar Styles */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: 60px repeat(7, 1fr);
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.calendar-cell {
+  background: var(--color-bg-primary);
+  min-height: 80px;
+  padding: var(--space-xs);
+  position: relative;
+  transition: all var(--transition-base);
+  border: 1px solid transparent;
+}
+
+.calendar-cell:hover {
+  background: var(--color-bg-secondary);
+  cursor: pointer;
+}
+
+.calendar-cell.drag-over {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  border-style: dashed;
+}
+
+.time-label {
+  background: var(--color-bg-secondary);
+  padding: var(--space-sm);
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  font-weight: 600;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-variant-numeric: tabular-nums;
+}
+
+.calendar-event {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  margin-bottom: var(--space-xs);
+  cursor: move;
+  transition: all var(--transition-base);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.calendar-event:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.calendar-event.dragging {
+  opacity: 0.5;
+  transform: rotate(2deg);
+}
+
+.calendar-event-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+  line-height: 1.3;
+}
+
+.calendar-event-time {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.calendar-event-category {
+  display: inline-block;
+  font-size: 0.6875rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  margin-top: var(--space-xs);
+  font-weight: 600;
+}
+
+/* Event category colors */
+.calendar-event[data-category="Deep Work"] {
+  border-left-color: #dc2626;
+}
+
+.calendar-event[data-category="Deep Work"] .calendar-event-category {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.calendar-event[data-category="Admin"] {
+  border-left-color: #ca8a04;
+}
+
+.calendar-event[data-category="Admin"] .calendar-event-category {
+  background: #fef9c3;
+  color: #ca8a04;
+}
+
+.calendar-event[data-category="Calls"] {
+  border-left-color: #16a34a;
+}
+
+.calendar-event[data-category="Calls"] .calendar-event-category {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.calendar-event[data-category="Communication"] {
+  border-left-color: #2563eb;
+}
+
+.calendar-event[data-category="Communication"] .calendar-event-category {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.calendar-event[data-category="Errands"] {
+  border-left-color: #a855f7;
+}
+
+.calendar-event[data-category="Errands"] .calendar-event-category {
+  background: #fdf4ff;
+  color: #a855f7;
+}
+
+.calendar-event[data-category="Break"] {
+  border-left-color: #64748b;
+}
+
+.calendar-event[data-category="Break"] .calendar-event-category {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+}
+
+/* Unscheduled Tasks */
+.unscheduled-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.unscheduled-task {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-text-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  cursor: move;
+  transition: all var(--transition-base);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.unscheduled-task:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transform: translateX(2px);
+}
+
+.unscheduled-task.dragging {
+  opacity: 0.5;
+}
+
+.unscheduled-task-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.unscheduled-task-duration {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.unscheduled-task-category {
+  display: inline-block;
+  font-size: 0.6875rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  margin-top: var(--space-xs);
+  font-weight: 600;
+}
+
+/* Category colors for unscheduled tasks */
+.unscheduled-task[data-category="Deep Work"] {
+  border-left-color: #dc2626;
+}
+
+.unscheduled-task[data-category="Deep Work"] .unscheduled-task-category {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.unscheduled-task[data-category="Admin"] {
+  border-left-color: #ca8a04;
+}
+
+.unscheduled-task[data-category="Admin"] .unscheduled-task-category {
+  background: #fef9c3;
+  color: #ca8a04;
+}
+
+.unscheduled-task[data-category="Calls"] {
+  border-left-color: #16a34a;
+}
+
+.unscheduled-task[data-category="Calls"] .unscheduled-task-category {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.unscheduled-task[data-category="Communication"] {
+  border-left-color: #2563eb;
+}
+
+.unscheduled-task[data-category="Communication"] .unscheduled-task-category {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.unscheduled-task[data-category="Errands"] {
+  border-left-color: #a855f7;
+}
+
+.unscheduled-task[data-category="Errands"] .unscheduled-task-category {
+  background: #fdf4ff;
+  color: #a855f7;
+}
+
+.unscheduled-task[data-category="Break"] {
+  border-left-color: #64748b;
+}
+
+.unscheduled-task[data-category="Break"] .unscheduled-task-category {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+}
+
+/* Date navigation */
+.date-navigation {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
