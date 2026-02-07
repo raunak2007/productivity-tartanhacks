@@ -1,6 +1,6 @@
 /**
  * UI Rendering for schedule visualization
- * Displays chaos vs optimized schedules with context switching penalties
+ * Displays chaos vs optimized schedules with AI-calculated switching penalties
  */
 
 // Category color mapping
@@ -15,22 +15,55 @@ const CATEGORY_COLORS = {
   Break: "#6b7280", // Gray
 };
 
-const SWITCHING_COST_MINUTES = 23;
-
 /**
- * Creates a task card element
- * @param {Object} task - Task object with task, category, duration, rationale
- * @param {boolean} includeRationale - Whether to add rationale as tooltip
+ * Creates a task card element for chaos schedule
+ * @param {Object} task - Task object with task, category, duration, switch_cost, switch_reason
  * @returns {HTMLElement} Task card element
  */
-function createTaskCard(task, includeRationale = false) {
+function createChaosTaskCard(task) {
   const card = document.createElement("div");
   card.className = "task-card";
 
   const color = CATEGORY_COLORS[task.category] || "#6b7280";
   card.style.borderLeftColor = color;
 
-  if (includeRationale && task.rationale) {
+  // Add switch reason as tooltip if it exists
+  if (task.switch_reason) {
+    card.setAttribute("data-reason", task.switch_reason);
+    card.classList.add("has-tooltip");
+  }
+
+  const switchCostDisplay =
+    task.switch_cost > 0
+      ? `<span style="color: #ef4444; font-size: 0.85rem; margin-left: 0.5rem;">+${task.switch_cost}m</span>`
+      : "";
+
+  card.innerHTML = `
+    <div class="task-header">
+      <span class="task-name">${task.task}</span>
+      <span class="task-duration">${task.duration}m${switchCostDisplay}</span>
+    </div>
+    <div class="task-category" style="color: ${color}">
+      ${task.category}
+    </div>
+  `;
+
+  return card;
+}
+
+/**
+ * Creates a task card element for flow schedule
+ * @param {Object} task - Task object with task, category, duration, rationale
+ * @returns {HTMLElement} Task card element
+ */
+function createFlowTaskCard(task) {
+  const card = document.createElement("div");
+  card.className = "task-card";
+
+  const color = CATEGORY_COLORS[task.category] || "#6b7280";
+  card.style.borderLeftColor = color;
+
+  if (task.rationale) {
     card.setAttribute("data-reason", task.rationale);
     card.classList.add("has-tooltip");
   }
@@ -50,25 +83,33 @@ function createTaskCard(task, includeRationale = false) {
 
 /**
  * Creates a penalty card for context switching
+ * @param {number} cost - Switching cost in minutes
+ * @param {string} reason - Reason for the penalty
  * @returns {HTMLElement} Penalty card element
  */
-function createPenaltyCard() {
+function createPenaltyCard(cost, reason) {
   const card = document.createElement("div");
   card.className = "penalty-card";
+
+  if (reason) {
+    card.setAttribute("data-reason", reason);
+    card.classList.add("has-tooltip");
+  }
+
   card.innerHTML = `
     <div class="penalty-content">
       <span class="penalty-icon">⚠️</span>
       <span class="penalty-text">Switching Cost</span>
-      <span class="penalty-time">+${SWITCHING_COST_MINUTES}m</span>
+      <span class="penalty-time">+${cost}m</span>
     </div>
   `;
   return card;
 }
 
 /**
- * Renders both chaos and optimized schedules
- * @param {Array} chaosData - Original task order
- * @param {Array} flowData - Optimized task order
+ * Renders both chaos and flow schedules
+ * @param {Array} chaosData - Original task order with switch_cost and switch_reason
+ * @param {Array} flowData - Optimized task order with rationale
  */
 export function renderSchedules(chaosData, flowData) {
   // Get containers
@@ -84,34 +125,33 @@ export function renderSchedules(chaosData, flowData) {
   chaosList.innerHTML = "";
   flowList.innerHTML = "";
 
-  // === CHAOS SCHEDULE (with penalties) ===
-  let previousCategory = null;
-  let switchCount = 0;
+  // === CHAOS SCHEDULE (with AI-calculated penalties) ===
   let chaosTotalDuration = 0;
+  let totalSwitchCost = 0;
+  let switchCount = 0;
 
-  chaosData.forEach((task) => {
-    // Check if category changed (context switch)
-    if (previousCategory !== null && previousCategory !== task.category) {
-      chaosList.appendChild(createPenaltyCard());
+  chaosData.forEach((task, index) => {
+    // Add penalty card if there's a switch cost
+    if (task.switch_cost > 0) {
+      chaosList.appendChild(
+        createPenaltyCard(task.switch_cost, task.switch_reason),
+      );
+      totalSwitchCost += task.switch_cost;
       switchCount++;
     }
 
     // Add task card
-    chaosList.appendChild(createTaskCard(task, false));
+    chaosList.appendChild(createChaosTaskCard(task));
     chaosTotalDuration += task.duration;
-    previousCategory = task.category;
   });
 
-  // Calculate total chaos time (tasks + penalties)
-  const chaosTotalTime =
-    chaosTotalDuration + switchCount * SWITCHING_COST_MINUTES;
+  const chaosTotalTime = chaosTotalDuration + totalSwitchCost;
 
-  // === FLOW SCHEDULE (optimized, no penalties) ===
+  // === FLOW SCHEDULE (optimized, minimal switching) ===
   let flowTotalDuration = 0;
 
   flowData.forEach((task) => {
-    // Add task card with rationale tooltip
-    flowList.appendChild(createTaskCard(task, true));
+    flowList.appendChild(createFlowTaskCard(task));
     flowTotalDuration += task.duration;
   });
 
@@ -121,10 +161,12 @@ export function renderSchedules(chaosData, flowData) {
 
   if (chaosTimeElement) {
     chaosTimeElement.textContent = `${chaosTotalTime} mins`;
-    chaosTimeElement.setAttribute(
-      "data-penalty",
-      `(+${switchCount * SWITCHING_COST_MINUTES}m penalty)`,
-    );
+    if (totalSwitchCost > 0) {
+      chaosTimeElement.setAttribute(
+        "data-penalty",
+        `(+${totalSwitchCost}m penalty)`,
+      );
+    }
   }
 
   if (flowTimeElement) {
@@ -144,8 +186,8 @@ export function renderSchedules(chaosData, flowData) {
     timeSavedElement.style.color = saved > 0 ? "#22c55e" : "#6b7280";
   }
 
-  console.log(`📊 Render Stats:
-    Chaos: ${chaosTotalTime} mins (${chaosTotalDuration} work + ${switchCount * SWITCHING_COST_MINUTES} penalties)
+  console.log(`[RENDER STATS]
+    Chaos: ${chaosTotalTime} mins (${chaosTotalDuration} work + ${totalSwitchCost} penalties)
     Flow: ${flowTotalDuration} mins
     Switches: ${switchCount}
     Time Saved: ${chaosTotalTime - flowTotalDuration} mins

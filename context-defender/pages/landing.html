@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Context Defender - Protect Your Focus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/styles/common.css" />
+    <style>
+      #app {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      main {
+        flex: 1;
+      }
+
+      /* Hero Section */
+      #hero {
+        background: linear-gradient(
+          135deg,
+          var(--color-primary) 0%,
+          #667eea 100%
+        );
+        color: white;
+        padding: var(--space-3xl) 0 5rem;
+        text-align: center;
+      }
+
+      #hero h2 {
+        font-size: 2.75rem;
+        margin-bottom: var(--space-xl);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      #hero p {
+        font-size: 1.25rem;
+        margin-bottom: var(--space-2xl);
+        opacity: 0.95;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+        font-weight: 400;
+      }
+
+      #hero .btn {
+        font-size: 1rem;
+        padding: 0.875rem 2.5rem;
+        box-shadow: var(--shadow-lg);
+        font-weight: 600;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: var(--shadow-lg);
+        }
+        50% {
+          box-shadow: var(--shadow-xl);
+          transform: translateY(-1px);
+        }
+      }
+
+      #hero .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-xl);
+        animation: none;
+      }
+
+      /* Features Section */
+      #features {
+        padding: var(--space-3xl) 0;
+        background: var(--color-bg-primary);
+      }
+
+      #features h2 {
+        text-align: center;
+        font-size: 2.25rem;
+        margin-bottom: var(--space-2xl);
+        color: var(--color-text-primary);
+        font-weight: 600;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--space-2xl);
+        margin-top: var(--space-xl);
+      }
+
+      .feature-card {
+        text-align: center;
+        padding: var(--space-2xl);
+        background: var(--color-bg-secondary);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--color-border);
+        transition: all var(--transition-base);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--color-border-hover);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: var(--space-lg);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        background: var(--color-primary-light);
+        border-radius: 50%;
+        color: var(--color-primary);
+        transition: all var(--transition-base);
+      }
+
+      .feature-card:hover .feature-icon {
+        transform: scale(1.1) rotate(5deg);
+        background: var(--color-primary);
+        color: white;
+        box-shadow: var(--shadow-md);
+      }
+
+      .feature-card h3 {
+        font-size: 1.375rem;
+        margin-bottom: var(--space-md);
+        color: var(--color-text-primary);
+        font-weight: 600;
+      }
+
+      .feature-card p {
+        font-size: 0.9375rem;
+        line-height: 1.7;
+        color: var(--color-text-secondary);
+      }
+
+      /* About Section */
+      #about {
+        padding: var(--space-3xl) 0;
+        background: var(--color-bg-tertiary);
+      }
+
+      #about h2 {
+        text-align: center;
+        font-size: 2.25rem;
+        margin-bottom: var(--space-xl);
+        color: var(--color-text-primary);
+        font-weight: 600;
+      }
+
+      #about p {
+        text-align: center;
+        font-size: 1.0625rem;
+        max-width: 800px;
+        margin: 0 auto var(--space-xl);
+        line-height: 1.8;
+        color: var(--color-text-secondary);
+      }
+
+      /* CTA Section */
+      #cta {
+        background: linear-gradient(
+          135deg,
+          var(--color-primary) 0%,
+          #667eea 100%
+        );
+        color: white;
+        padding: var(--space-3xl) 0;
+        text-align: center;
+      }
+
+      #cta h2 {
+        font-size: 2.25rem;
+        margin-bottom: var(--space-lg);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      #cta p {
+        font-size: 1.125rem;
+        margin-bottom: var(--space-xl);
+        opacity: 0.95;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 768px) {
+        #hero h2 {
+          font-size: 2rem;
+        }
+
+        #hero p {
+          font-size: 1.125rem;
+        }
+
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+
+        #features h2,
+        #about h2,
+        #cta h2 {
+          font-size: 1.875rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="container">
+          <h1 onclick="window.location.href = '/pages/landing.html'">
+            <i class="fas fa-shield-alt"></i> Context Defender
+          </h1>
+          <nav>
+            <a href="/pages/landing.html" class="active">Home</a>
+            <a href="/pages/dashboard.html">Dashboard</a>
+            <a
+              href="#about"
+              onclick="
+                scrollToSection('about');
+                return false;
+              "
+              >About</a
+            >
+            <a
+              href="#features"
+              onclick="
+                scrollToSection('features');
+                return false;
+              "
+              >Features</a
+            >
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section id="hero">
+          <div class="container">
+            <h2>Defend Your Focus</h2>
+            <p>
+              Stop losing hours to context switching. Let AI optimize your
+              schedule for deep work and maximum productivity.
+            </p>
+            <a href="/pages/dashboard.html" class="btn btn-secondary"
+              >Get Started</a
+            >
+          </div>
+        </section>
+
+        <section id="features">
+          <div class="container">
+            <h2>Why Context Defender?</h2>
+            <div class="features-grid">
+              <div class="feature-card card">
+                <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                <h3>AI-Powered Scheduling</h3>
+                <p>
+                  Our cognitive science consultant analyzes your tasks and
+                  creates optimized schedules that minimize context switching
+                  costs.
+                </p>
+              </div>
+              <div class="feature-card card">
+                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                <h3>Context Switch Detection</h3>
+                <p>
+                  Automatically identifies and quantifies the productivity
+                  penalties of task switching, saving you hours every week.
+                </p>
+              </div>
+              <div class="feature-card card">
+                <div class="feature-icon">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Visual Analytics</h3>
+                <p>
+                  See the real cost of chaos vs. optimized flow. Track your
+                  productivity gains with beautiful, insightful visualizations.
+                </p>
+              </div>
+              <div class="feature-card card">
+                <div class="feature-icon"><i class="fas fa-bullseye"></i></div>
+                <h3>Smart Task Batching</h3>
+                <p>
+                  Groups similar tasks together to maintain cognitive flow and
+                  preserve your mental energy throughout the day.
+                </p>
+              </div>
+              <div class="feature-card card">
+                <div class="feature-icon"><i class="fas fa-lightbulb"></i></div>
+                <h3>Cognitive Science Based</h3>
+                <p>
+                  Built on research-backed principles of attention, focus, and
+                  mental state transitions for maximum effectiveness.
+                </p>
+              </div>
+              <div class="feature-card card">
+                <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+                <h3>Instant Optimization</h3>
+                <p>
+                  Just paste your tasks and get an optimized schedule in
+                  seconds. No configuration, no complexity.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="about">
+          <div class="container">
+            <h2>About Context Defender</h2>
+            <p>
+              Context switching is one of the biggest productivity killers in
+              modern work. Every time you switch between tasks of different
+              types—like jumping from coding to email, or from writing to
+              meetings—you lose precious minutes (and sometimes hours) as your
+              brain struggles to recalibrate.
+            </p>
+            <p>
+              Context Defender uses advanced AI and cognitive science principles
+              to analyze your task list and create optimized schedules that
+              batch similar work together. By minimizing context switches,
+              you'll experience deeper focus, faster completion times, and
+              significantly less mental fatigue.
+            </p>
+            <p>
+              Built during TartanHacks 2025, Context Defender is designed to
+              help knowledge workers reclaim their time and energy by defending
+              against the invisible costs of chaotic scheduling.
+            </p>
+          </div>
+        </section>
+
+        <section id="cta">
+          <div class="container">
+            <h2>Ready to Reclaim Your Time?</h2>
+            <p>Start optimizing your schedule today and see the difference.</p>
+            <a href="/pages/dashboard.html" class="btn btn-secondary"
+              >Try Context Defender</a
+            >
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="container">
+          <p>
+            &copy; 2026 Context Defender | TartanHacks 2025 | Built with passion
+          </p>
+        </div>
+      </footer>
+    </div>
+    <script>
+      function scrollToSection(id) {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    </script>
+  </body>
+</html>

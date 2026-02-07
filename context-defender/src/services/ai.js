@@ -35,13 +35,13 @@ For EVERY task (except the first one):
 Context Switching Cost Analysis (Task-Specific):
 You must analyze the ACTUAL TASKS, not just categories. Consider:
 
-🧠 Cognitive State Required:
+COGNITIVE STATE REQUIRED:
 - Deep focus state (coding, writing, complex analysis) → High mental load
 - Administrative state (email, scheduling, expenses) → Light processing
 - Social/communication state (calls, meetings) → Different mental mode
 - Physical state (errands, breaks) → Non-cognitive
 
-💡 Switching Cost Examples:
+SWITCHING COST EXAMPLES:
 • 20-25 mins: "Shifting from deep debugging session to checking emails requires complete mental context reset"
 • 18-22 mins: "Transitioning from writing documentation to making phone calls disrupts flow state"
 • 12-15 mins: "Moving from code review to running errands requires context closure and mental transition"
@@ -49,7 +49,7 @@ You must analyze the ACTUAL TASKS, not just categories. Consider:
 • 3-5 mins: "Transitioning between similar admin tasks like email to Slack requires minimal overhead"
 • 2-4 mins: "Moving from one meeting to another maintains social/communication state"
 
-⚠️ CRITICAL: Estimate the EXACT switching cost based on:
+CRITICAL: Estimate the EXACT switching cost based on:
 - Depth of focus required by previous task (deeper = higher exit cost)
 - Cognitive distance between task types (coding → email is HUGE)
 - Mental state preservation (similar tasks = lower cost)
@@ -58,7 +58,7 @@ You must analyze the ACTUAL TASKS, not just categories. Consider:
 The first task has switch_cost: 0 and switch_reason: "First task of the day"
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✨ FLOW SCHEDULE (Optimized + Rationale)
+FLOW SCHEDULE (Optimized + Rationale)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Group tasks by category to minimize switching:
@@ -71,7 +71,7 @@ For EVERY task, provide a "rationale" explaining its placement:
 Example: "Batched with other Admin tasks to preserve focus state"
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 METRICS CALCULATION
+METRICS CALCULATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Calculate:

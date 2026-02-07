@@ -1,8 +1,4 @@
 import "./style.css";
-import "./ui/render.js";
-import "./ui/simulation.js";
-import "./logic/scheduler.js";
-import "./logic/scoring.js";
 
 // Initialize the app
 document.addEventListener("DOMContentLoaded", () => {
