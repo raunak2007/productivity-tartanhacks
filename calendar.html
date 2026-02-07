@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
     <style>
-      /* Base styles - Inspired by tactile3d design system */
+      /* Base Reset */
       * {
         margin: 0;
         padding: 0;
@@ -17,17 +17,14 @@
 
       body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        background: white;
+        background: #f5f7fa;
         color: #2b2b2b;
         min-height: 100vh;
         line-height: 1.6;
-        background-image: radial-gradient(#2b2b2b 1px, transparent 1px);
-        background-size: 35px 35px;
       }
 
       #app {
         display: flex;
-        flex-direction: column;
         min-height: 100vh;
       }
 
@@ -38,129 +35,71 @@
         width: 100%;
       }
 
-      /* Header - Inspired by TopNav */
-      header {
-        background: white;
-        border-bottom: 1px solid #e5e5e5;
-        padding: 0;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        height: 56px;
+      /* Layout Structure */
+      .app-layout {
+        display: flex;
+        width: 100%;
       }
 
-      header .container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 100%;
+      /* Left Sidebar Navigation */
+      .sidebar {
+        width: 240px;
+        background: white;
+        border-right: 1px solid #eef1f5;
+        padding: 1.5rem 0;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.03);
       }
 
       .logo {
         display: flex;
         align-items: center;
         gap: 12px;
-        text-decoration: none;
+        padding: 0 1.5rem 1.5rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid #eef1f5;
       }
 
       .logo-icon {
         width: 36px;
         height: 36px;
-        background: #ff6600; /* Primary color from tactile3d */
-        border-radius: 6px;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
-        font-weight: bold;
-        font-size: 14px;
-        border: 1px solid #ff6600;
+        font-weight: 700;
+        font-size: 16px;
       }
 
-      header h1 {
-        font-size: 1.25rem;
-        color: #2b2b2b;
+      .logo-text {
+        font-size: 1.125rem;
+        color: #1f2937;
         font-weight: 600;
       }
 
-      nav {
-        display: flex;
-        gap: 1.5rem;
-        align-items: center;
+      .nav-section {
+        padding: 0 1.5rem;
+        margin-bottom: 2rem;
       }
 
-      nav a {
-        color: #666;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 0.875rem;
-        padding: 0.5rem 0.75rem;
-        border-radius: 4px;
-        transition: all 0.2s;
-      }
-
-      nav a:hover {
-        background: #f5f5f5;
-        color: #2b2b2b;
-      }
-
-      nav a.active {
-        background: rgba(255, 102, 0, 0.1);
-        color: #ff6600;
-      }
-
-      .user-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: #2b2b2b;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 600;
-        font-size: 0.875rem;
-        cursor: pointer;
-        border: 1px solid #e5e5e5;
-      }
-
-      /* Dashboard Layout */
-      .dashboard {
-        display: grid;
-        grid-template-columns: 240px 1fr;
-        min-height: calc(100vh - 56px);
-        background: white;
-      }
-
-      /* Sidebar - Inspired by SideNav */
-      .sidebar {
-        background: white;
-        border-right: 1px solid #e5e5e5;
-        padding: 1.5rem 0;
-        position: sticky;
-        top: 56px;
-        height: calc(100vh - 56px);
-        overflow-y: auto;
-      }
-
-      .sidebar-section {
-        padding: 0 1rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .sidebar-section h3 {
+      .nav-title {
         font-size: 0.75rem;
-        color: #666;
+        color: #6b7280;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        margin-bottom: 0.75rem;
+        margin-bottom: 1rem;
         font-weight: 600;
       }
 
-      .sidebar-nav {
+      .nav-list {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 4px;
       }
 
       .nav-item {
@@ -168,126 +107,262 @@
         align-items: center;
         gap: 12px;
         padding: 0.75rem 1rem;
-        color: #666;
+        color: #4b5563;
         text-decoration: none;
-        border-radius: 4px;
+        border-radius: 10px;
         font-size: 0.875rem;
-        transition: all 0.2s;
-        border: 1px solid transparent;
+        transition: all 0.2s ease;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
       }
 
       .nav-item:hover {
-        background: #f5f5f5;
+        background: #f3f4f6;
+        color: #374151;
       }
 
       .nav-item.active {
-        background: white;
-        color: #ff6600;
-        border-color: #e5e5e5;
-        font-weight: 500;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
       }
 
       .nav-item i {
-        width: 16px;
+        width: 20px;
         text-align: center;
-        font-size: 0.875rem;
+        font-size: 1rem;
       }
 
-      .quick-add {
-        background: #ff6600;
-        color: white;
-        border: none;
-        padding: 0.75rem 1rem;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 500;
-        font-size: 0.875rem;
-        width: 100%;
-        margin-top: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        justify-content: center;
-        transition: all 0.2s;
-      }
-
-      .quick-add:hover {
-        background: #e65c00;
-        transform: translateY(-1px);
-      }
-
-      /* Main Content */
-      .main-content {
-        padding: 1.5rem;
+      /* Statistics Mini Card */
+      .stats-mini-card {
         background: white;
+        border: 1px solid #eef1f5;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+
+      .stats-mini-title {
+        font-size: 0.75rem;
+        color: #6b7280;
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+      }
+
+      .stats-mini-chart {
+        height: 40px;
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        margin-bottom: 0.5rem;
+      }
+
+      .stats-mini-bar {
+        flex: 1;
+        background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+        border-radius: 4px;
+        opacity: 0.7;
+      }
+
+      .stats-mini-bar:nth-child(2n) {
+        opacity: 1;
+      }
+
+      .stats-mini-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: #9ca3af;
+      }
+
+      /* Main Content Area */
+      .main-content {
+        flex: 1;
+        padding: 1.5rem 2rem;
         overflow-y: auto;
       }
 
-      .content-header {
+      /* Top Header */
+      .main-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .search-bar {
+        flex: 1;
+        max-width: 400px;
+        position: relative;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: white;
+        font-size: 0.875rem;
+        color: #374151;
+        transition: all 0.2s;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        font-size: 0.875rem;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      .date-display {
+        padding: 0.5rem 1rem;
+        background: white;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        font-size: 0.875rem;
+        color: #374151;
+        font-weight: 500;
+      }
+
+      .lang-selector {
+        padding: 0.5rem 1rem;
+        background: white;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        font-size: 0.875rem;
+        color: #374151;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .lang-selector:hover {
+        border-color: #6366f1;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem;
+        border-radius: 10px;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      .user-profile:hover {
+        background: #f3f4f6;
+      }
+
+      .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+
+      .user-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .user-name {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #1f2937;
+      }
+
+      .user-role {
+        font-size: 0.75rem;
+        color: #6b7280;
+      }
+
+      /* Welcome Banner */
+      .welcome-banner {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border-radius: 16px;
+        padding: 1.5rem 2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .welcome-content h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .welcome-content p {
+        font-size: 0.875rem;
+        opacity: 0.9;
+      }
+
+      .welcome-illustration {
+        width: 120px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+      }
+
+      /* Calendar Section */
+      .calendar-section {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #eef1f5;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+
+      .section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid #e5e5e5;
       }
 
-      .content-header h2 {
-        font-size: 1.5rem;
-        color: #2b2b2b;
+      .section-title {
+        font-size: 1.25rem;
         font-weight: 600;
-      }
-
-      .header-actions {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-      }
-
-      .date-navigation {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: white;
-        padding: 0.5rem;
-        border-radius: 4px;
-        border: 1px solid #e5e5e5;
-      }
-
-      .current-date {
-        font-weight: 500;
-        color: #2b2b2b;
-        min-width: 140px;
-        text-align: center;
-        font-size: 0.875rem;
-      }
-
-      .nav-btn {
-        background: none;
-        border: none;
-        color: #666;
-        cursor: pointer;
-        padding: 0.5rem;
-        border-radius: 4px;
-        transition: all 0.2s;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .nav-btn:hover {
-        background: #f5f5f5;
-        color: #2b2b2b;
+        color: #1f2937;
       }
 
       .view-toggle {
         display: flex;
-        background: white;
-        border: 1px solid #e5e5e5;
-        border-radius: 4px;
-        overflow: hidden;
+        background: #f3f4f6;
+        border-radius: 10px;
+        padding: 4px;
       }
 
       .view-btn {
@@ -297,80 +372,117 @@
         cursor: pointer;
         font-weight: 500;
         font-size: 0.875rem;
-        color: #666;
+        color: #6b7280;
         transition: all 0.2s;
+        border-radius: 8px;
       }
 
       .view-btn.active {
-        background: #ff6600;
-        color: white;
+        background: white;
+        color: #6366f1;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      .date-navigation {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: white;
+        padding: 0.5rem;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+      }
+
+      .current-date {
+        font-weight: 500;
+        color: #1f2937;
+        min-width: 160px;
+        text-align: center;
+        font-size: 0.875rem;
+      }
+
+      .nav-btn {
+        background: none;
+        border: none;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.2s;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .nav-btn:hover {
+        background: #f3f4f6;
+        color: #374151;
       }
 
       /* Calendar Grid */
       .calendar-container {
         background: white;
-        border: 1px solid #e5e5e5;
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
-        margin-bottom: 1.5rem;
+        border: 1px solid #eef1f5;
       }
 
-      .calendar-header {
+      .calendar-header-week {
         display: grid;
-        grid-template-columns: 50px repeat(7, 1fr);
+        grid-template-columns: 60px repeat(7, 1fr);
         background: white;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: 1px solid #eef1f5;
       }
 
       .time-column {
-        padding: 0.75rem;
+        padding: 1rem;
         font-weight: 500;
-        color: #666;
+        color: #6b7280;
         text-align: center;
-        border-right: 1px solid #e5e5e5;
+        border-right: 1px solid #eef1f5;
         font-size: 0.875rem;
+        background: #f9fafb;
       }
 
       .day-header {
-        padding: 0.75rem;
+        padding: 1rem;
         text-align: center;
         font-weight: 500;
-        color: #2b2b2b;
-        border-right: 1px solid #e5e5e5;
+        color: #374151;
+        border-right: 1px solid #eef1f5;
         font-size: 0.875rem;
       }
 
-      .day-header:last-child {
-        border-right: none;
-      }
-
       .day-header.today {
-        background: #ff6600;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
         color: white;
-        margin: 0.25rem;
-        border-radius: 4px;
+        border-radius: 8px;
+        margin: 4px;
       }
 
-      .calendar-grid {
+      .calendar-grid-week {
         display: grid;
-        grid-template-columns: 50px repeat(7, 1fr);
-        height: 600px;
+        grid-template-columns: 60px repeat(7, 1fr);
+        height: 500px;
         overflow-y: auto;
       }
 
       .time-slot {
-        padding: 0.5rem;
-        border-bottom: 1px solid #f0f0f0;
-        border-right: 1px solid #f0f0f0;
+        padding: 0.75rem;
+        border-bottom: 1px solid #f3f4f6;
+        border-right: 1px solid #f3f4f6;
         font-size: 0.75rem;
-        color: #666;
+        color: #6b7280;
         text-align: center;
+        background: #f9fafb;
       }
 
       .calendar-cell {
-        border-bottom: 1px solid #f0f0f0;
-        border-right: 1px solid #f0f0f0;
-        padding: 2px;
+        border-bottom: 1px solid #f3f4f6;
+        border-right: 1px solid #f3f4f6;
+        padding: 4px;
         position: relative;
         min-height: 60px;
         cursor: pointer;
@@ -378,53 +490,44 @@
       }
 
       .calendar-cell:hover {
-        background: #fafafa;
-      }
-
-      .calendar-cell:last-child {
-        border-right: none;
+        background: #f9fafb;
       }
 
       /* Calendar Event */
       .calendar-event {
         position: absolute;
-        left: 2px;
-        right: 2px;
+        left: 4px;
+        right: 4px;
         padding: 8px 12px;
-        border-radius: 4px;
+        border-radius: 8px;
         font-size: 0.75rem;
         cursor: move;
         z-index: 1;
-        border: 1px solid #e5e5e5;
+        border: 1px solid #e5e7eb;
         transition: all 0.2s;
         overflow: hidden;
+        background: white;
       }
 
       .calendar-event:hover {
         z-index: 2;
-        border-color: #ff6600;
-      }
-
-      .calendar-event.dragging {
-        opacity: 0.8;
+        border-color: #6366f1;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
       }
 
       .event-priority-high {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-        color: white;
-        border-left: 3px solid #ff4757;
+        border-left: 3px solid #ef4444;
+        background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
       }
 
       .event-priority-medium {
-        background: linear-gradient(135deg, #ffd93d 0%, #ffed99 100%);
-        color: #2b2b2b;
-        border-left: 3px solid #ffc107;
+        border-left: 3px solid #f59e0b;
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
       }
 
       .event-priority-low {
-        background: linear-gradient(135deg, #6bcf7f 0%, #9be5aa 100%);
-        color: white;
-        border-left: 3px solid #28a745;
+        border-left: 3px solid #10b981;
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
       }
 
       .event-title {
@@ -434,14 +537,253 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: 0.75rem;
+        color: #1f2937;
       }
 
       .event-time {
         font-size: 0.7rem;
-        opacity: 0.9;
+        color: #6b7280;
       }
 
-      /* Modals - Inspired by tactile3d modals */
+      /* KPI Cards */
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .kpi-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem;
+        border: 1px solid #eef1f5;
+        transition: all 0.2s;
+      }
+
+      .kpi-card:hover {
+        border-color: #6366f1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .kpi-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+      }
+
+      .kpi-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+      }
+
+      .icon-subscribers {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+      }
+
+      .icon-streams {
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        color: white;
+      }
+
+      .icon-engagement {
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        color: white;
+      }
+
+      .icon-watchtime {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+        color: white;
+      }
+
+      .kpi-trend {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .trend-up {
+        color: #10b981;
+      }
+
+      .trend-down {
+        color: #ef4444;
+      }
+
+      .kpi-value {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.25rem;
+      }
+
+      .kpi-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+      }
+
+      /* Right Sidebar */
+      .right-sidebar {
+        width: 300px;
+        background: white;
+        border-left: 1px solid #eef1f5;
+        padding: 1.5rem;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .metric-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem;
+        border: 1px solid #eef1f5;
+        margin-bottom: 1rem;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      .metric-card:hover {
+        border-color: #6366f1;
+      }
+
+      .metric-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+
+      .metric-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+      }
+
+      .metric-chevron {
+        color: #9ca3af;
+        font-size: 0.75rem;
+      }
+
+      .metric-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+      }
+
+      /* Calendar Widget */
+      .calendar-widget {
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem;
+        border: 1px solid #eef1f5;
+        margin-bottom: 1.5rem;
+      }
+
+      .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .calendar-header h4 {
+        font-size: 1rem;
+        color: #1f2937;
+        font-weight: 600;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+      }
+
+      .calendar-day {
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 0.75rem;
+        color: #6b7280;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .calendar-day:hover {
+        background: #f3f4f6;
+      }
+
+      .calendar-day.active {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+      }
+
+      /* Progress Chart */
+      .progress-chart {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid #eef1f5;
+        text-align: center;
+      }
+
+      .chart-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 1rem;
+      }
+
+      .chart-svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+
+      .chart-background {
+        fill: none;
+        stroke: #e5e7eb;
+        stroke-width: 8;
+      }
+
+      .chart-progress {
+        fill: none;
+        stroke: url(#gradient);
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-dasharray: 314;
+        stroke-dashoffset: calc(314 - (314 * 0.75));
+        transition: stroke-dashoffset 1s ease;
+      }
+
+      .chart-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+      }
+
+      .progress-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 0.5rem;
+      }
+
+      .progress-subtext {
+        font-size: 0.75rem;
+        color: #9ca3af;
+      }
+
+      /* Modals */
       .modal {
         display: none;
         position: fixed;
@@ -449,7 +791,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(43, 43, 43, 0.5);
+        background: rgba(31, 41, 55, 0.5);
         z-index: 1000;
         align-items: center;
         justify-content: center;
@@ -459,18 +801,18 @@
 
       .modal-content {
         background: white;
-        border-radius: 8px;
+        border-radius: 16px;
         width: 100%;
         max-width: 500px;
         max-height: 90vh;
         overflow-y: auto;
-        border: 1px solid #e5e5e5;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid #eef1f5;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       }
 
       .modal-header {
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid #e5e5e5;
+        padding: 1.5rem;
+        border-bottom: 1px solid #eef1f5;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -478,19 +820,19 @@
       }
 
       .modal-header h3 {
-        font-size: 1.125rem;
-        color: #2b2b2b;
+        font-size: 1.25rem;
+        color: #1f2937;
         font-weight: 600;
       }
 
       .close-modal {
         background: none;
         border: none;
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         cursor: pointer;
-        color: #666;
+        color: #6b7280;
         padding: 0.25rem;
-        border-radius: 4px;
+        border-radius: 8px;
         transition: background 0.2s;
         width: 32px;
         height: 32px;
@@ -500,337 +842,50 @@
       }
 
       .close-modal:hover {
-        background: #f5f5f5;
+        background: #f3f4f6;
       }
 
       .modal-body {
         padding: 1.5rem;
       }
 
-      /* Task Card Design */
-      .task-card {
-        border: 1px solid #e5e5e5;
-        border-radius: 6px;
-        padding: 1.5rem;
-        background: white;
-        position: relative;
-      }
-
-      .task-header {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #2b2b2b;
-        margin-bottom: 1rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid #e5e5e5;
-      }
-
-      .task-info {
-        display: grid;
-        gap: 0.75rem;
-        margin: 1rem 0;
-      }
-
-      .info-row {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .info-label {
-        font-weight: 500;
-        color: #666;
-        min-width: 80px;
-        font-size: 0.875rem;
-      }
-
-      .info-value {
-        color: #2b2b2b;
-        flex: 1;
-        font-size: 0.875rem;
-      }
-
-      .intensity-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        font-weight: 500;
-      }
-
-      .intensity-deep {
-        background: #e3f2fd;
-        color: #1565c0;
-      }
-
-      .intensity-focus {
-        background: #f3e5f5;
-        color: #7b1fa2;
-      }
-
-      .intensity-light {
-        background: #e8f5e9;
-        color: #2e7d32;
-      }
-
-      .section-title {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: #666;
-        margin: 1.25rem 0 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .prerequisites-list {
-        list-style: none;
-        padding-left: 1rem;
-      }
-
-      .prerequisites-list li {
-        padding: 0.375rem 0;
-        color: #2b2b2b;
-        position: relative;
-        padding-left: 1.25rem;
-        font-size: 0.875rem;
-      }
-
-      .prerequisites-list li::before {
-        content: '•';
-        position: absolute;
-        left: 0;
-        color: #ff6600;
-        font-size: 1rem;
-      }
-
-      .suggestions-list {
-        list-style: none;
-        padding-left: 1rem;
-      }
-
-      .suggestions-list li {
-        padding: 0.375rem 0;
-        color: #666;
-        position: relative;
-        padding-left: 1.25rem;
-        font-size: 0.875rem;
-      }
-
-      .suggestions-list li::before {
-        content: '○';
-        position: absolute;
-        left: 0;
-        color: #28a745;
-      }
-
-      .task-actions {
-        display: flex;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
-        padding-top: 1rem;
-        border-top: 1px solid #e5e5e5;
-      }
-
-      .action-btn {
-        flex: 1;
-        padding: 0.625rem 1rem;
-        border: 1px solid #e5e5e5;
-        border-radius: 4px;
-        background: white;
-        color: #2b2b2b;
-        font-weight: 500;
-        font-size: 0.875rem;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-      }
-
-      .action-btn:hover {
-        background: #f5f5f5;
-      }
-
-      .action-btn.primary {
-        background: #ff6600;
-        color: white;
-        border-color: #ff6600;
-      }
-
-      .action-btn.primary:hover {
-        background: #e65c00;
-        border-color: #e65c00;
-      }
-
-      .action-btn.danger {
-        background: #ff6b6b;
-        color: white;
-        border-color: #ff6b6b;
-      }
-
-      .action-btn.danger:hover {
-        background: #ff5252;
-        border-color: #ff5252;
-      }
-
-      /* Timer Section */
-      .timer-section {
-        background: white;
-        border-radius: 6px;
-        padding: 1.25rem;
-        margin-top: 1rem;
-        border: 1px solid #e5e5e5;
-      }
-
-      .timer-display {
-        font-size: 2.5rem;
-        font-weight: 600;
-        text-align: center;
-        color: #2b2b2b;
-        font-family: 'Courier New', monospace;
-        margin: 1rem 0;
-        letter-spacing: 2px;
-      }
-
-      .timer-controls {
-        display: flex;
-        gap: 0.75rem;
-        justify-content: center;
-      }
-
-      .timer-btn {
-        padding: 0.625rem 1.25rem;
-        border: none;
-        border-radius: 4px;
-        font-weight: 500;
-        font-size: 0.875rem;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .timer-btn.start {
-        background: #28a745;
-        color: white;
-      }
-
-      .timer-btn.start:hover {
-        background: #218838;
-      }
-
-      .timer-btn.pause {
-        background: #ffc107;
-        color: #2b2b2b;
-      }
-
-      .timer-btn.pause:hover {
-        background: #e0a800;
-      }
-
-      .timer-btn.stop {
-        background: #dc3545;
-        color: white;
-      }
-
-      .timer-btn.stop:hover {
-        background: #c82333;
-      }
-
-      /* Progress Report */
-      .progress-report {
-        background: white;
-        border: 1px solid #e5e5e5;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-top: 1.5rem;
-      }
-
-      .progress-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.25rem;
-      }
-
-      .progress-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1rem;
-        margin-bottom: 1.25rem;
-      }
-
-      .progress-stat {
-        text-align: center;
-        padding: 1rem;
-        background: white;
-        border: 1px solid #e5e5e5;
-        border-radius: 6px;
-        transition: all 0.2s;
-      }
-
-      .progress-stat:hover {
-        border-color: #ff6600;
-      }
-
-      .stat-value {
-        font-size: 1.75rem;
-        font-weight: 600;
-        color: #ff6600;
-      }
-
-      .stat-label {
-        font-size: 0.875rem;
-        color: #666;
-        margin-top: 0.25rem;
-      }
-
-      .completed-tasks {
-        margin-top: 1.25rem;
-      }
-
-      .completed-task {
-        padding: 0.875rem;
-        background: white;
-        border: 1px solid #e5e5e5;
-        border-radius: 6px;
-        margin-bottom: 0.5rem;
-        border-left: 3px solid #28a745;
-        transition: all 0.2s;
-      }
-
-      .completed-task:hover {
-        border-color: #28a745;
-      }
-
       /* Form Elements */
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.875rem;
+      }
+
       .form-control {
         width: 100%;
-        padding: 0.625rem 0.75rem;
-        border: 1px solid #e5e5e5;
-        border-radius: 4px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
         font-size: 0.875rem;
-        color: #2b2b2b;
+        color: #374151;
         background: white;
-        transition: border-color 0.2s;
+        transition: all 0.2s;
       }
 
       .form-control:focus {
         outline: none;
-        border-color: #ff6600;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
       }
 
-      /* Button Styles */
+      /* Buttons */
       .btn {
-        padding: 0.625rem 1rem;
-        border: 1px solid #e5e5e5;
-        border-radius: 4px;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
         background: white;
-        color: #2b2b2b;
+        color: #374151;
         font-weight: 500;
         font-size: 0.875rem;
         cursor: pointer;
@@ -841,58 +896,44 @@
       }
 
       .btn:hover {
-        background: #f5f5f5;
+        background: #f3f4f6;
       }
 
-      /* Quick Add Floating Button */
-      .quick-add-floating {
-        position: fixed;
-        bottom: 1.5rem;
-        right: 1.5rem;
-        background: #ff6600;
+      .btn-primary {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
         color: white;
         border: none;
-        border-radius: 50%;
-        width: 56px;
-        height: 56px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
-        transition: all 0.2s;
-        z-index: 100;
       }
 
-      .quick-add-floating:hover {
-        background: #e65c00;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(255, 102, 0, 0.4);
-      }
-
-      /* Footer */
-      footer {
-        background: white;
-        color: #666;
-        padding: 1.5rem 0;
-        text-align: center;
-        border-top: 1px solid #e5e5e5;
-        margin-top: auto;
-        font-size: 0.875rem;
+      .btn-primary:hover {
+        opacity: 0.9;
       }
 
       /* Responsive Design */
-      @media (max-width: 1024px) {
-        .dashboard {
-          grid-template-columns: 1fr;
+      @media (max-width: 1200px) {
+        .app-layout {
+          flex-direction: column;
         }
 
         .sidebar {
-          display: none;
+          width: 100%;
+          height: auto;
+          position: static;
+          border-right: none;
+          border-bottom: 1px solid #eef1f5;
         }
 
-        .calendar-grid {
-          height: 500px;
+        .right-sidebar {
+          width: 100%;
+          height: auto;
+          position: static;
+          border-left: none;
+          border-top: 1px solid #eef1f5;
+          order: 3;
+        }
+
+        .kpi-grid {
+          grid-template-columns: repeat(2, 1fr);
         }
       }
 
@@ -901,53 +942,49 @@
           padding: 0 1rem;
         }
 
-        .calendar-header,
-        .calendar-grid {
-          grid-template-columns: 40px repeat(7, 1fr);
+        .main-header {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .search-bar {
+          max-width: 100%;
+        }
+
+        .header-right {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .kpi-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .calendar-header-week {
+          grid-template-columns: 50px repeat(7, 1fr);
+        }
+
+        .calendar-grid-week {
+          grid-template-columns: 50px repeat(7, 1fr);
+          height: 400px;
         }
 
         .day-header {
-          font-size: 0.75rem;
           padding: 0.5rem;
-        }
-
-        .content-header {
-          flex-direction: column;
-          gap: 1rem;
-          align-items: stretch;
-        }
-
-        .header-actions {
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
-        .date-navigation,
-        .view-toggle {
-          width: 100%;
-          justify-content: center;
-        }
-
-        .task-actions {
-          flex-direction: column;
-        }
-
-        .timer-display {
-          font-size: 2rem;
-        }
-
-        .progress-stats {
-          grid-template-columns: repeat(2, 1fr);
+          font-size: 0.75rem;
         }
       }
 
-      @media (max-width: 480px) {
-        .progress-stats {
-          grid-template-columns: 1fr;
-        }
+      /* Animations */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
       }
 
-      /* Loading Animation */
+      .fade-in {
+        animation: fadeIn 0.3s ease;
+      }
+
       @keyframes pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.5; }
@@ -960,116 +997,123 @@
   </head>
   <body>
     <div id="app">
-      <header>
-        <div class="container">
-          <a href="https://raunak2007.github.io/productivity-tartanhacks/index.html" class="logo">
-            <div class="logo-icon">CD</div>
-            <h1>Context Defender</h1>
-          </a>
-          <nav>
-            <a href="index.html">Home</a>
-            <a href="dashboard.html" class="active">Dashboard</a>
-            <a href="#features">Features</a>
-            <a href="#contact">Contact</a>
-            <div class="user-avatar" onclick="openUserMenu()">JD</div>
-          </nav>
-        </div>
-      </header>
-
-      <div class="dashboard">
-        <!-- Sidebar -->
+      <div class="app-layout">
+        <!-- Left Sidebar Navigation -->
         <aside class="sidebar">
-          <div class="sidebar-section">
-            <h3>Navigation</h3>
-            <div class="sidebar-nav">
-              <a href="#" class="nav-item" onclick="showSection('overview')">
+          <div class="logo">
+            <div class="logo-icon">CD</div>
+            <div class="logo-text">Context Defender</div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-title">Navigation</div>
+            <div class="nav-list">
+              <a href="#" class="nav-item active" onclick="showSection('dashboard')">
                 <i class="fas fa-tachometer-alt"></i>
-                Overview
+                Dashboard
               </a>
-              <a href="#" class="nav-item active" onclick="showSection('calendar')">
-                <i class="fas fa-calendar-alt"></i>
-                Calendar
+              <a href="#" class="nav-item" onclick="showSection('profile')">
+                <i class="fas fa-user"></i>
+                Profile
               </a>
-              <a href="#" class="nav-item" onclick="showSection('tasks')">
-                <i class="fas fa-tasks"></i>
-                Tasks
-              </a>
-              <a href="#" class="nav-item" onclick="showSection('schedule')">
-                <i class="fas fa-clock"></i>
-                Schedule
-              </a>
-              <a href="#" class="nav-item" onclick="showSection('analytics')">
-                <i class="fas fa-chart-bar"></i>
-                Analytics
+              <a href="#" class="nav-item" onclick="showSection('utilities')">
+                <i class="fas fa-tools"></i>
+                Utilities
               </a>
               <a href="#" class="nav-item" onclick="showSection('settings')">
                 <i class="fas fa-cog"></i>
                 Settings
               </a>
+              <a href="#" class="nav-item" onclick="showSection('messages')">
+                <i class="fas fa-envelope"></i>
+                Messages
+              </a>
+              <a href="#" class="nav-item" onclick="showSection('analytics')">
+                <i class="fas fa-chart-bar"></i>
+                Analytics
+              </a>
+              <a href="#" class="nav-item" onclick="showSection('integrations')">
+                <i class="fas fa-plug"></i>
+                Integrations
+              </a>
             </div>
-            <button class="quick-add" onclick="openAddTaskModal()">
-              <i class="fas fa-plus"></i> Quick Add
-            </button>
           </div>
 
-          <div class="sidebar-section">
-            <h3>Today's Focus</h3>
-            <div style="background: white; padding: 1rem; border-radius: 6px; border: 1px solid #e5e5e5;">
-              <div style="font-weight: 500; color: #2b2b2b; margin-bottom: 0.5rem; font-size: 0.875rem;">Productivity Score</div>
-              <div style="font-size: 1.75rem; font-weight: 600; color: #ff6600;">85</div>
-              <div style="font-size: 0.75rem; color: #666; margin-top: 0.25rem;">+5 from yesterday</div>
-            </div>
-          </div>
-
-          <div class="sidebar-section">
-            <h3>Quick Stats</h3>
-            <div style="display: grid; gap: 0.5rem;">
-              <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-                <span style="color: #666;">Tasks Today</span>
-                <span style="font-weight: 500; color: #2b2b2b;">8/12</span>
+          <div class="nav-section">
+            <div class="stats-mini-card">
+              <div class="stats-mini-title">Statistics</div>
+              <div class="stats-mini-chart">
+                <div class="stats-mini-bar" style="height: 30px"></div>
+                <div class="stats-mini-bar" style="height: 20px"></div>
+                <div class="stats-mini-bar" style="height: 35px"></div>
+                <div class="stats-mini-bar" style="height: 25px"></div>
+                <div class="stats-mini-bar" style="height: 40px"></div>
               </div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-                <span style="color: #666;">Focus Time</span>
-                <span style="font-weight: 500; color: #2b2b2b;">4h 23m</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-                <span style="color: #666;">AI Optimizations</span>
-                <span style="font-weight: 500; color: #2b2b2b;">6</span>
+              <div class="stats-mini-labels">
+                <span>Min</span>
+                <span>Max</span>
               </div>
             </div>
           </div>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <main class="main-content">
-          <!-- Calendar Section -->
-          <section id="calendarSection" class="dashboard-section">
-            <div class="content-header">
-              <div>
-                <h2>Calendar View</h2>
-                <p style="color: #666; margin-top: 0.25rem; font-size: 0.875rem;">Drag and drop tasks to reschedule</p>
+          <!-- Top Header -->
+          <div class="main-header">
+            <div class="search-bar">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" class="search-input" placeholder="Search for Statistics...">
+            </div>
+            <div class="header-right">
+              <div class="date-display" id="currentDate">04 Jan Friday 2026</div>
+              <div class="lang-selector">EN</div>
+              <div class="user-profile" onclick="openUserMenu()">
+                <div class="user-avatar">GR</div>
+                <div class="user-info">
+                  <div class="user-name">Ghulam R</div>
+                  <div class="user-role">UX Designer</div>
+                </div>
               </div>
-              <div class="header-actions">
-                <div class="date-navigation">
-                  <button class="nav-btn" onclick="prevWeek()">
-                    <i class="fas fa-chevron-left"></i>
-                  </button>
-                  <div class="current-date" id="currentDate">October 24-30, 2026</div>
-                  <button class="nav-btn" onclick="nextWeek()">
-                    <i class="fas fa-chevron-right"></i>
-                  </button>
-                </div>
+            </div>
+          </div>
+
+          <!-- Welcome Banner -->
+          <div class="welcome-banner">
+            <div class="welcome-content">
+              <h2>Hello John Doe</h2>
+              <p>Have a nice day at work!</p>
+            </div>
+            <div class="welcome-illustration">
+              <i class="fas fa-user-tie"></i>
+            </div>
+          </div>
+
+          <!-- Calendar Section -->
+          <section id="dashboardSection" class="calendar-section">
+            <div class="section-header">
+              <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <h2 class="section-title">Calendar Overview</h2>
                 <div class="view-toggle">
-                  <button class="view-btn active">Week</button>
-                  <button class="view-btn">Day</button>
-                  <button class="view-btn">Month</button>
+                  <button class="view-btn active" onclick="switchView('week')">Week</button>
+                  <button class="view-btn" onclick="switchView('day')">Day</button>
+                  <button class="view-btn" onclick="switchView('month')">Month</button>
                 </div>
+              </div>
+              <div class="date-navigation">
+                <button class="nav-btn" onclick="prevPeriod()">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="current-date" id="calendarDate">October 24-30, 2026</div>
+                <button class="nav-btn" onclick="nextPeriod()">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
               </div>
             </div>
 
             <!-- Calendar Grid -->
-            <div class="calendar-container">
-              <div class="calendar-header">
+            <div id="weekView" class="calendar-container">
+              <div class="calendar-header-week">
                 <div class="time-column">Time</div>
                 <div class="day-header today">Mon</div>
                 <div class="day-header">Tue</div>
@@ -1079,175 +1123,202 @@
                 <div class="day-header">Sat</div>
                 <div class="day-header">Sun</div>
               </div>
-              <div class="calendar-grid" id="calendarGrid">
-                <!-- Calendar cells will be generated by JavaScript -->
+              <div class="calendar-grid-week" id="calendarGridWeek">
+                <!-- Week view cells will be generated by JavaScript -->
               </div>
             </div>
-
-            <!-- Progress Report -->
-            <div class="progress-report">
-              <div class="progress-header">
-                <h3>Today's Progress Report</h3>
-                <button class="btn" onclick="generateProgressReport()">
-                  <i class="fas fa-file-export"></i> Export Report
-                </button>
-              </div>
-              
-              <div class="progress-stats">
-                <div class="progress-stat">
-                  <div class="stat-value">8</div>
-                  <div class="stat-label">Tasks Completed</div>
-                </div>
-                <div class="progress-stat">
-                  <div class="stat-value">4h 23m</div>
-                  <div class="stat-label">Focus Time</div>
-                </div>
-                <div class="progress-stat">
-                  <div class="stat-value">85%</div>
-                  <div class="stat-label">Efficiency</div>
-                </div>
-                <div class="progress-stat">
-                  <div class="stat-value">6</div>
-                  <div class="stat-label">AI Optimizations</div>
-                </div>
-              </div>
-
-              <div class="completed-tasks">
-                <h4 style="margin-bottom: 1rem; color: #2b2b2b; font-size: 1rem;">Completed Tasks</h4>
-                <div id="completedTasksList">
-                  <!-- Completed tasks will be loaded here -->
-                </div>
-              </div>
-            </div>
-
-            <!-- Quick Add Floating Button -->
-            <button class="quick-add-floating" onclick="openAddTaskModal()">
-              <i class="fas fa-plus"></i>
-            </button>
           </section>
+
+          <!-- KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <div class="kpi-icon icon-subscribers">
+                  <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="kpi-trend trend-up">+12%</div>
+              </div>
+              <div class="kpi-value">5,095</div>
+              <div class="kpi-label">New Subscribers</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <div class="kpi-icon icon-streams">
+                  <i class="fas fa-stream"></i>
+                </div>
+                <div class="kpi-trend trend-down">-3%</div>
+              </div>
+              <div class="kpi-value">47,095</div>
+              <div class="kpi-label">Streams</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <div class="kpi-icon icon-engagement">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="kpi-trend trend-up">+8%</div>
+              </div>
+              <div class="kpi-value">25.81</div>
+              <div class="kpi-label">Engagement Rate</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <div class="kpi-icon icon-watchtime">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div class="kpi-trend trend-up">+15%</div>
+              </div>
+              <div class="kpi-value">45.42</div>
+              <div class="kpi-label">Avg. Watch Time</div>
+            </div>
+          </div>
 
           <!-- Other Sections (hidden initially) -->
-          <section id="overviewSection" class="dashboard-section" style="display: none;">
-            <!-- Overview content -->
+          <section id="profileSection" class="calendar-section" style="display: none;">
+            <!-- Profile content -->
           </section>
-          <section id="tasksSection" class="dashboard-section" style="display: none;">
-            <!-- Tasks content -->
+          <section id="utilitiesSection" class="calendar-section" style="display: none;">
+            <!-- Utilities content -->
           </section>
-          <section id="scheduleSection" class="dashboard-section" style="display: none;">
-            <!-- Schedule content -->
-          </section>
-          <section id="analyticsSection" class="dashboard-section" style="display: none;">
-            <!-- Analytics content -->
-          </section>
-          <section id="settingsSection" class="dashboard-section" style="display: none;">
+          <section id="settingsSection" class="calendar-section" style="display: none;">
             <!-- Settings content -->
           </section>
+          <section id="messagesSection" class="calendar-section" style="display: none;">
+            <!-- Messages content -->
+          </section>
+          <section id="analyticsSection" class="calendar-section" style="display: none;">
+            <!-- Analytics content -->
+          </section>
+          <section id="integrationsSection" class="calendar-section" style="display: none;">
+            <!-- Integrations content -->
+          </section>
         </main>
-      </div>
 
-      <footer>
-        <div class="container">
-          <p>&copy; 2026 Context Defender. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
-
-    <!-- Task Details Modal -->
-    <div id="taskModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Task Details</h3>
-          <button class="close-modal" onclick="closeModal('taskModal')">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="task-card" id="taskDetails">
-            <!-- Task details will be loaded here -->
-          </div>
-          
-          <div class="timer-section" id="timerSection" style="display: none;">
-            <h4 style="margin-bottom: 1rem; color: #2b2b2b; font-size: 1rem;">Task Timer</h4>
-            <div class="timer-display" id="timerDisplay">25:00</div>
-            <div class="timer-controls">
-              <button class="timer-btn start" onclick="startTimer()">
-                <i class="fas fa-play"></i> Start
-              </button>
-              <button class="timer-btn pause" onclick="pauseTimer()" style="display: none;">
-                <i class="fas fa-pause"></i> Pause
-              </button>
-              <button class="timer-btn stop" onclick="stopTimer()">
-                <i class="fas fa-stop"></i> Stop
-              </button>
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+          <!-- Metric Cards -->
+          <div class="metric-card" onclick="showMetricDetails('projects')">
+            <div class="metric-header">
+              <div class="metric-label">New Projects</div>
+              <i class="fas fa-chevron-right metric-chevron"></i>
             </div>
+            <div class="metric-value">500</div>
           </div>
-        </div>
-      </div>
-    </div>
+          <div class="metric-card" onclick="showMetricDetails('completed')">
+            <div class="metric-header">
+              <div class="metric-label">Successfully Completed</div>
+              <i class="fas fa-chevron-right metric-chevron"></i>
+            </div>
+            <div class="metric-value">3,502</div>
+          </div>
+          <div class="metric-card" onclick="showMetricDetails('earned')">
+            <div class="metric-header">
+              <div class="metric-label">Earned This Month</div>
+              <i class="fas fa-chevron-right metric-chevron"></i>
+            </div>
+            <div class="metric-value">$523,001</div>
+          </div>
 
-    <!-- Add Task Modal -->
-    <div id="addTaskModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Add New Task</h3>
-          <button class="close-modal" onclick="closeModal('addTaskModal')">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="taskForm" onsubmit="addTask(event)">
-            <div style="display: grid; gap: 1rem;">
-              <div>
-                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2b2b2b; font-size: 0.875rem;">Task Title *</label>
-                <input type="text" class="form-control" id="taskTitle" placeholder="What needs to be done?" required>
-              </div>
-              
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div>
-                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2b2b2b; font-size: 0.875rem;">Priority</label>
-                  <select class="form-control" id="taskPriority">
-                    <option value="high">High</option>
-                    <option value="medium">Medium</option>
-                    <option value="low">Low</option>
-                  </select>
-                </div>
-                <div>
-                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2b2b2b; font-size: 0.875rem;">Intensity</label>
-                  <select class="form-control" id="taskIntensity">
-                    <option value="deep">🧠 Deep Work</option>
-                    <option value="focus">🎯 Focus</option>
-                    <option value="light">💡 Light</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div>
-                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2b2b2b; font-size: 0.875rem;">Duration</label>
-                  <input type="number" class="form-control" id="taskDuration" placeholder="Minutes">
-                </div>
-                <div>
-                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2b2b2b; font-size: 0.875rem;">Time</label>
-                  <input type="time" class="form-control" id="taskTime">
-                </div>
-              </div>
-              
-              <div>
-                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2b2b2b; font-size: 0.875rem;">Prerequisites (one per line)</label>
-                <textarea class="form-control" id="taskPrerequisites" rows="3" placeholder="Review Q3 data (15m)&#10;Gather team input (30m)"></textarea>
-              </div>
-              
-              <div>
-                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2b2b2b; font-size: 0.875rem;">Suggested Preparation</label>
-                <textarea class="form-control" id="taskPreparation" rows="2" placeholder="Clear notifications&#10;Noise-cancelling headphones"></textarea>
-              </div>
-              
-              <div class="task-actions">
-                <button type="button" class="action-btn" onclick="closeModal('addTaskModal')">
-                  Cancel
-                </button>
-                <button type="submit" class="action-btn primary">
-                  <i class="fas fa-plus"></i> Add Task
-                </button>
+          <!-- Calendar Widget -->
+          <div class="calendar-widget">
+            <div class="calendar-header">
+              <h4>Calendar</h4>
+              <div class="nav-btn">
+                <i class="fas fa-ellipsis-h"></i>
               </div>
             </div>
-          </form>
+            <div class="calendar-grid" id="miniCalendar">
+              <!-- Mini calendar will be generated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Progress Chart -->
+          <div class="progress-chart">
+            <div class="progress-label">Audience Engagement</div>
+            <div class="chart-container">
+              <svg class="chart-svg" viewBox="0 0 120 120">
+                <defs>
+                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#6366f1" />
+                    <stop offset="100%" stop-color="#8b5cf6" />
+                  </linearGradient>
+                </defs>
+                <circle class="chart-background" cx="60" cy="60" r="50" />
+                <circle class="chart-progress" cx="60" cy="60" r="50" />
+              </svg>
+              <div class="chart-value">75%</div>
+            </div>
+            <div class="progress-subtext">38% Returning Audience</div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Add Task Modal -->
+      <div id="addTaskModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Add New Task</h3>
+            <button class="close-modal" onclick="closeModal('addTaskModal')">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="taskForm" onsubmit="addTask(event)">
+              <div style="display: grid; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Task Title *</label>
+                  <input type="text" class="form-control" id="taskTitle" placeholder="What needs to be done?" required>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <select class="form-control" id="taskPriority">
+                      <option value="high">High</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="low">Low</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Intensity</label>
+                    <select class="form-control" id="taskIntensity">
+                      <option value="deep">🧠 Deep Work</option>
+                      <option value="focus" selected>🎯 Focus</option>
+                      <option value="light">💡 Light</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group">
+                    <label class="form-label">Duration (min)</label>
+                    <input type="number" class="form-control" id="taskDuration" placeholder="60" value="60">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Time</label>
+                    <input type="time" class="form-control" id="taskTime">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Prerequisites (one per line)</label>
+                  <textarea class="form-control" id="taskPrerequisites" rows="3" placeholder="Review Q3 data (15m)&#10;Gather team input (30m)"></textarea>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Suggested Preparation</label>
+                  <textarea class="form-control" id="taskPreparation" rows="2" placeholder="Clear notifications&#10;Noise-cancelling headphones"></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                  <button type="button" class="btn" onclick="closeModal('addTaskModal')" style="flex: 1;">
+                    Cancel
+                  </button>
+                  <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    <i class="fas fa-plus"></i> Add Task
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -1255,39 +1326,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
     <script>
       // Global state
-      let currentUser = null;
-      let calendarEvents = [];
       let currentDate = new Date();
-      let currentDragEvent = null;
-      let timerInterval = null;
-      let timerSeconds = 1500; // 25 minutes
-      let isTimerRunning = false;
+      let currentView = 'week';
+      let calendarEvents = [];
 
       // Initialize the app
       document.addEventListener('DOMContentLoaded', () => {
-        console.log('Calendar Dashboard initialized');
+        console.log('Modern Dashboard initialized');
         
-        // Load user and events
-        loadUser();
         loadCalendarEvents();
-        
-        // Generate calendar grid
         generateCalendarGrid();
+        generateMiniCalendar();
+        updateDateDisplay();
         
-        // Load completed tasks for progress report
-        loadCompletedTasks();
-        
-        // Initialize drag and drop
-        initDragAndDrop();
+        // Set current time as default
+        const now = new Date();
+        const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
+                          now.getMinutes().toString().padStart(2, '0');
+        document.getElementById('taskTime').value = timeString;
       });
 
       // Toast notifications
       function showToast(message, type = 'info') {
         const colors = {
-          success: '#28a745',
-          error: '#dc3545',
-          info: '#ff6600',
-          warning: '#ffc107'
+          success: '#10b981',
+          error: '#ef4444',
+          info: '#6366f1',
+          warning: '#f59e0b'
         };
         
         Toastify({
@@ -1309,20 +1374,10 @@
         document.getElementById(modalId).style.display = 'none';
       }
 
-      function openAddTaskModal() {
-        // Set current time as default
-        const now = new Date();
-        const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
-                          now.getMinutes().toString().padStart(2, '0');
-        document.getElementById('taskTime').value = timeString;
-        
-        openModal('addTaskModal');
-      }
-
       // Navigation
       function showSection(section) {
         // Hide all sections
-        document.querySelectorAll('.dashboard-section').forEach(el => {
+        document.querySelectorAll('.calendar-section').forEach(el => {
           el.style.display = 'none';
         });
         
@@ -1338,14 +1393,28 @@
         event.target.classList.add('active');
         
         // Update current section
-        if (section === 'calendar') {
+        if (section === 'dashboard') {
           generateCalendarGrid();
         }
       }
 
+      // View switching
+      function switchView(view) {
+        currentView = view;
+        
+        // Update view toggle buttons
+        document.querySelectorAll('.view-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // Generate the view
+        generateCalendarGrid();
+      }
+
       // Calendar functions
       function generateCalendarGrid() {
-        const grid = document.getElementById('calendarGrid');
+        const grid = document.getElementById('calendarGridWeek');
         if (!grid) return;
         
         grid.innerHTML = '';
@@ -1364,16 +1433,11 @@
             cell.className = 'calendar-cell';
             cell.dataset.hour = hour;
             cell.dataset.day = day;
-            cell.addEventListener('click', (e) => onCellClick(e, hour, day));
+            cell.addEventListener('click', () => openAddTaskModal());
             grid.appendChild(cell);
             
             // Add events to this cell
-            const cellEvents = calendarEvents.filter(event => {
-              const eventDate = new Date(event.startTime);
-              const eventHour = eventDate.getHours();
-              const eventDay = eventDate.getDay();
-              return eventHour === hour && eventDay === day;
-            });
+            const cellEvents = getEventsForTimeSlot(hour, day);
             
             cellEvents.forEach(event => {
               const eventElement = createEventElement(event);
@@ -1382,79 +1446,36 @@
           }
         }
         
-        // Update date display
-        updateDateDisplay();
+        updateWeekDayHeaders();
+      }
+
+      function getEventsForTimeSlot(hour, dayOffset) {
+        return calendarEvents.filter(event => {
+          const eventDate = new Date(event.startTime);
+          const eventHour = eventDate.getHours();
+          const eventDay = eventDate.getDay();
+          
+          return eventHour === hour && eventDay === dayOffset;
+        });
       }
 
       function createEventElement(event) {
         const eventElement = document.createElement('div');
         eventElement.className = `calendar-event event-priority-${event.priority}`;
         eventElement.dataset.eventId = event.id;
-        eventElement.style.top = '2px';
-        eventElement.style.height = 'calc(100% - 4px)';
+        eventElement.style.top = '4px';
+        eventElement.style.height = 'calc(100% - 8px)';
         eventElement.innerHTML = `
           <div class="event-title">${event.title}</div>
-          <div class="event-time">${formatTime(event.startTime)} - ${formatTime(event.endTime)}</div>
+          <div class="event-time">${formatTime(event.startTime)}</div>
         `;
         
-        // Make event draggable
-        eventElement.setAttribute('draggable', 'true');
-        eventElement.addEventListener('dragstart', onDragStart);
-        eventElement.addEventListener('dragend', onDragEnd);
         eventElement.addEventListener('click', (e) => {
           e.stopPropagation();
-          openTaskDetails(event);
+          showToast(`Opening ${event.title}`, 'info');
         });
         
         return eventElement;
-      }
-
-      function onCellClick(e, hour, day) {
-        // Get the day offset from current week
-        const startOfWeek = getStartOfWeek(currentDate);
-        const eventDate = new Date(startOfWeek);
-        eventDate.setDate(startOfWeek.getDate() + day);
-        eventDate.setHours(hour, 0, 0, 0);
-        
-        // Open add task modal with pre-filled time
-        const timeString = hour.toString().padStart(2, '0') + ':00';
-        document.getElementById('taskTime').value = timeString;
-        
-        // Store the selected date for the task
-        document.getElementById('taskForm').dataset.selectedDate = eventDate.toISOString();
-        
-        openAddTaskModal();
-      }
-
-      function getStartOfWeek(date) {
-        const d = new Date(date);
-        const day = d.getDay();
-        const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-        return new Date(d.setDate(diff));
-      }
-
-      function updateDateDisplay() {
-        const startOfWeek = getStartOfWeek(currentDate);
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        
-        const options = { month: 'long', day: 'numeric' };
-        const dateString = `${startOfWeek.toLocaleDateString('en-US', options)} - ${endOfWeek.toLocaleDateString('en-US', options)}, ${startOfWeek.getFullYear()}`;
-        
-        const dateElement = document.getElementById('currentDate');
-        if (dateElement) {
-          dateElement.textContent = dateString;
-        }
-      }
-
-      function prevWeek() {
-        currentDate.setDate(currentDate.getDate() - 7);
-        generateCalendarGrid();
-      }
-
-      function nextWeek() {
-        currentDate.setDate(currentDate.getDate() + 7);
-        generateCalendarGrid();
       }
 
       function formatTime(dateString) {
@@ -1466,82 +1487,67 @@
         });
       }
 
-      // Drag and Drop
-      function initDragAndDrop() {
-        const grid = document.getElementById('calendarGrid');
-        if (grid) {
-          grid.addEventListener('dragover', onDragOver);
-          grid.addEventListener('drop', onDrop);
-        }
-      }
-
-      function onDragStart(e) {
-        currentDragEvent = e.target;
-        e.target.classList.add('dragging');
-        e.dataTransfer.setData('text/plain', e.target.dataset.eventId);
-      }
-
-      function onDragOver(e) {
-        e.preventDefault();
-        const cell = e.target.closest('.calendar-cell');
-        if (cell) {
-          cell.style.backgroundColor = '#fff5e6';
-        }
-      }
-
-      function onDrop(e) {
-        e.preventDefault();
-        const cell = e.target.closest('.calendar-cell');
-        if (cell && currentDragEvent) {
-          const eventId = currentDragEvent.dataset.eventId;
-          const newHour = parseInt(cell.dataset.hour);
-          const newDay = parseInt(cell.dataset.day);
+      function updateWeekDayHeaders() {
+        const startOfWeek = getStartOfWeek(currentDate);
+        const dayHeaders = document.querySelectorAll('.calendar-header-week .day-header');
+        
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const today = new Date();
+        
+        dayHeaders.forEach((header, index) => {
+          const dayDate = new Date(startOfWeek);
+          dayDate.setDate(startOfWeek.getDate() + index);
           
-          // Update event time
-          updateEventTime(eventId, newHour, newDay);
+          // Update day name
+          header.textContent = days[index];
           
-          // Remove highlighting
-          cell.style.backgroundColor = '';
-        }
-      }
-
-      function onDragEnd(e) {
-        e.target.classList.remove('dragging');
-        // Remove highlighting from all cells
-        document.querySelectorAll('.calendar-cell').forEach(cell => {
-          cell.style.backgroundColor = '';
+          // Check if this is today
+          if (dayDate.getDate() === today.getDate() && 
+              dayDate.getMonth() === today.getMonth() && 
+              dayDate.getFullYear() === today.getFullYear()) {
+            header.classList.add('today');
+          } else {
+            header.classList.remove('today');
+          }
         });
       }
 
-      function updateEventTime(eventId, newHour, newDay) {
-        const eventIndex = calendarEvents.findIndex(e => e.id.toString() === eventId);
-        if (eventIndex === -1) return;
-        
-        const event = calendarEvents[eventIndex];
-        const oldDate = new Date(event.startTime);
-        const startOfWeek = getStartOfWeek(currentDate);
-        const newDate = new Date(startOfWeek);
-        
-        newDate.setDate(startOfWeek.getDate() + newDay);
-        newDate.setHours(newHour, oldDate.getMinutes(), 0, 0);
-        
-        // Calculate duration
-        const duration = (new Date(event.endTime) - new Date(event.startTime)) / (1000 * 60); // in minutes
-        
-        // Update event times
-        event.startTime = newDate.toISOString();
-        const endDate = new Date(newDate);
-        endDate.setMinutes(endDate.getMinutes() + duration);
-        event.endTime = endDate.toISOString();
-        
-        // Save and refresh
-        saveCalendarEvents();
-        generateCalendarGrid();
-        
-        showToast('Task rescheduled successfully', 'success');
+      function getStartOfWeek(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        return new Date(d.setDate(diff));
       }
 
-      // Task functions
+      function updateDateDisplay() {
+        const dateElement = document.getElementById('calendarDate');
+        const currentDateElement = document.getElementById('currentDate');
+        
+        if (!dateElement || !currentDateElement) return;
+        
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        currentDateElement.textContent = currentDate.toLocaleDateString('en-US', options);
+        
+        const startOfWeek = getStartOfWeek(currentDate);
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        
+        const dateString = `${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, ${startOfWeek.getFullYear()}`;
+        dateElement.textContent = dateString;
+      }
+
+      function prevPeriod() {
+        currentDate.setDate(currentDate.getDate() - 7);
+        generateCalendarGrid();
+        updateDateDisplay();
+      }
+
+      function nextPeriod() {
+        currentDate.setDate(currentDate.getDate() + 7);
+        generateCalendarGrid();
+        updateDateDisplay();
+      }
+
       function addTask(event) {
         event.preventDefault();
         
@@ -1550,20 +1556,10 @@
         const intensity = document.getElementById('taskIntensity').value;
         const duration = parseInt(document.getElementById('taskDuration').value) || 60;
         const time = document.getElementById('taskTime').value;
-        const prerequisites = document.getElementById('taskPrerequisites').value.split('\n').filter(p => p.trim());
-        const preparation = document.getElementById('taskPreparation').value.split('\n').filter(p => p.trim());
-        
-        // Get selected date or use current date
-        let eventDate;
-        const selectedDate = document.getElementById('taskForm').dataset.selectedDate;
-        if (selectedDate) {
-          eventDate = new Date(selectedDate);
-        } else {
-          eventDate = new Date();
-        }
         
         // Parse time
         const [hours, minutes] = time.split(':').map(Number);
+        const eventDate = new Date();
         eventDate.setHours(hours, minutes, 0, 0);
         
         // Create end time
@@ -1576,13 +1572,9 @@
           priority,
           intensity,
           duration,
-          prerequisites,
-          preparation,
           startTime: eventDate.toISOString(),
           endTime: endDate.toISOString(),
-          status: 'scheduled',
-          completed: false,
-          createdAt: new Date().toISOString()
+          status: 'scheduled'
         };
         
         calendarEvents.push(newEvent);
@@ -1591,332 +1583,65 @@
         
         // Reset form and close modal
         document.getElementById('taskForm').reset();
-        delete document.getElementById('taskForm').dataset.selectedDate;
         closeModal('addTaskModal');
         
         showToast('Task added to calendar', 'success');
       }
 
-      function openTaskDetails(event) {
-        const taskDetails = document.getElementById('taskDetails');
+      function generateMiniCalendar() {
+        const grid = document.getElementById('miniCalendar');
+        if (!grid) return;
         
-        // Format prerequisites
-        const prerequisitesHtml = event.prerequisites && event.prerequisites.length > 0 
-          ? event.prerequisites.map(p => `<li>${p}</li>`).join('')
-          : '<li style="color: #999; font-size: 0.875rem;">No prerequisites defined</li>';
+        grid.innerHTML = '';
         
-        // Format preparation
-        const preparationHtml = event.preparation && event.preparation.length > 0 
-          ? event.preparation.map(p => `<li>${p}</li>`).join('')
-          : '<li style="color: #999; font-size: 0.875rem;">No preparation needed</li>';
+        const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
         
-        // Get intensity badge
-        let intensityBadge;
-        switch(event.intensity) {
-          case 'deep':
-            intensityBadge = '<span class="intensity-badge intensity-deep">🧠 Deep Work</span>';
-            break;
-          case 'focus':
-            intensityBadge = '<span class="intensity-badge intensity-focus">🎯 Focus</span>';
-            break;
-          case 'light':
-            intensityBadge = '<span class="intensity-badge intensity-light">💡 Light</span>';
-            break;
-          default:
-            intensityBadge = '<span class="intensity-badge">Unknown</span>';
-        }
+        // Add day headers
+        days.forEach(day => {
+          const dayElement = document.createElement('div');
+          dayElement.className = 'calendar-day';
+          dayElement.textContent = day;
+          dayElement.style.fontWeight = '500';
+          dayElement.style.color = '#374151';
+          grid.appendChild(dayElement);
+        });
         
-        taskDetails.innerHTML = `
-          <div class="task-header">${event.title}</div>
-          <div class="task-info">
-            <div class="info-row">
-              <span class="info-label">Status:</span>
-              <span class="info-value">${event.completed ? '✅ Completed' : `Scheduled (${formatTime(event.startTime)})`}</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Intensity:</span>
-              <span class="info-value">${intensityBadge}</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Duration:</span>
-              <span class="info-value">${Math.floor(event.duration / 60)}h ${event.duration % 60}m</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Priority:</span>
-              <span class="info-value" style="color: ${getPriorityColor(event.priority)}; font-weight: 500;">${event.priority.charAt(0).toUpperCase() + event.priority.slice(1)}</span>
-            </div>
-          </div>
+        // Add days
+        const today = new Date().getDate();
+        for (let i = 1; i <= 31; i++) {
+          const dayElement = document.createElement('div');
+          dayElement.className = 'calendar-day';
+          dayElement.textContent = i;
           
-          <div class="section-title">PREREQUISITES</div>
-          <ul class="prerequisites-list">
-            ${prerequisitesHtml}
-          </ul>
-          
-          <div class="section-title">SUGGESTED PREP</div>
-          <ul class="suggestions-list">
-            ${preparationHtml}
-          </ul>
-          
-          <div class="task-actions">
-            <button class="action-btn" onclick="editTask('${event.id}')">
-              <i class="fas fa-edit"></i> EDIT
-            </button>
-            <button class="action-btn primary" onclick="completeTask('${event.id}')">
-              <i class="fas fa-check"></i> COMPLETE
-            </button>
-            <button class="action-btn danger" onclick="deleteTask('${event.id}')">
-              <i class="fas fa-trash"></i> DELETE
-            </button>
-          </div>
-        `;
-        
-        // Show timer if task is active
-        if (!event.completed) {
-          document.getElementById('timerSection').style.display = 'block';
-          // Reset timer to task duration
-          timerSeconds = event.duration * 60;
-          updateTimerDisplay();
-        } else {
-          document.getElementById('timerSection').style.display = 'none';
-        }
-        
-        // Store current event ID for timer
-        document.getElementById('timerSection').dataset.eventId = event.id;
-        
-        openModal('taskModal');
-      }
-
-      function getPriorityColor(priority) {
-        const colors = {
-          high: '#ff4757',
-          medium: '#ffa502',
-          low: '#2ed573'
-        };
-        return colors[priority] || '#666';
-      }
-
-      function editTask(eventId) {
-        const event = calendarEvents.find(e => e.id.toString() === eventId);
-        if (!event) return;
-        
-        // Pre-fill form with event data
-        document.getElementById('taskTitle').value = event.title;
-        document.getElementById('taskPriority').value = event.priority;
-        document.getElementById('taskIntensity').value = event.intensity;
-        document.getElementById('taskDuration').value = event.duration;
-        
-        // Format time
-        const startTime = new Date(event.startTime);
-        const timeString = startTime.getHours().toString().padStart(2, '0') + ':' + 
-                          startTime.getMinutes().toString().padStart(2, '0');
-        document.getElementById('taskTime').value = timeString;
-        
-        document.getElementById('taskPrerequisites').value = event.prerequisites.join('\n');
-        document.getElementById('taskPreparation').value = event.preparation.join('\n');
-        
-        // Store event ID for update
-        document.getElementById('taskForm').dataset.editId = eventId;
-        
-        closeModal('taskModal');
-        openAddTaskModal();
-      }
-
-      function completeTask(eventId) {
-        const event = calendarEvents.find(e => e.id.toString() === eventId);
-        if (!event) return;
-        
-        event.completed = true;
-        event.status = 'completed';
-        event.completedAt = new Date().toISOString();
-        
-        saveCalendarEvents();
-        generateCalendarGrid();
-        loadCompletedTasks();
-        closeModal('taskModal');
-        
-        // Update productivity score
-        if (currentUser) {
-          currentUser.productivityScore = Math.min(100, (currentUser.productivityScore || 0) + 5);
-          saveUser();
-        }
-        
-        showToast('Task marked as completed!', 'success');
-      }
-
-      function deleteTask(eventId) {
-        if (confirm('Are you sure you want to delete this task?')) {
-          calendarEvents = calendarEvents.filter(e => e.id.toString() !== eventId);
-          saveCalendarEvents();
-          generateCalendarGrid();
-          closeModal('taskModal');
-          showToast('Task deleted', 'info');
-        }
-      }
-
-      // Timer functions
-      function startTimer() {
-        if (isTimerRunning) return;
-        
-        isTimerRunning = true;
-        document.querySelector('.timer-btn.start').style.display = 'none';
-        document.querySelector('.timer-btn.pause').style.display = 'flex';
-        
-        timerInterval = setInterval(() => {
-          if (timerSeconds > 0) {
-            timerSeconds--;
-            updateTimerDisplay();
-          } else {
-            stopTimer();
-            showToast('Timer completed! Great work! 🎉', 'success');
+          if (i === today) {
+            dayElement.classList.add('active');
           }
-        }, 1000);
-      }
-
-      function pauseTimer() {
-        if (!isTimerRunning) return;
-        
-        isTimerRunning = false;
-        clearInterval(timerInterval);
-        document.querySelector('.timer-btn.start').style.display = 'flex';
-        document.querySelector('.timer-btn.pause').style.display = 'none';
-      }
-
-      function stopTimer() {
-        isTimerRunning = false;
-        clearInterval(timerInterval);
-        document.querySelector('.timer-btn.start').style.display = 'flex';
-        document.querySelector('.timer-btn.pause').style.display = 'none';
-        
-        // Reset to original duration
-        const eventId = document.getElementById('timerSection').dataset.eventId;
-        const event = calendarEvents.find(e => e.id.toString() === eventId);
-        if (event) {
-          timerSeconds = event.duration * 60;
-          updateTimerDisplay();
+          
+          dayElement.addEventListener('click', () => {
+            // Remove active class from all days
+            document.querySelectorAll('.calendar-day').forEach(d => {
+              d.classList.remove('active');
+            });
+            // Add active class to clicked day
+            dayElement.classList.add('active');
+          });
+          
+          grid.appendChild(dayElement);
         }
       }
 
-      function updateTimerDisplay() {
-        const minutes = Math.floor(timerSeconds / 60);
-        const seconds = timerSeconds % 60;
-        const display = document.getElementById('timerDisplay');
-        if (display) {
-          display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
+      function showMetricDetails(metric) {
+        const metricNames = {
+          projects: 'New Projects',
+          completed: 'Successfully Completed',
+          earned: 'Earned This Month'
+        };
+        
+        showToast(`Viewing details for ${metricNames[metric]}`, 'info');
       }
 
-      // Progress Report
-      function loadCompletedTasks() {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        
-        const completedToday = calendarEvents.filter(event => {
-          if (!event.completed || !event.completedAt) return false;
-          const completedDate = new Date(event.completedAt);
-          completedDate.setHours(0, 0, 0, 0);
-          return completedDate.getTime() === today.getTime();
-        });
-        
-        const container = document.getElementById('completedTasksList');
-        if (!container) return;
-        
-        if (completedToday.length === 0) {
-          container.innerHTML = `
-            <div style="text-align: center; padding: 2rem; color: #666;">
-              <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 1rem; color: #28a745;"></i>
-              <p style="font-size: 0.875rem;">No tasks completed today yet. Keep going!</p>
-            </div>
-          `;
-        } else {
-          container.innerHTML = completedToday.map(event => `
-            <div class="completed-task">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <strong style="font-size: 0.875rem;">${event.title}</strong>
-                  <div style="font-size: 0.75rem; color: #666; margin-top: 0.25rem;">
-                    Completed at ${formatTime(event.completedAt)}
-                  </div>
-                </div>
-                <span style="color: #28a745; font-weight: 500; font-size: 0.875rem;">${event.duration}m</span>
-              </div>
-            </div>
-          `).join('');
-        }
-      }
-
-      function generateProgressReport() {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        
-        const completedToday = calendarEvents.filter(event => {
-          if (!event.completed || !event.completedAt) return false;
-          const completedDate = new Date(event.completedAt);
-          completedDate.setHours(0, 0, 0, 0);
-          return completedDate.getTime() === today.getTime();
-        });
-        
-        const totalDuration = completedToday.reduce((sum, event) => sum + event.duration, 0);
-        const efficiency = completedToday.length > 0 ? Math.min(100, Math.floor((completedToday.length / 12) * 100)) : 0;
-        
-        // Create report content
-        const report = `
-Context Defender - Daily Progress Report
-Date: ${today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-
-SUMMARY:
-• Tasks Completed: ${completedToday.length}
-• Total Focus Time: ${Math.floor(totalDuration / 60)}h ${totalDuration % 60}m
-• Efficiency Score: ${efficiency}%
-• AI Optimizations: 6
-
-COMPLETED TASKS:
-${completedToday.map((event, i) => `${i + 1}. ${event.title} (${event.duration}m) - ${formatTime(event.completedAt)}`).join('\n')}
-
-PREREQUISITES COMPLETED:
-${completedToday.flatMap(event => event.prerequisites).filter(p => p).length} prerequisites fulfilled
-
-RECOMMENDATIONS:
-1. Schedule deep work sessions for morning
-2. Take 5-minute breaks every 25 minutes
-3. Group similar tasks together
-
-Productivity Score: ${currentUser?.productivityScore || 85}/100
-        `;
-        
-        // Create download link
-        const blob = new Blob([report], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `progress-report-${today.toISOString().split('T')[0]}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        showToast('Progress report exported!', 'success');
-      }
-
-      // Data persistence
-      function loadUser() {
-        const savedUser = localStorage.getItem('context_defender_user');
-        if (savedUser) {
-          currentUser = JSON.parse(savedUser);
-        } else {
-          currentUser = {
-            id: 'user_' + Date.now(),
-            name: 'John Doe',
-            email: 'john@example.com',
-            productivityScore: 85,
-            workHours: 8,
-            avatar: 'JD'
-          };
-          saveUser();
-        }
-      }
-
-      function saveUser() {
-        localStorage.setItem('context_defender_user', JSON.stringify(currentUser));
+      function openUserMenu() {
+        showToast('User menu clicked', 'info');
       }
 
       function loadCalendarEvents() {
@@ -1935,13 +1660,9 @@ Productivity Score: ${currentUser?.productivityScore || 85}/100
               priority: 'high',
               intensity: 'deep',
               duration: 90,
-              prerequisites: ['Review Q3 data (15m)', 'Gather team input (30m)'],
-              preparation: ['Clear notifications', 'Noise-cancelling headphones', 'Water & snacks ready'],
               startTime: new Date(today.getTime() + (14 * 60 * 60 * 1000)).toISOString(), // 2 PM
               endTime: new Date(today.getTime() + (15.5 * 60 * 60 * 1000)).toISOString(),
-              status: 'scheduled',
-              completed: false,
-              createdAt: new Date().toISOString()
+              status: 'scheduled'
             },
             {
               id: 2,
@@ -1949,13 +1670,9 @@ Productivity Score: ${currentUser?.productivityScore || 85}/100
               priority: 'medium',
               intensity: 'focus',
               duration: 60,
-              prerequisites: ['Prepare agenda (10m)', 'Review previous notes (5m)'],
-              preparation: ['Test video call setup', 'Have notes ready'],
               startTime: new Date(today.getTime() + (10 * 60 * 60 * 1000)).toISOString(), // 10 AM
               endTime: new Date(today.getTime() + (11 * 60 * 60 * 1000)).toISOString(),
-              status: 'scheduled',
-              completed: false,
-              createdAt: new Date().toISOString()
+              status: 'scheduled'
             },
             {
               id: 3,
@@ -1963,13 +1680,9 @@ Productivity Score: ${currentUser?.productivityScore || 85}/100
               priority: 'low',
               intensity: 'light',
               duration: 45,
-              prerequisites: ['Run tests (10m)', 'Check documentation'],
-              preparation: ['Coffee break before', 'Review checklist'],
               startTime: new Date(today.getTime() + (16 * 60 * 60 * 1000)).toISOString(), // 4 PM
               endTime: new Date(today.getTime() + (16.75 * 60 * 60 * 1000)).toISOString(),
-              status: 'scheduled',
-              completed: false,
-              createdAt: new Date().toISOString()
+              status: 'scheduled'
             }
           ];
           saveCalendarEvents();
@@ -1978,12 +1691,6 @@ Productivity Score: ${currentUser?.productivityScore || 85}/100
 
       function saveCalendarEvents() {
         localStorage.setItem('context_defender_calendar_events', JSON.stringify(calendarEvents));
-      }
-
-      // User menu
-      function openUserMenu() {
-        // In a real app, this would open a dropdown menu
-        showToast('User menu clicked', 'info');
       }
     </script>
   </body>
