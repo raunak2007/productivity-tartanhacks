@@ -267,6 +267,19 @@
         background: #f8f9fa;
       }
 
+      .task-item.dragging {
+        background: #e6f0ff;
+        border-bottom-color: #c7dcff;
+        opacity: 1;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        cursor: grabbing;
+      }
+
+      .task-placeholder {
+        border: 2px dashed #c7dcff;
+        background: transparent;
+      }
+
       .task-item:last-child {
         border-bottom: none;
       }
@@ -1006,6 +1019,11 @@
               <option value="low">Low Energy</option>
             </select>
           </div>
+
+          <div class="form-group">
+            <label>Due Date</label>
+            <input type="date" class="form-control" id="taskDueDate">
+          </div>
           
           <div class="form-actions">
             <button type="button" class="btn-secondary" onclick="closeModal('addTaskModal')" style="flex: 1;">
@@ -1036,6 +1054,9 @@
       let currentUser = null;
       let tasks = [];
       let currentSection = 'overview';
+      let currentTaskFilter = 'all';
+      let draggedTaskId = null;
+      let taskDragState = null;
 
       // Toast notifications
       function showToast(message, type = 'info') {
@@ -1246,6 +1267,7 @@
         const priority = document.getElementById('taskPriority').value;
         const estimatedTime = parseInt(document.getElementById('taskTime').value) || null;
         const energyLevel = document.getElementById('taskEnergy').value;
+        const dueDate = document.getElementById('taskDueDate').value;
         
         const newTask = {
           id: Date.now(),
@@ -1257,7 +1279,7 @@
           energyLevel,
           status: 'pending',
           createdAt: new Date().toISOString(),
-          dueDate: new Date(Date.now() + 86400000).toISOString()
+          dueDate: dueDate || null
         };
         
         tasks.unshift(newTask);
@@ -1324,10 +1346,12 @@
       }
 
       function filterTasks(filter) {
+        currentTaskFilter = filter;
         renderTasks(filter);
       }
 
       function renderTasks(filter = 'all') {
+        currentTaskFilter = filter;
         const todayTasksContainer = document.getElementById('todayTasks');
         const allTasksContainer = document.getElementById('allTasks');
         
@@ -1384,9 +1408,20 @@
       function createTaskElement(task, showDelete = false) {
         const taskElement = document.createElement('div');
         taskElement.className = 'task-item';
+        taskElement.dataset.taskId = task.id;
         
         const priorityClass = `priority-${task.priority}`;
         const isCompleted = task.status === 'completed';
+        
+        const dueDateDisplay = task.dueDate
+          ? `<div class="task-time" style="font-size: 0.85rem; margin-top: 0.25rem; ${isCompleted ? 'color: #999;' : ''}">Due ${formatDueDate(task.dueDate)}</div>`
+          : '';
+        const dueDateInput = `
+          <label style="font-size: 0.8rem; color: #666; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.35rem;">
+            Due
+            <input type="date" class="task-due-input" value="${dueDateToInputValue(task.dueDate)}" style="border: 1px solid #ddd; border-radius: 6px; padding: 0.2rem 0.4rem; font-size: 0.8rem;">
+          </label>
+        `;
         
         taskElement.innerHTML = `
           <div class="task-checkbox ${isCompleted ? 'checked' : ''}" onclick="toggleTask(${task.id})">
@@ -1397,6 +1432,7 @@
               ${task.title}
             </div>
             ${task.description ? `<div class="task-time" style="${isCompleted ? 'color: #999;' : ''}">${task.description}</div>` : ''}
+            ${showDelete ? dueDateInput : dueDateDisplay}
           </div>
           <div class="task-priority ${priorityClass}">
             ${task.priority}
@@ -1407,8 +1443,155 @@
             </button>
           ` : ''}
         `;
+
+        if (showDelete) {
+          taskElement.style.cursor = 'grab';
+          taskElement.addEventListener('mousedown', (e) => {
+            if (
+              e.button !== 0 ||
+              e.target.closest('input, button, select, textarea, .task-checkbox')
+            ) {
+              return;
+            }
+            startTaskDrag(e, taskElement);
+          });
+
+          const dueInput = taskElement.querySelector('.task-due-input');
+          if (dueInput) {
+            dueInput.addEventListener('mousedown', (e) => e.stopPropagation());
+            dueInput.addEventListener('change', (e) => {
+              const updatedTask = tasks.find(t => t.id === task.id);
+              if (!updatedTask) return;
+              updatedTask.dueDate = e.target.value || null;
+              saveTasks();
+              renderTasks(currentTaskFilter);
+            });
+          }
+        }
         
         return taskElement;
+      }
+
+      function dueDateToInputValue(dateStr) {
+        if (!dateStr) return '';
+        const parsed = new Date(dateStr);
+        if (Number.isNaN(parsed.getTime())) return '';
+        return parsed.toISOString().split('T')[0];
+      }
+
+      function formatDueDate(dateStr) {
+        if (!dateStr) return '';
+        const parsed = new Date(dateStr);
+        if (Number.isNaN(parsed.getTime())) return dateStr;
+        return parsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }
+
+      function startTaskDrag(e, taskElement) {
+        const allTasksContainer = document.getElementById('allTasks');
+        if (!allTasksContainer) return;
+
+        draggedTaskId = Number(taskElement.dataset.taskId);
+        const rect = taskElement.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left;
+        const offsetY = e.clientY - rect.top;
+
+        const placeholder = document.createElement('div');
+        placeholder.className = 'task-item task-placeholder';
+        placeholder.style.height = `${rect.height}px`;
+
+        taskElement.classList.add('dragging');
+        taskElement.style.position = 'fixed';
+        taskElement.style.zIndex = '1000';
+        taskElement.style.width = `${rect.width}px`;
+        taskElement.style.left = `${rect.left}px`;
+        taskElement.style.top = `${rect.top}px`;
+        taskElement.style.pointerEvents = 'none';
+        taskElement.style.background = '#e6f0ff';
+        taskElement.style.borderBottomColor = '#c7dcff';
+        taskElement.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.12)';
+
+        allTasksContainer.insertBefore(placeholder, taskElement.nextSibling);
+
+        taskDragState = {
+          taskElement,
+          placeholder,
+          offsetX,
+          offsetY,
+          container: allTasksContainer
+        };
+
+        document.addEventListener('mousemove', handleTaskMouseMove);
+        document.addEventListener('mouseup', handleTaskMouseUp);
+      }
+
+      function handleTaskMouseMove(e) {
+        if (!taskDragState) return;
+        const { taskElement, placeholder, offsetX, offsetY, container } = taskDragState;
+
+        taskElement.style.left = `${e.clientX - offsetX}px`;
+        taskElement.style.top = `${e.clientY - offsetY}px`;
+
+        const items = Array.from(container.querySelectorAll('.task-item:not(.dragging)'));
+        const mouseY = e.clientY;
+
+        let inserted = false;
+        for (const item of items) {
+          const itemRect = item.getBoundingClientRect();
+          const midpoint = itemRect.top + itemRect.height / 2;
+          if (mouseY < midpoint) {
+            container.insertBefore(placeholder, item);
+            inserted = true;
+            break;
+          }
+        }
+
+        if (!inserted) {
+          container.appendChild(placeholder);
+        }
+      }
+
+      function handleTaskMouseUp() {
+        if (!taskDragState) return;
+        const { taskElement, placeholder, container } = taskDragState;
+
+        container.insertBefore(taskElement, placeholder);
+        placeholder.remove();
+
+        taskElement.classList.remove('dragging');
+        taskElement.style.position = '';
+        taskElement.style.zIndex = '';
+        taskElement.style.width = '';
+        taskElement.style.left = '';
+        taskElement.style.top = '';
+        taskElement.style.pointerEvents = '';
+        taskElement.style.background = '';
+        taskElement.style.borderBottomColor = '';
+        taskElement.style.boxShadow = '';
+
+        const orderedVisibleIds = Array.from(container.querySelectorAll('.task-item'))
+          .map(el => Number(el.dataset.taskId));
+
+        if (orderedVisibleIds.length) {
+          const visibleSet = new Set(orderedVisibleIds);
+          const reorderedVisible = orderedVisibleIds.map(id => tasks.find(task => task.id === id));
+          let nextVisibleIndex = 0;
+          tasks = tasks.map(task => {
+            if (visibleSet.has(task.id)) {
+              const replacement = reorderedVisible[nextVisibleIndex];
+              nextVisibleIndex += 1;
+              return replacement;
+            }
+            return task;
+          });
+        }
+
+        saveTasks();
+        renderTasks(currentTaskFilter);
+
+        document.removeEventListener('mousemove', handleTaskMouseMove);
+        document.removeEventListener('mouseup', handleTaskMouseUp);
+        taskDragState = null;
+        draggedTaskId = null;
       }
 
       // AI Optimization

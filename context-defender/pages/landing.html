@@ -210,6 +210,8 @@
         border-radius: 8px;
         padding: 2rem;
         transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
       }
 
       .feature-card:hover {
@@ -237,6 +239,138 @@
         font-size: 0.9375rem;
         line-height: 1.6;
         color: var(--color-text-secondary);
+        flex: 1;
+      }
+
+      .feature-card .btn-ghost {
+        margin-top: 1.25rem;
+      }
+
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-sans);
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--color-border);
+        background: var(--color-bg-primary);
+        color: var(--color-text-primary);
+        border-radius: 999px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+
+      .btn-ghost:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        box-shadow: var(--shadow-sm);
+        transform: translateY(-1px);
+      }
+
+      .peek-caption {
+        font-size: 0.9rem;
+        color: var(--color-text-tertiary);
+        margin-top: 0.75rem;
+      }
+
+      .mini-list {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .mini-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+      }
+
+      .mini-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--color-text-tertiary);
+      }
+
+      .mini-row.optimized {
+        font-weight: 600;
+        color: var(--color-primary);
+      }
+
+      .mini-row.optimized .mini-dot {
+        background: var(--color-primary);
+      }
+
+      .mini-calendar {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .mini-cal-row {
+        display: grid;
+        grid-template-columns: 3rem 1fr;
+        gap: 0.5rem;
+        align-items: center;
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+      }
+
+      .mini-chip {
+        padding: 0.35rem 0.6rem;
+        border-radius: 999px;
+        background: var(--color-bg-primary);
+        border: 1px solid var(--color-border);
+        font-weight: 600;
+        color: var(--color-text-primary);
+      }
+
+      .mini-chip.primary {
+        border-color: rgba(255, 102, 0, 0.4);
+        color: var(--color-primary);
+        background: rgba(255, 102, 0, 0.08);
+      }
+
+      .mini-metrics {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .mini-metric {
+        display: grid;
+        gap: 0.2rem;
+      }
+
+      .mini-metric .label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--color-text-tertiary);
+        font-weight: 600;
+      }
+
+      .mini-metric .value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
       }
 
       /* Stats Section */
@@ -244,6 +378,80 @@
         padding: 4rem 0;
         background: var(--color-bg-primary);
         border-top: 1px solid var(--color-border);
+      }
+
+      /* Research Section */
+      #research {
+        padding: 4rem 0;
+        background: var(--color-bg-primary);
+        border-top: 1px solid var(--color-border);
+      }
+
+      .section-header.left {
+        text-align: left;
+        margin-bottom: 1.5rem;
+      }
+
+      .research-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 3rem;
+        align-items: center;
+      }
+
+      .research-list {
+        display: grid;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .research-pill {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        color: var(--color-text-secondary);
+        font-size: 0.95rem;
+      }
+
+      .research-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .research-card {
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+      }
+
+      .paper-meta {
+        font-size: 0.875rem;
+        color: var(--color-text-tertiary);
+        margin-bottom: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+      }
+
+      .paper-frame {
+        width: 100%;
+        height: 360px;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        background: #ffffff;
+      }
+
+      .paper-note {
+        margin-top: 0.75rem;
+        font-size: 0.875rem;
+        color: var(--color-text-tertiary);
       }
 
       .stats-grid {
@@ -351,6 +559,10 @@
         .hero-content h2 {
           font-size: 3rem;
         }
+
+        .research-grid {
+          grid-template-columns: 1fr;
+        }
       }
 
       @media (max-width: 768px) {
@@ -369,6 +581,10 @@
 
         nav a {
           font-size: 0.8125rem;
+        }
+
+        .paper-frame {
+          height: 280px;
         }
       }
 
@@ -470,57 +686,155 @@
         <section id="features">
           <div class="container">
             <div class="section-header">
-              <h2>Built for focus, not distraction</h2>
-              <p>Six ways Utilio protects your productivity</p>
+              <h2>Sneak peek: how Utilio saves your day</h2>
+              <p>A quick look at the workflow you will see inside Utilio</p>
             </div>
             <div class="features-grid">
               <div class="feature-card">
-                <i class="fas fa-brain feature-icon"></i>
-                <h3>AI-Powered Task Batching</h3>
+                <i class="fas fa-wand-magic-sparkles feature-icon"></i>
+                <h3>AI Optimized Task List</h3>
                 <p>
-                  Our cognitive science consultant analyzes your tasks and
-                  groups similar work together, eliminating wasteful context
-                  switches.
+                  Utilio sorts your tasks into the ideal order for fewer
+                  context switches.
                 </p>
+                <div class="mini-list" aria-hidden="true">
+                  <div class="mini-row optimized">
+                    <span class="mini-dot"></span>
+                    <span>Deep work: architecture review</span>
+                  </div>
+                  <div class="mini-row optimized">
+                    <span class="mini-dot"></span>
+                    <span>Deep work: API implementation</span>
+                  </div>
+                  <div class="mini-row">
+                    <span class="mini-dot"></span>
+                    <span>Email: product follow-ups</span>
+                  </div>
+                  <div class="mini-row">
+                    <span class="mini-dot"></span>
+                    <span>Email: investor update</span>
+                  </div>
+                  <div class="mini-row">
+                    <span class="mini-dot"></span>
+                    <span>Meeting: sprint check-in</span>
+                  </div>
+                </div>
+                <div class="peek-caption">Optimized by AI</div>
               </div>
               <div class="feature-card">
-                <i class="fas fa-bolt feature-icon"></i>
-                <h3>Real-Time Cost Analysis</h3>
+                <i class="fas fa-calendar-day feature-icon"></i>
+                <h3>Daily Flow Calendar</h3>
                 <p>
-                  See exactly how much time you're losing to chaos vs. optimized
-                  flow. Every switch has a price.
+                  Your calendar auto-aligns with the optimized order from the
+                  list.
                 </p>
+                <div class="mini-calendar" aria-hidden="true">
+                  <div class="mini-cal-row">
+                    <span>9:00</span>
+                    <span class="mini-chip primary">Architecture review</span>
+                  </div>
+                  <div class="mini-cal-row">
+                    <span>10:30</span>
+                    <span class="mini-chip primary">API implementation</span>
+                  </div>
+                  <div class="mini-cal-row">
+                    <span>1:00</span>
+                    <span class="mini-chip">Product follow-ups</span>
+                  </div>
+                  <div class="mini-cal-row">
+                    <span>2:30</span>
+                    <span class="mini-chip">Investor update</span>
+                  </div>
+                  <div class="mini-cal-row">
+                    <span>4:00</span>
+                    <span class="mini-chip">Sprint check-in</span>
+                  </div>
+                </div>
+                <div class="peek-caption">Mirrors the optimized list</div>
               </div>
               <div class="feature-card">
-                <i class="fas fa-bullseye feature-icon"></i>
-                <h3>Smart Scheduling</h3>
+                <i class="fas fa-gauge-high feature-icon"></i>
+                <h3>Optimizer Metrics</h3>
                 <p>
-                  Preserve cognitive flow by maintaining mental state. Deep work
-                  stays deep.
+                  A quick snapshot of how the schedule is performing right now.
                 </p>
+                <div class="mini-metrics" aria-hidden="true">
+                  <div class="mini-metric">
+                    <div class="label">Time Optimization</div>
+                    <div class="value">0m</div>
+                    <div class="peek-caption">
+                      Average Time Saved per Session
+                    </div>
+                  </div>
+                  <div class="mini-metric">
+                    <div class="label">Total Optimized Tasks</div>
+                    <div class="value">0</div>
+                  </div>
+                  <div class="mini-metric">
+                    <div class="label">Average Session Duration</div>
+                    <div class="value">0m</div>
+                  </div>
+                  <div class="mini-metric">
+                    <div class="label">Peak Optimization Time</div>
+                    <div class="value">N/A</div>
+                  </div>
+                </div>
               </div>
-              <div class="feature-card">
-                <i class="fas fa-chart-line feature-icon"></i>
-                <h3>Visual Productivity Analytics</h3>
-                <p>
-                  Track your efficiency gains with side-by-side comparisons of
-                  chaotic vs. optimized schedules.
-                </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="research">
+          <div class="container">
+            <div class="research-grid">
+              <div>
+                <div class="section-header left">
+                  <h2>Research that shaped Utilio</h2>
+                  <p>
+                    The product was inspired by Gloria Mark's work at UC Irvine
+                    on the cost of interruptions and how they impact speed and
+                    stress.
+                  </p>
+                </div>
+                <div class="research-list">
+                  <div class="research-pill">
+                    <i class="fas fa-university"></i>
+                    <span>
+                      Abstract: interruptions can speed task completion while
+                      increasing stress and attention shifts
+                    </span>
+                  </div>
+                  <div class="research-pill">
+                    <i class="fas fa-user-group"></i>
+                    <span>Authored by Gloria Mark (UC Irvine)</span>
+                  </div>
+                  <div class="research-pill">
+                    <i class="fas fa-heart-pulse"></i>
+                    <span>Interruptions can speed work but raise stress</span>
+                  </div>
+                </div>
+                <div class="research-actions">
+                  <a
+                    class="btn-ghost"
+                    href="https://ics.uci.edu/~gmark/chi08-mark.pdf"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Open the paper
+                  </a>
+                </div>
               </div>
-              <div class="feature-card">
-                <i class="fas fa-lightbulb feature-icon"></i>
-                <h3>Research-Backed</h3>
-                <p>
-                  Built on cognitive science principles of attention and mental
-                  state transitions.
-                </p>
-              </div>
-              <div class="feature-card">
-                <i class="fas fa-rocket feature-icon"></i>
-                <h3>Instant Results</h3>
-                <p>
-                  Paste your tasks, get an optimized schedule in seconds. Zero
-                  configuration.
+              <div class="research-card">
+                <div class="paper-meta">Paper Preview</div>
+                <iframe
+                  class="paper-frame"
+                  src="https://ics.uci.edu/~gmark/chi08-mark.pdf"
+                  title="The cost of interrupted work: more speed and stress"
+                  loading="lazy"
+                ></iframe>
+                <p class="paper-note">
+                  If the preview does not load, use the button to open the PDF
+                  in a new tab.
                 </p>
               </div>
             </div>
@@ -542,7 +856,7 @@
                 <div class="stat-label">To Refocus After Switch</div>
               </div>
               <div class="stat-card">
-                <div class="stat-number">$450B</div>
+                <div class="stat-number">$650B</div>
                 <div class="stat-label">Annual Cost to US Economy</div>
               </div>
             </div>
@@ -571,7 +885,7 @@
                 faster completion, and significantly less cognitive fatigue.
               </p>
               <p>
-                Built during TartanHacks 2025, Utilio transforms how knowledge
+                Built during TartanHacks 2026, Utilio transforms how knowledge
                 workers approach their day—defending against the invisible costs
                 of chaotic scheduling.
               </p>
@@ -594,7 +908,7 @@
 
       <footer>
         <div class="container">
-          <p>&copy; 2026 Utilio | TartanHacks 2025 | Built with focus</p>
+          <p>&copy; 2026 Utilio | TartanHacks 2026 | Built with focus</p>
         </div>
       </footer>
     </div>
@@ -653,8 +967,10 @@
       });
 
       function animateCounter(element) {
-        const finalValue = parseFloat(element.textContent);
-        const suffix = element.textContent.replace(/[0-9.]/g, "");
+        const rawValue = element.textContent.trim();
+        const finalValue = parseFloat(rawValue.replace(/[^0-9.]/g, ""));
+        const prefix = (rawValue.match(/^[^0-9.]*/)?.[0] || "").trim();
+        const suffix = (rawValue.match(/[^0-9.]*$/)?.[0] || "").trim();
         const duration = 2000;
         const startTime = performance.now();
 
@@ -664,16 +980,16 @@
           const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
 
           let currentValue;
-          if (element.textContent.includes("$")) {
+          if (rawValue.includes("$")) {
             currentValue = Math.floor(easeProgress * finalValue);
-          } else if (element.textContent.includes("min")) {
+          } else if (rawValue.includes("min")) {
             currentValue = Math.floor(easeProgress * finalValue);
           } else {
             currentValue = easeProgress * finalValue;
             currentValue = currentValue.toFixed(currentValue % 1 === 0 ? 0 : 1);
           }
 
-          element.textContent = suffix ? currentValue + suffix : currentValue;
+          element.textContent = `${prefix}${currentValue}${suffix}`;
 
           if (progress < 1) {
             requestAnimationFrame(updateCounter);
