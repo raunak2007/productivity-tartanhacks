@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/src/styles/common.css" />
@@ -41,12 +41,18 @@
           <div class="user-profile">
             <div class="avatar" id="userAvatar">CD</div>
             <h3 id="userName">Context Defender</h3>
-            <p id="userEmail" style="color: #666; font-size: 0.9rem">
+            <p
+              id="userEmail"
+              style="color: var(--color-text-secondary); font-size: 0.9rem"
+            >
               Productivity Optimizer
             </p>
             <div class="productivity-score">
-              <p style="color: #666; margin-top: 0.5rem">
-                <i class="fas fa-chart-line" style="color: #000000"></i>
+              <p style="color: var(--color-text-secondary); margin-top: 0.5rem">
+                <i
+                  class="fas fa-chart-line"
+                  style="color: var(--color-primary)"
+                ></i>
                 Productivity: <span id="productivityValue">85</span>/100
               </p>
             </div>
@@ -140,7 +146,9 @@
             <div class="content-header">
               <div>
                 <h2>Productivity Dashboard</h2>
-                <p style="color: #666; margin-top: 0.5rem">
+                <p
+                  style="color: var(--color-text-secondary); margin-top: 0.5rem"
+                >
                   Welcome back! Here's your productivity overview
                 </p>
               </div>
@@ -321,7 +329,7 @@
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
               "
             >
-              <h3 style="color: #333; margin-bottom: 1rem">
+              <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
                 Weekly Productivity Trend
               </h3>
               <div
@@ -356,7 +364,7 @@
                   margin-bottom: 1rem;
                 "
               >
-                <h3 style="color: #333">Today's Tasks</h3>
+                <h3 style="color: var(--color-text-primary)">Today's Tasks</h3>
                 <button
                   class="btn btn-secondary"
                   onclick="quickOptimizeSchedule()"
@@ -413,7 +421,9 @@
                   <i class="fas fa-plus"></i>
                 </div>
                 <h3>Add New Task</h3>
-                <p style="color: #666; font-size: 0.9rem">
+                <p
+                  style="color: var(--color-text-secondary); font-size: 0.9rem"
+                >
                   Create a new task with AI assistance
                 </p>
               </div>
@@ -455,7 +465,9 @@
                   <i class="fas fa-bolt"></i>
                 </div>
                 <h3>Optimize Schedule</h3>
-                <p style="color: #666; font-size: 0.9rem">
+                <p
+                  style="color: var(--color-text-secondary); font-size: 0.9rem"
+                >
                   Let AI optimize your daily schedule
                 </p>
               </div>
@@ -497,7 +509,9 @@
                   <i class="fas fa-chart-line"></i>
                 </div>
                 <h3>View Analytics</h3>
-                <p style="color: #666; font-size: 0.9rem">
+                <p
+                  style="color: var(--color-text-secondary); font-size: 0.9rem"
+                >
                   Check your productivity trends
                 </p>
               </div>
@@ -539,7 +553,9 @@
                   <i class="fas fa-cog"></i>
                 </div>
                 <h3>Settings</h3>
-                <p style="color: #666; font-size: 0.9rem">
+                <p
+                  style="color: var(--color-text-secondary); font-size: 0.9rem"
+                >
                   Customize your preferences
                 </p>
               </div>
@@ -555,7 +571,9 @@
             <div class="content-header">
               <div>
                 <h2>Task Management</h2>
-                <p style="color: #666; margin-top: 0.5rem">
+                <p
+                  style="color: var(--color-text-secondary); margin-top: 0.5rem"
+                >
                   Manage all your tasks in one place
                 </p>
               </div>
@@ -599,7 +617,7 @@
             <div class="content-header">
               <div>
                 <h2>AI Schedule Optimizer</h2>
-                <p style="color: #666">
+                <p style="color: var(--color-text-secondary)">
                   Minimize context switching with AI-powered task batching
                 </p>
               </div>
@@ -607,7 +625,9 @@
 
             <div class="input-section">
               <h3><i class="fas fa-tasks"></i> Add Tasks</h3>
-              <p style="color: #666; margin-bottom: 1rem">
+              <p
+                style="color: var(--color-text-secondary); margin-bottom: 1rem"
+              >
                 Add your tasks one by one - AI will automatically categorize
                 them
               </p>
@@ -744,7 +764,9 @@
             <div class="content-header">
               <div>
                 <h2>Productivity Analytics</h2>
-                <p style="color: #666; margin-top: 0.5rem">
+                <p
+                  style="color: var(--color-text-secondary); margin-top: 0.5rem"
+                >
                   Detailed insights into your productivity
                 </p>
               </div>
@@ -919,7 +941,7 @@
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
               "
             >
-              <h3 style="color: #333; margin-bottom: 1rem">
+              <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
                 Monthly Performance
               </h3>
               <div
@@ -947,7 +969,9 @@
             <div class="content-header">
               <div>
                 <h2>Settings</h2>
-                <p style="color: #666; margin-top: 0.5rem">
+                <p
+                  style="color: var(--color-text-secondary); margin-top: 0.5rem"
+                >
                   Customize your experience
                 </p>
               </div>
@@ -1143,7 +1167,9 @@
             <div class="content-header">
               <div>
                 <h2><i class="fas fa-calendar-week"></i> Weekly Calendar</h2>
-                <p style="color: #666; margin-top: 0.5rem">
+                <p
+                  style="color: var(--color-text-secondary); margin-top: 0.5rem"
+                >
                   Drag and drop tasks to schedule your week
                 </p>
               </div>
@@ -1547,7 +1573,7 @@
             margin-bottom: 1.5rem;
           "
         >
-          <h3 style="color: #333">Add New Task</h3>
+          <h3 style="color: var(--color-text-primary)">Add New Task</h3>
           <button
             class="close-modal"
             onclick="closeModal('addTaskModal')"
