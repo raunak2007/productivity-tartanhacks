@@ -1431,51 +1431,51 @@
           </section>
 
           <!-- About Section -->
-          <section id="aboutSection" class="dashboard-section">
-            <div class="content-header">
-              <h2>How It Works</h2>
-            </div>
+<section id="aboutSection" class="dashboard-section" style="display: none">
+  <div class="content-header">
+    <h2>How It Works</h2>
+  </div>
 
-            <div class="info-card">
-              <h3>
-                <i class="fas fa-brain"></i> Cognitive Science-Based
-                Optimization
-              </h3>
-              <p>
-                Utilio uses advanced AI trained on cognitive science principles
-                to analyze your tasks and minimize the hidden costs of context
-                switching.
-              </p>
-            </div>
+  <div class="info-card">
+    <h3>
+      <i class="fas fa-brain"></i> Cognitive Science-Based
+      Optimization
+    </h3>
+    <p>
+      Utilio uses advanced AI trained on cognitive science principles
+      to analyze your tasks and minimize the hidden costs of context
+      switching.
+    </p>
+  </div>
 
-            <div class="info-card">
-              <h3>
-                <i class="fas fa-exclamation-triangle"></i> Context Switching
-                Costs
-              </h3>
-              <p>
-                <strong>High Cost (15-25 mins):</strong> Switching between deep
-                work and administrative tasks
-              </p>
-              <p style="margin-top: var(--space-sm)">
-                <strong>Medium Cost (10-15 mins):</strong> Transitioning between
-                completely different contexts
-              </p>
-              <p style="margin-top: var(--space-sm)">
-                <strong>Low Cost (2-5 mins):</strong> Moving between similar
-                tasks
-              </p>
-            </div>
+  <div class="info-card">
+    <h3>
+      <i class="fas fa-exclamation-triangle"></i> Context Switching
+      Costs
+    </h3>
+    <p>
+      <strong>High Cost (15-25 mins):</strong> Switching between deep
+      work and administrative tasks
+    </p>
+    <p style="margin-top: var(--space-sm)">
+      <strong>Medium Cost (10-15 mins):</strong> Transitioning between
+      completely different contexts
+    </p>
+    <p style="margin-top: var(--space-sm)">
+      <strong>Low Cost (2-5 mins):</strong> Moving between similar
+      tasks
+    </p>
+  </div>
 
-            <div class="info-card">
-              <h3><i class="fas fa-check-circle"></i> The Solution</h3>
-              <p>
-                By batching similar tasks together and optimizing the order, you
-                can maintain cognitive flow, reduce mental fatigue, and save
-                hours every week.
-              </p>
-            </div>
-          </section>
+  <div class="info-card">
+    <h3><i class="fas fa-check-circle"></i> The Solution</h3>
+    <p>
+      By batching similar tasks together and optimizing the order, you
+      can maintain cognitive flow, reduce mental fatigue, and save
+      hours every week.
+    </p>
+  </div>
+</section>
 
           <!-- Calendar Section -->
           <section
@@ -2815,11 +2815,27 @@ async function updateSyncStatus() {
 }
 
 // Modal functions
+// Debug: Test if functions are accessible
+window.addEventListener('load', function() {
+  console.log("Window loaded - testing sidebar functions");
+  console.log("showSection function exists:", typeof window.showSection === 'function');
+  console.log("openAddTaskModal function exists:", typeof window.openAddTaskModal === 'function');
+  
+  // Test if sidebar click events are working
+  const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+  sidebarLinks.forEach(link => {
+    console.log("Sidebar link found:", link.textContent.trim());
+  });
+});
+
+// Also ensure the modal functions are properly exposed
 window.openModal = function (modalId) {
+  console.log("Opening modal:", modalId);
   document.getElementById(modalId).style.display = "flex";
 };
 
 window.closeModal = function (modalId) {
+  console.log("Closing modal:", modalId);
   document.getElementById(modalId).style.display = "none";
 };
 
