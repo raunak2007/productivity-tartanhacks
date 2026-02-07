@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About - Context Defender</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #f5f5f5;
+        color: #333;
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      #app {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        width: 100%;
+      }
+
+      header {
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      header h1 {
+        font-size: 1.5rem;
+        color: #4a9eff;
+      }
+
+      nav {
+        display: flex;
+        gap: 2rem;
+      }
+
+      nav a {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      nav a:hover {
+        color: #4a9eff;
+      }
+
+      main {
+        flex: 1;
+      }
+
+      #hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 0;
+        text-align: center;
+      }
+
+      #hero h2 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      #hero p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+      }
+
+      #about-content {
+        padding: 4rem 0;
+        background: white;
+      }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .card {
+        background: #f9f9f9;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .card h3 {
+        color: #4a9eff;
+        margin-bottom: 1rem;
+      }
+
+      .card p {
+        color: #666;
+        margin-bottom: 1rem;
+      }
+
+      .card ul {
+        padding-left: 1.5rem;
+        color: #666;
+      }
+
+      .card li {
+        margin-bottom: 0.5rem;
+      }
+
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .team-member {
+        text-align: center;
+        background: #f9f9f9;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .team-member img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 4px solid #4a9eff;
+      }
+
+      .team-member h4 {
+        color: #4a9eff;
+        margin-bottom: 0.5rem;
+      }
+
+      .team-member p {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .mission-statement {
+        background: linear-gradient(135deg, #4a9eff 0%, #667eea 100%);
+        color: white;
+        padding: 3rem;
+        border-radius: 8px;
+        margin: 3rem 0;
+        text-align: center;
+      }
+
+      .mission-statement h3 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .mission-statement p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 3rem auto;
+        padding-left: 2rem;
+      }
+
+      .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #4a9eff;
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 2rem;
+        padding-left: 2rem;
+      }
+
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 0;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #4a9eff;
+        border: 3px solid white;
+      }
+
+      .timeline-date {
+        color: #4a9eff;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .timeline-content h4 {
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      .timeline-content p {
+        color: #666;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 2rem;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #4a9eff;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .cta-btn {
+        background: #4a9eff;
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        display: inline-block;
+        text-decoration: none;
+      }
+
+      .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+        background: #3a8eef;
+      }
+
+      footer {
+        background: #333;
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .footer-links a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+      }
+
+      .footer-links a:hover {
+        opacity: 1;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 1rem;
+        }
+        
+        nav {
+          gap: 1rem;
+        }
+        
+        .footer-content {
+          flex-direction: column;
+          text-align: center;
+        }
+        
+        #hero h2 {
+          font-size: 2rem;
+        }
+        
+        #hero p {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="container">
+          <h1>Context Defender</h1>
+          <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html" style="color: #4a9eff;">About</a>
+            <a href="https://raunak2007.github.io/productivity-tartanhacks/dashboard.html">Dashboard</a>
+            <a href="#contact">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section id="hero">
+          <div class="container">
+            <h2>About Context Defender</h2>
+            <p>The Future of AI-Powered Productivity</p>
+          </div>
+        </section>
+
+        <section id="about-content">
+          <div class="container">
+            <div class="mission-statement">
+              <h3>Our Mission</h3>
+              <p>To empower individuals and teams with intelligent productivity tools that adapt to context, eliminate distractions, and optimize workflow through cutting-edge AI technology.</p>
+            </div>
+
+            <div class="about-grid">
+              <div class="card">
+                <h3>What We Do</h3>
+                <p>Context Defender is an AI-powered productivity platform that intelligently organizes tasks, estimates time requirements, and optimizes schedules for maximum efficiency.</p>
+                <p>Our system learns from your work patterns and adapts to provide personalized productivity recommendations.</p>
+                <ul>
+                  <li>AI-powered task scheduling</li>
+                  <li>Intelligent time estimation</li>
+                  <li>Context-aware optimization</li>
+                  <li>Real-time productivity analytics</li>
+                </ul>
+              </div>
+
+              <div class="card">
+                <h3>How It Works</h3>
+                <p>Our platform uses advanced machine learning algorithms to analyze your work patterns and optimize your schedule.</p>
+                <p>From red (low productivity) to green (optimal efficiency), we guide you through your productivity journey with intelligent insights and actionable recommendations.</p>
+                <a href="https://raunak2007.github.io/productivity-tartanhacks/dashboard.html" class="cta-btn" style="margin-top: 1rem;">Try Dashboard</a>
+              </div>
+
+              <div class="card">
+                <h3>Technology</h3>
+                <p>Built with modern web technologies and AI integration, Context Defender delivers a seamless experience across all devices.</p>
+                <ul>
+                  <li>React & Next.js for frontend</li>
+                  <li>Supabase for backend & auth</li>
+                  <li>Machine Learning for AI features</li>
+                  <li>Responsive design for all devices</li>
+                  <li>Real-time data synchronization</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">Active Users</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Productivity Increase</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Optimization</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Features</div>
+              </div>
+            </div>
+
+            <h2 style="text-align: center; margin: 3rem 0; color: #333;">Our Journey</h2>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-date">2024</div>
+                <div class="timeline-content">
+                  <h4>Concept Development</h4>
+                  <p>Initial research and development of the productivity optimization concept</p>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-date">2025</div>
+                <div class="timeline-content">
+                  <h4>Beta Launch</h4>
+                  <p>First version released to early adopters with basic AI scheduling features</p>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-date">2026</div>
+                <div class="timeline-content">
+                  <h4>Full Release</h4>
+                  <p>Complete platform launch with advanced AI optimization and analytics</p>
+                </div>
+              </div>
+            </div>
+
+            <h2 style="text-align: center; margin: 3rem 0; color: #333;">Meet Our Team</h2>
+            <div class="team-grid">
+              <div class="team-member">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Team Member">
+                <h4>Alex Johnson</h4>
+                <p>CEO & Founder</p>
+                <p>AI & Productivity Expert</p>
+              </div>
+              <div class="team-member">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w-400&q=80" alt="Team Member">
+                <h4>Sarah Chen</h4>
+                <p>Lead Developer</p>
+                <p>Full Stack & AI Integration</p>
+              </div>
+              <div class="team-member">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Team Member">
+                <h4>Michael Rodriguez</h4>
+                <p>Product Designer</p>
+                <p>UX/UI & User Experience</p>
+              </div>
+              <div class="team-member">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Team Member">
+                <h4>David Kim</h4>
+                <p>Data Scientist</p>
+                <p>Machine Learning & Analytics</p>
+              </div>
+            </div>
+
+            <div style="text-align: center; margin: 3rem 0;">
+              <h3 style="margin-bottom: 1rem; color: #333;">Ready to Boost Your Productivity?</h3>
+              <a href="https://raunak2007.github.io/productivity-tartanhacks/dashboard.html" class="cta-btn">Get Started Today</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="container">
+          <div class="footer-content">
+            <p>&copy; 2026 Context Defender. All rights reserved.</p>
+            <div class="footer-links">
+              <a href="index.html">Home</a>
+              <a href="about.html">About</a>
+              <a href="#privacy">Privacy</a>
+              <a href="#terms">Terms</a>
+              <a href="#contact">Contact</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("About page loaded");
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId !== '#') {
+              const targetElement = document.querySelector(targetId);
+              if (targetElement) {
+                targetElement.scrollIntoView({
+                  behavior: 'smooth'
+                });
+              }
+            }
+          });
+        });
+
+        // Navigation active state
+        const currentPage = window.location.pathname.split('/').pop();
+        const navLinks = document.querySelectorAll('nav a');
+        
+        navLinks.forEach(link => {
+          const linkHref = link.getAttribute('href');
+          if (linkHref === currentPage || 
+              (currentPage === '' && linkHref === 'index.html')) {
+            link.style.color = '#4a9eff';
+            link.style.fontWeight = '600';
+          }
+        });
+
+        // Animate stats counter
+        const stats = document.querySelectorAll('.stat-number');
+        stats.forEach(stat => {
+          const target = parseInt(stat.textContent);
+          const suffix = stat.textContent.replace(/[0-9]/g, '');
+          const duration = 2000;
+          const steps = 60;
+          const increment = target / steps;
+          let current = 0;
+          let step = 0;
+          
+          const timer = setInterval(() => {
+            current += increment;
+            step++;
+            if (step >= steps) {
+              current = target;
+              clearInterval(timer);
+            }
+            stat.textContent = Math.floor(current) + suffix;
+          }, duration / steps);
+        });
+      });
+    </script>
+  </body>
+</html>
