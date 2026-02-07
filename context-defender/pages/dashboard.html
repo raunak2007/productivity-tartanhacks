@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/src/styles/common.css" />
@@ -21,7 +21,10 @@
     <div id="app">
       <header>
         <div class="container-wide">
-          <h1 onclick="window.location.href = '/pages/landing.html'" style="cursor: pointer;">
+          <h1
+            onclick="window.location.href = '/pages/landing.html'"
+            style="cursor: pointer"
+          >
             <i class="fas fa-shield-alt"></i> Context Defender
           </h1>
           <nav>
@@ -38,7 +41,9 @@
           <div class="user-profile">
             <div class="avatar" id="userAvatar">CD</div>
             <h3 id="userName">Context Defender</h3>
-            <p id="userEmail" style="color: #666; font-size: 0.9rem">Productivity Optimizer</p>
+            <p id="userEmail" style="color: #666; font-size: 0.9rem">
+              Productivity Optimizer
+            </p>
             <div class="productivity-score">
               <p style="color: #666; margin-top: 0.5rem">
                 <i class="fas fa-chart-line" style="color: #2978a0"></i>
@@ -133,40 +138,218 @@
               </button>
             </div>
 
-            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-              <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-                <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase;">Today's Focus</h3>
-                <div class="stat-value" style="font-size: 2rem; font-weight: bold; color: #2978a0; margin-bottom: 0.5rem;">4h 23m</div>
-                <div class="stat-change" style="font-size: 0.9rem; color: #28a745;">+45m from yesterday</div>
+            <div
+              class="stats-grid"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+              "
+            >
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="
+                    color: #666;
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                  "
+                >
+                  Today's Focus
+                </h3>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #2978a0;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  4h 23m
+                </div>
+                <div
+                  class="stat-change"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  +45m from yesterday
+                </div>
               </div>
-              <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-                <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase;">Tasks Completed</h3>
-                <div class="stat-value" style="font-size: 2rem; font-weight: bold; color: #2978a0; margin-bottom: 0.5rem;"><span id="completedCount">0</span>/<span id="totalTaskCount">0</span></div>
-                <div class="stat-change" style="font-size: 0.9rem; color: #28a745;"><span id="completionRate">0</span>% completion rate</div>
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="
+                    color: #666;
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                  "
+                >
+                  Tasks Completed
+                </h3>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #2978a0;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <span id="completedCount">0</span>/<span id="totalTaskCount"
+                    >0</span
+                  >
+                </div>
+                <div
+                  class="stat-change"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  <span id="completionRate">0</span>% completion rate
+                </div>
               </div>
-              <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-                <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase;">Productivity Score</h3>
-                <div class="stat-value" style="font-size: 2rem; font-weight: bold; color: #2978a0; margin-bottom: 0.5rem;" id="overviewScore">85</div>
-                <div class="stat-change" style="font-size: 0.9rem; color: #28a745;">+5 this week</div>
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="
+                    color: #666;
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                  "
+                >
+                  Productivity Score
+                </h3>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #2978a0;
+                    margin-bottom: 0.5rem;
+                  "
+                  id="overviewScore"
+                >
+                  85
+                </div>
+                <div
+                  class="stat-change"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  +5 this week
+                </div>
               </div>
-              <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-                <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase;">AI Optimizations</h3>
-                <div class="stat-value" style="font-size: 2rem; font-weight: bold; color: #2978a0; margin-bottom: 0.5rem;">6</div>
-                <div class="stat-change" style="font-size: 0.9rem; color: #28a745;">3 new suggestions</div>
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="
+                    color: #666;
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                  "
+                >
+                  AI Optimizations
+                </h3>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #2978a0;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  6
+                </div>
+                <div
+                  class="stat-change"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  3 new suggestions
+                </div>
               </div>
             </div>
 
-            <div class="chart-container" style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-              <h3 style="color: #333; margin-bottom: 1rem;">Weekly Productivity Trend</h3>
-              <div class="productivity-chart" id="productivityChart" style="height: 200px; display: flex; align-items: flex-end; gap: 20px; padding: 1rem 0;">
+            <div
+              class="chart-container"
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                margin-bottom: 2rem;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+              "
+            >
+              <h3 style="color: #333; margin-bottom: 1rem">
+                Weekly Productivity Trend
+              </h3>
+              <div
+                class="productivity-chart"
+                id="productivityChart"
+                style="
+                  height: 200px;
+                  display: flex;
+                  align-items: flex-end;
+                  gap: 20px;
+                  padding: 1rem 0;
+                "
+              >
                 <!-- Chart bars will be generated by JavaScript -->
               </div>
             </div>
 
-            <div class="task-list" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="color: #333;">Today's Tasks</h3>
-                <button class="btn btn-secondary" onclick="quickOptimizeSchedule()">
+            <div
+              class="task-list"
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 1rem;
+                "
+              >
+                <h3 style="color: #333">Today's Tasks</h3>
+                <button
+                  class="btn btn-secondary"
+                  onclick="quickOptimizeSchedule()"
+                >
                   <i class="fas fa-bolt"></i> AI Optimize
                 </button>
               </div>
@@ -175,57 +358,221 @@
               </div>
             </div>
 
-            <div class="quick-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
-              <div class="action-card" onclick="openAddTaskModal()" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); text-align: center; cursor: pointer; transition: all 0.2s;">
-                <div class="action-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, #2978a0 0%, #315659 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem;">
+            <div
+              class="quick-actions"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+                margin-top: 2rem;
+              "
+            >
+              <div
+                class="action-card"
+                onclick="openAddTaskModal()"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                  text-align: center;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                "
+              >
+                <div
+                  class="action-icon"
+                  style="
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(
+                      135deg,
+                      #2978a0 0%,
+                      #315659 100%
+                    );
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1rem;
+                    color: white;
+                    font-size: 1.5rem;
+                  "
+                >
                   <i class="fas fa-plus"></i>
                 </div>
                 <h3>Add New Task</h3>
-                <p style="color: #666; font-size: 0.9rem;">Create a new task with AI assistance</p>
+                <p style="color: #666; font-size: 0.9rem">
+                  Create a new task with AI assistance
+                </p>
               </div>
-              <div class="action-card" onclick="showSection('schedule'); return false;" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); text-align: center; cursor: pointer; transition: all 0.2s;">
-                <div class="action-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, #2978a0 0%, #315659 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem;">
+              <div
+                class="action-card"
+                onclick="
+                  showSection('schedule');
+                  return false;
+                "
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                  text-align: center;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                "
+              >
+                <div
+                  class="action-icon"
+                  style="
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(
+                      135deg,
+                      #2978a0 0%,
+                      #315659 100%
+                    );
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1rem;
+                    color: white;
+                    font-size: 1.5rem;
+                  "
+                >
                   <i class="fas fa-bolt"></i>
                 </div>
                 <h3>Optimize Schedule</h3>
-                <p style="color: #666; font-size: 0.9rem;">Let AI optimize your daily schedule</p>
+                <p style="color: #666; font-size: 0.9rem">
+                  Let AI optimize your daily schedule
+                </p>
               </div>
-              <div class="action-card" onclick="showSection('analytics'); return false;" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); text-align: center; cursor: pointer; transition: all 0.2s;">
-                <div class="action-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, #2978a0 0%, #315659 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem;">
+              <div
+                class="action-card"
+                onclick="
+                  showSection('analytics');
+                  return false;
+                "
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                  text-align: center;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                "
+              >
+                <div
+                  class="action-icon"
+                  style="
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(
+                      135deg,
+                      #2978a0 0%,
+                      #315659 100%
+                    );
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1rem;
+                    color: white;
+                    font-size: 1.5rem;
+                  "
+                >
                   <i class="fas fa-chart-line"></i>
                 </div>
                 <h3>View Analytics</h3>
-                <p style="color: #666; font-size: 0.9rem;">Check your productivity trends</p>
+                <p style="color: #666; font-size: 0.9rem">
+                  Check your productivity trends
+                </p>
               </div>
-              <div class="action-card" onclick="showSection('settings'); return false;" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); text-align: center; cursor: pointer; transition: all 0.2s;">
-                <div class="action-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, #2978a0 0%, #315659 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem;">
+              <div
+                class="action-card"
+                onclick="
+                  showSection('settings');
+                  return false;
+                "
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                  text-align: center;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                "
+              >
+                <div
+                  class="action-icon"
+                  style="
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(
+                      135deg,
+                      #2978a0 0%,
+                      #315659 100%
+                    );
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1rem;
+                    color: white;
+                    font-size: 1.5rem;
+                  "
+                >
                   <i class="fas fa-cog"></i>
                 </div>
                 <h3>Settings</h3>
-                <p style="color: #666; font-size: 0.9rem;">Customize your preferences</p>
+                <p style="color: #666; font-size: 0.9rem">
+                  Customize your preferences
+                </p>
               </div>
             </div>
           </section>
 
           <!-- Tasks Section -->
-          <section id="tasksSection" class="dashboard-section" style="display: none;">
+          <section
+            id="tasksSection"
+            class="dashboard-section"
+            style="display: none"
+          >
             <div class="content-header">
               <div>
                 <h2>Task Management</h2>
-                <p style="color: #666; margin-top: 0.5rem;">
+                <p style="color: #666; margin-top: 0.5rem">
                   Manage all your tasks in one place
                 </p>
               </div>
-              <div style="display: flex; gap: 1rem;">
-                <button class="btn btn-secondary" onclick="filterTasks('all')">All</button>
-                <button class="btn btn-secondary" onclick="filterTasks('pending')">Pending</button>
+              <div style="display: flex; gap: 1rem">
+                <button class="btn btn-secondary" onclick="filterTasks('all')">
+                  All
+                </button>
+                <button
+                  class="btn btn-secondary"
+                  onclick="filterTasks('pending')"
+                >
+                  Pending
+                </button>
                 <button class="btn" onclick="openAddTaskModal()">
                   <i class="fas fa-plus"></i> Add Task
                 </button>
               </div>
             </div>
 
-            <div class="task-list" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+            <div
+              class="task-list"
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+              "
+            >
               <div id="allTasks">
                 <!-- All tasks will be loaded here -->
               </div>
@@ -233,7 +580,11 @@
           </section>
 
           <!-- Schedule Section -->
-          <section id="scheduleSection" class="dashboard-section" style="display: none;">
+          <section
+            id="scheduleSection"
+            class="dashboard-section"
+            style="display: none"
+          >
             <div class="content-header">
               <div>
                 <h2>AI Schedule Optimizer</h2>
@@ -354,92 +705,352 @@
           </section>
 
           <!-- Analytics Section -->
-          <section id="analyticsSection" class="dashboard-section" style="display: none;">
+          <section
+            id="analyticsSection"
+            class="dashboard-section"
+            style="display: none"
+          >
             <div class="content-header">
               <div>
                 <h2>Productivity Analytics</h2>
-                <p style="color: #666; margin-top: 0.5rem;">
+                <p style="color: #666; margin-top: 0.5rem">
                   Detailed insights into your productivity
                 </p>
               </div>
             </div>
 
-            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-              <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-                <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase;">Weekly Average</h3>
-                <div class="stat-value" style="font-size: 2rem; font-weight: bold; color: #2978a0; margin-bottom: 0.5rem;">82%</div>
-                <div class="stat-change" style="font-size: 0.9rem; color: #28a745;">+7% from last week</div>
+            <div
+              class="stats-grid"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+              "
+            >
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="
+                    color: #666;
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                  "
+                >
+                  Weekly Average
+                </h3>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #2978a0;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  82%
+                </div>
+                <div
+                  class="stat-change"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  +7% from last week
+                </div>
               </div>
-              <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-                <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase;">Focus Streak</h3>
-                <div class="stat-value" style="font-size: 2rem; font-weight: bold; color: #2978a0; margin-bottom: 0.5rem;">14 days</div>
-                <div class="stat-change" style="font-size: 0.9rem; color: #28a745;">Personal best!</div>
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="
+                    color: #666;
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                  "
+                >
+                  Focus Streak
+                </h3>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #2978a0;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  14 days
+                </div>
+                <div
+                  class="stat-change"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  Personal best!
+                </div>
               </div>
-              <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-                <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase;">Task Completion</h3>
-                <div class="stat-value" style="font-size: 2rem; font-weight: bold; color: #2978a0; margin-bottom: 0.5rem;">94%</div>
-                <div class="stat-change" style="font-size: 0.9rem; color: #28a745;">+4% this month</div>
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="
+                    color: #666;
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                  "
+                >
+                  Task Completion
+                </h3>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #2978a0;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  94%
+                </div>
+                <div
+                  class="stat-change"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  +4% this month
+                </div>
               </div>
-              <div class="stat-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-                <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase;">AI Effectiveness</h3>
-                <div class="stat-value" style="font-size: 2rem; font-weight: bold; color: #2978a0; margin-bottom: 0.5rem;">92%</div>
-                <div class="stat-change" style="font-size: 0.9rem; color: #28a745;">High optimization rate</div>
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="
+                    color: #666;
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                  "
+                >
+                  AI Effectiveness
+                </h3>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #2978a0;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  92%
+                </div>
+                <div
+                  class="stat-change"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  High optimization rate
+                </div>
               </div>
             </div>
 
-            <div class="chart-container" style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-              <h3 style="color: #333; margin-bottom: 1rem;">Monthly Performance</h3>
-              <div class="productivity-chart" id="monthlyChart" style="height: 200px; display: flex; align-items: flex-end; gap: 20px; padding: 1rem 0;">
+            <div
+              class="chart-container"
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                margin-bottom: 2rem;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+              "
+            >
+              <h3 style="color: #333; margin-bottom: 1rem">
+                Monthly Performance
+              </h3>
+              <div
+                class="productivity-chart"
+                id="monthlyChart"
+                style="
+                  height: 200px;
+                  display: flex;
+                  align-items: flex-end;
+                  gap: 20px;
+                  padding: 1rem 0;
+                "
+              >
                 <!-- Monthly chart will be generated here -->
               </div>
             </div>
           </section>
 
           <!-- Settings Section -->
-          <section id="settingsSection" class="dashboard-section" style="display: none;">
+          <section
+            id="settingsSection"
+            class="dashboard-section"
+            style="display: none"
+          >
             <div class="content-header">
               <div>
                 <h2>Settings</h2>
-                <p style="color: #666; margin-top: 0.5rem;">
+                <p style="color: #666; margin-top: 0.5rem">
                   Customize your experience
                 </p>
               </div>
             </div>
 
-            <div class="task-list" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
-              <div style="margin-bottom: 2rem;">
-                <h3 style="margin-bottom: 1rem; color: #333;">Profile Settings</h3>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                  <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500;">Full Name</label>
-                  <input type="text" class="form-control" id="settingsName" value="Context Defender" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
+            <div
+              class="task-list"
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+              "
+            >
+              <div style="margin-bottom: 2rem">
+                <h3 style="margin-bottom: 1rem; color: #333">
+                  Profile Settings
+                </h3>
+                <div class="form-group" style="margin-bottom: 1rem">
+                  <label
+                    style="
+                      display: block;
+                      margin-bottom: 0.5rem;
+                      color: #333;
+                      font-weight: 500;
+                    "
+                    >Full Name</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="settingsName"
+                    value="Context Defender"
+                    style="
+                      width: 100%;
+                      padding: 0.75rem;
+                      border: 1px solid #ddd;
+                      border-radius: 8px;
+                      font-size: 1rem;
+                    "
+                  />
                 </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                  <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500;">Email</label>
-                  <input type="email" class="form-control" id="settingsEmail" value="user@contextdefender.com" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
+                <div class="form-group" style="margin-bottom: 1rem">
+                  <label
+                    style="
+                      display: block;
+                      margin-bottom: 0.5rem;
+                      color: #333;
+                      font-weight: 500;
+                    "
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="settingsEmail"
+                    value="user@contextdefender.com"
+                    style="
+                      width: 100%;
+                      padding: 0.75rem;
+                      border: 1px solid #ddd;
+                      border-radius: 8px;
+                      font-size: 1rem;
+                    "
+                  />
                 </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                  <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500;">Daily Work Hours</label>
-                  <input type="number" class="form-control" id="settingsHours" value="8" min="1" max="24" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
+                <div class="form-group" style="margin-bottom: 1rem">
+                  <label
+                    style="
+                      display: block;
+                      margin-bottom: 0.5rem;
+                      color: #333;
+                      font-weight: 500;
+                    "
+                    >Daily Work Hours</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="settingsHours"
+                    value="8"
+                    min="1"
+                    max="24"
+                    style="
+                      width: 100%;
+                      padding: 0.75rem;
+                      border: 1px solid #ddd;
+                      border-radius: 8px;
+                      font-size: 1rem;
+                    "
+                  />
                 </div>
               </div>
 
-              <div style="margin-bottom: 2rem;">
-                <h3 style="margin-bottom: 1rem; color: #333;">Preferences</h3>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid #eee;">
+              <div style="margin-bottom: 2rem">
+                <h3 style="margin-bottom: 1rem; color: #333">Preferences</h3>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem 0;
+                    border-bottom: 1px solid #eee;
+                  "
+                >
                   <span>Enable AI Optimizations</span>
-                  <input type="checkbox" id="aiOptimizations" checked>
+                  <input type="checkbox" id="aiOptimizations" checked />
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid #eee;">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem 0;
+                    border-bottom: 1px solid #eee;
+                  "
+                >
                   <span>Daily Notifications</span>
-                  <input type="checkbox" id="dailyNotifications" checked>
+                  <input type="checkbox" id="dailyNotifications" checked />
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem 0;
+                  "
+                >
                   <span>Dark Mode</span>
-                  <input type="checkbox" id="darkMode">
+                  <input type="checkbox" id="darkMode" />
                 </div>
               </div>
 
-              <button class="btn" onclick="saveSettings()" style="width: 100%;">
+              <button class="btn" onclick="saveSettings()" style="width: 100%">
                 <i class="fas fa-save"></i> Save Settings
               </button>
             </div>
@@ -496,27 +1107,134 @@
     </div>
 
     <!-- Add Task Modal -->
-    <div id="addTaskModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
-      <div class="modal-content" style="background: white; padding: 2rem; border-radius: 12px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
-        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h3 style="color: #333;">Add New Task</h3>
-          <button class="close-modal" onclick="closeModal('addTaskModal')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666;">&times;</button>
+    <div
+      id="addTaskModal"
+      class="modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        class="modal-content"
+        style="
+          background: white;
+          padding: 2rem;
+          border-radius: 12px;
+          max-width: 500px;
+          width: 90%;
+          max-height: 90vh;
+          overflow-y: auto;
+        "
+      >
+        <div
+          class="modal-header"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+          "
+        >
+          <h3 style="color: #333">Add New Task</h3>
+          <button
+            class="close-modal"
+            onclick="closeModal('addTaskModal')"
+            style="
+              background: none;
+              border: none;
+              font-size: 1.5rem;
+              cursor: pointer;
+              color: #666;
+            "
+          >
+            &times;
+          </button>
         </div>
-        
+
         <form id="taskForm" onsubmit="addTaskFromModal(event)">
-          <div class="form-group" style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500;">Task Title *</label>
-            <input type="text" class="form-control" id="taskTitle" placeholder="What needs to be done?" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label
+              style="
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #333;
+                font-weight: 500;
+              "
+              >Task Title *</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="taskTitle"
+              placeholder="What needs to be done?"
+              required
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 1rem;
+              "
+            />
           </div>
-          
-          <div class="form-group" style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500;">Description</label>
-            <textarea class="form-control" id="taskDescription" rows="3" placeholder="Add details about the task..." style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;"></textarea>
+
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label
+              style="
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #333;
+                font-weight: 500;
+              "
+              >Description</label
+            >
+            <textarea
+              class="form-control"
+              id="taskDescription"
+              rows="3"
+              placeholder="Add details about the task..."
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 1rem;
+              "
+            ></textarea>
           </div>
-          
-          <div class="form-group" style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500;">Category</label>
-            <select class="select-control" id="taskCategory" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; background: white; cursor: pointer;">
+
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label
+              style="
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #333;
+                font-weight: 500;
+              "
+              >Category</label
+            >
+            <select
+              class="select-control"
+              id="taskCategory"
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 1rem;
+                background: white;
+                cursor: pointer;
+              "
+            >
               <option value="work">Work</option>
               <option value="personal">Personal</option>
               <option value="learning">Learning</option>
@@ -524,37 +1242,103 @@
               <option value="other">Other</option>
             </select>
           </div>
-          
-          <div class="form-group" style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500;">Priority</label>
-            <select class="select-control" id="taskPriority" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; background: white; cursor: pointer;">
+
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label
+              style="
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #333;
+                font-weight: 500;
+              "
+              >Priority</label
+            >
+            <select
+              class="select-control"
+              id="taskPriority"
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 1rem;
+                background: white;
+                cursor: pointer;
+              "
+            >
               <option value="high">High</option>
               <option value="medium">Medium</option>
               <option value="low">Low</option>
             </select>
           </div>
-          
-          <div class="form-group" style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500;">Estimated Time (minutes)</label>
-            <input type="number" class="form-control" id="taskTime" placeholder="e.g., 30" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
+
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label
+              style="
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #333;
+                font-weight: 500;
+              "
+              >Estimated Time (minutes)</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="taskTime"
+              placeholder="e.g., 30"
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 1rem;
+              "
+            />
           </div>
-          
-          <div class="form-group" style="margin-bottom: 1rem;">
-            <label style="display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500;">Energy Level Required</label>
-            <select class="select-control" id="taskEnergy" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; background: white; cursor: pointer;">
+
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label
+              style="
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #333;
+                font-weight: 500;
+              "
+              >Energy Level Required</label
+            >
+            <select
+              class="select-control"
+              id="taskEnergy"
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 1rem;
+                background: white;
+                cursor: pointer;
+              "
+            >
               <option value="high">High Energy</option>
               <option value="medium">Medium Energy</option>
               <option value="low">Low Energy</option>
             </select>
           </div>
-          
-          <div class="form-actions" style="display: flex; gap: 1rem; margin-top: 2rem;">
-            <button type="button" class="btn btn-secondary" onclick="closeModal('addTaskModal')" style="flex: 1;">
+
+          <div
+            class="form-actions"
+            style="display: flex; gap: 1rem; margin-top: 2rem"
+          >
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeModal('addTaskModal')"
+              style="flex: 1"
+            >
               Cancel
             </button>
-            <button type="submit" class="btn" style="flex: 2;">
-              Add Task
-            </button>
+            <button type="submit" class="btn" style="flex: 2">Add Task</button>
           </div>
         </form>
       </div>
@@ -568,16 +1352,16 @@
       let tasks = [];
       let managedTasks = []; // For the task management section
       let currentUser = {
-        id: 'user_' + Date.now(),
-        name: 'Context Defender',
-        email: 'user@contextdefender.com',
+        id: "user_" + Date.now(),
+        name: "Context Defender",
+        email: "user@contextdefender.com",
         productivityScore: 85,
         workHours: 8,
-        avatar: 'CD'
+        avatar: "CD",
       };
 
       // Initialize
-      window.addEventListener('DOMContentLoaded', () => {
+      window.addEventListener("DOMContentLoaded", () => {
         loadUser();
         loadManagedTasks();
         updateCharts();
@@ -585,21 +1369,21 @@
       });
 
       // Modal functions
-      window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'flex';
+      window.openModal = function (modalId) {
+        document.getElementById(modalId).style.display = "flex";
       };
 
-      window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none';
+      window.closeModal = function (modalId) {
+        document.getElementById(modalId).style.display = "none";
       };
 
-      window.openAddTaskModal = function() {
-        openModal('addTaskModal');
+      window.openAddTaskModal = function () {
+        openModal("addTaskModal");
       };
 
       // User functions
       function loadUser() {
-        const savedUser = localStorage.getItem('context_defender_user');
+        const savedUser = localStorage.getItem("context_defender_user");
         if (savedUser) {
           currentUser = JSON.parse(savedUser);
         }
@@ -607,45 +1391,57 @@
       }
 
       function saveUser() {
-        localStorage.setItem('context_defender_user', JSON.stringify(currentUser));
+        localStorage.setItem(
+          "context_defender_user",
+          JSON.stringify(currentUser),
+        );
       }
 
       function updateUserUI() {
         if (!currentUser) return;
-        
-        document.getElementById('userAvatar').textContent = currentUser.avatar;
-        document.getElementById('userName').textContent = currentUser.name;
-        document.getElementById('userEmail').textContent = currentUser.email;
-        document.getElementById('productivityValue').textContent = currentUser.productivityScore;
-        document.getElementById('overviewScore').textContent = currentUser.productivityScore;
-        
+
+        document.getElementById("userAvatar").textContent = currentUser.avatar;
+        document.getElementById("userName").textContent = currentUser.name;
+        document.getElementById("userEmail").textContent = currentUser.email;
+        document.getElementById("productivityValue").textContent =
+          currentUser.productivityScore;
+        document.getElementById("overviewScore").textContent =
+          currentUser.productivityScore;
+
         // Update settings form if elements exist
-        if (document.getElementById('settingsName')) {
-          document.getElementById('settingsName').value = currentUser.name;
-          document.getElementById('settingsEmail').value = currentUser.email;
-          document.getElementById('settingsHours').value = currentUser.workHours;
+        if (document.getElementById("settingsName")) {
+          document.getElementById("settingsName").value = currentUser.name;
+          document.getElementById("settingsEmail").value = currentUser.email;
+          document.getElementById("settingsHours").value =
+            currentUser.workHours;
         }
       }
 
-      window.saveSettings = function() {
-        const name = document.getElementById('settingsName').value;
-        const email = document.getElementById('settingsEmail').value;
-        const hours = parseInt(document.getElementById('settingsHours').value);
-        
+      window.saveSettings = function () {
+        const name = document.getElementById("settingsName").value;
+        const email = document.getElementById("settingsEmail").value;
+        const hours = parseInt(document.getElementById("settingsHours").value);
+
         currentUser.name = name;
         currentUser.email = email;
         currentUser.workHours = hours;
-        currentUser.avatar = name.split(' ').map(n => n[0]).join('').toUpperCase();
-        
+        currentUser.avatar = name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase();
+
         saveUser();
         updateUserUI();
-        alert('Settings saved successfully!');
-        showSection('overview');
+        alert("Settings saved successfully!");
+        showSection("overview");
       };
 
       // Managed Tasks functions (for task management section)
       function loadManagedTasks() {
-        const savedTasks = localStorage.getItem('context_defender_managed_tasks');
+        const savedTasks = localStorage.getItem(
+          "context_defender_managed_tasks",
+        );
         if (savedTasks) {
           managedTasks = JSON.parse(savedTasks);
         } else {
@@ -653,26 +1449,26 @@
           managedTasks = [
             {
               id: 1,
-              title: 'Complete project report',
-              description: 'Finish the quarterly project analysis',
-              priority: 'high',
-              category: 'work',
+              title: "Complete project report",
+              description: "Finish the quarterly project analysis",
+              priority: "high",
+              category: "work",
               estimatedTime: 120,
-              energyLevel: 'high',
-              status: 'pending',
-              createdAt: new Date().toISOString()
+              energyLevel: "high",
+              status: "pending",
+              createdAt: new Date().toISOString(),
             },
             {
               id: 2,
-              title: 'Learn new framework',
-              description: 'Study React advanced concepts',
-              priority: 'medium',
-              category: 'learning',
+              title: "Learn new framework",
+              description: "Study React advanced concepts",
+              priority: "medium",
+              category: "learning",
               estimatedTime: 90,
-              energyLevel: 'medium',
-              status: 'pending',
-              createdAt: new Date().toISOString()
-            }
+              energyLevel: "medium",
+              status: "pending",
+              createdAt: new Date().toISOString(),
+            },
           ];
           saveManagedTasks();
         }
@@ -680,19 +1476,23 @@
       }
 
       function saveManagedTasks() {
-        localStorage.setItem('context_defender_managed_tasks', JSON.stringify(managedTasks));
+        localStorage.setItem(
+          "context_defender_managed_tasks",
+          JSON.stringify(managedTasks),
+        );
       }
 
-      window.addTaskFromModal = function(event) {
+      window.addTaskFromModal = function (event) {
         event.preventDefault();
-        
-        const title = document.getElementById('taskTitle').value;
-        const description = document.getElementById('taskDescription').value;
-        const category = document.getElementById('taskCategory').value;
-        const priority = document.getElementById('taskPriority').value;
-        const estimatedTime = parseInt(document.getElementById('taskTime').value) || 30;
-        const energyLevel = document.getElementById('taskEnergy').value;
-        
+
+        const title = document.getElementById("taskTitle").value;
+        const description = document.getElementById("taskDescription").value;
+        const category = document.getElementById("taskCategory").value;
+        const priority = document.getElementById("taskPriority").value;
+        const estimatedTime =
+          parseInt(document.getElementById("taskTime").value) || 30;
+        const energyLevel = document.getElementById("taskEnergy").value;
+
         const newTask = {
           id: Date.now(),
           title,
@@ -701,38 +1501,47 @@
           priority,
           estimatedTime,
           energyLevel,
-          status: 'pending',
-          createdAt: new Date().toISOString()
+          status: "pending",
+          createdAt: new Date().toISOString(),
         };
-        
+
         managedTasks.unshift(newTask);
         saveManagedTasks();
         renderManagedTasks();
-        
+
         // Reset form and close modal
-        document.getElementById('taskForm').reset();
-        closeModal('addTaskModal');
-        
+        document.getElementById("taskForm").reset();
+        closeModal("addTaskModal");
+
         // Update productivity score
-        currentUser.productivityScore = Math.min(100, currentUser.productivityScore + 2);
+        currentUser.productivityScore = Math.min(
+          100,
+          currentUser.productivityScore + 2,
+        );
         saveUser();
         updateUserUI();
-        
-        alert('Task added successfully!');
+
+        alert("Task added successfully!");
         updateOverview();
       };
 
-      window.toggleTask = function(taskId) {
-        const task = managedTasks.find(t => t.id === taskId);
+      window.toggleTask = function (taskId) {
+        const task = managedTasks.find((t) => t.id === taskId);
         if (task) {
-          task.status = task.status === 'completed' ? 'pending' : 'completed';
-          if (task.status === 'completed') {
+          task.status = task.status === "completed" ? "pending" : "completed";
+          if (task.status === "completed") {
             task.completedAt = new Date().toISOString();
-            currentUser.productivityScore = Math.min(100, currentUser.productivityScore + 3);
+            currentUser.productivityScore = Math.min(
+              100,
+              currentUser.productivityScore + 3,
+            );
           } else {
-            currentUser.productivityScore = Math.max(0, currentUser.productivityScore - 1);
+            currentUser.productivityScore = Math.max(
+              0,
+              currentUser.productivityScore - 1,
+            );
           }
-          
+
           saveManagedTasks();
           saveUser();
           updateUserUI();
@@ -741,39 +1550,45 @@
         }
       };
 
-      window.deleteTask = function(taskId) {
-        if (confirm('Are you sure you want to delete this task?')) {
-          managedTasks = managedTasks.filter(t => t.id !== taskId);
+      window.deleteTask = function (taskId) {
+        if (confirm("Are you sure you want to delete this task?")) {
+          managedTasks = managedTasks.filter((t) => t.id !== taskId);
           saveManagedTasks();
           renderManagedTasks();
           updateOverview();
         }
       };
 
-      window.filterTasks = function(filter) {
+      window.filterTasks = function (filter) {
         renderManagedTasks(filter);
       };
 
-      function renderManagedTasks(filter = 'all') {
-        const todayTasksContainer = document.getElementById('todayTasks');
-        const allTasksContainer = document.getElementById('allTasks');
-        
+      function renderManagedTasks(filter = "all") {
+        const todayTasksContainer = document.getElementById("todayTasks");
+        const allTasksContainer = document.getElementById("allTasks");
+
         if (!todayTasksContainer || !allTasksContainer) return;
-        
-        todayTasksContainer.innerHTML = '';
-        allTasksContainer.innerHTML = '';
-        
+
+        todayTasksContainer.innerHTML = "";
+        allTasksContainer.innerHTML = "";
+
         // Filter tasks
         let filteredTasks = managedTasks;
-        if (filter === 'pending') {
-          filteredTasks = managedTasks.filter(task => task.status === 'pending');
-        } else if (filter === 'completed') {
-          filteredTasks = managedTasks.filter(task => task.status === 'completed');
+        if (filter === "pending") {
+          filteredTasks = managedTasks.filter(
+            (task) => task.status === "pending",
+          );
+        } else if (filter === "completed") {
+          filteredTasks = managedTasks.filter(
+            (task) => task.status === "completed",
+          );
         }
-        
+
         // Get today's tasks
-        const todayTasks = managedTasks.filter(task => task.status === 'pending').slice(0, 5);
-        
+        const todayTasks = managedTasks
+          .filter((task) => task.status === "pending")
+          .slice(0, 5);
+
         // Render today's tasks
         if (todayTasks.length === 0) {
           todayTasksContainer.innerHTML = `
@@ -783,11 +1598,11 @@
             </div>
           `;
         } else {
-          todayTasks.forEach(task => {
+          todayTasks.forEach((task) => {
             todayTasksContainer.appendChild(createTaskElement(task, false));
           });
         }
-        
+
         // Render all tasks
         if (filteredTasks.length === 0) {
           allTasksContainer.innerHTML = `
@@ -797,46 +1612,51 @@
             </div>
           `;
         } else {
-          filteredTasks.forEach(task => {
+          filteredTasks.forEach((task) => {
             allTasksContainer.appendChild(createTaskElement(task, true));
           });
         }
       }
 
       function createTaskElement(task, showDelete = false) {
-        const taskElement = document.createElement('div');
-        taskElement.className = 'task-item';
-        taskElement.style.cssText = 'display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #eee; transition: background 0.2s;';
-        
+        const taskElement = document.createElement("div");
+        taskElement.className = "task-item";
+        taskElement.style.cssText =
+          "display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #eee; transition: background 0.2s;";
+
         const priorityClass = `priority-${task.priority}`;
-        const isCompleted = task.status === 'completed';
-        
+        const isCompleted = task.status === "completed";
+
         const priorityColors = {
-          high: 'background: #fee; color: #dc3545;',
-          medium: 'background: #fff3cd; color: #856404;',
-          low: 'background: #d4edda; color: #155724;'
+          high: "background: #fee; color: #dc3545;",
+          medium: "background: #fff3cd; color: #856404;",
+          low: "background: #d4edda; color: #155724;",
         };
-        
+
         taskElement.innerHTML = `
-          <div class="task-checkbox ${isCompleted ? 'checked' : ''}" onclick="toggleTask(${task.id})" style="width: 20px; height: 20px; border: 2px solid #ddd; border-radius: 4px; margin-right: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; ${isCompleted ? 'background: #2978a0; border-color: #2978a0; color: white;' : ''}">
-            ${isCompleted ? '<i class="fas fa-check"></i>' : ''}
+          <div class="task-checkbox ${isCompleted ? "checked" : ""}" onclick="toggleTask(${task.id})" style="width: 20px; height: 20px; border: 2px solid #ddd; border-radius: 4px; margin-right: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; ${isCompleted ? "background: #2978a0; border-color: #2978a0; color: white;" : ""}">
+            ${isCompleted ? '<i class="fas fa-check"></i>' : ""}
           </div>
           <div class="task-content" style="flex: 1;">
-            <div class="task-title" style="font-weight: 500; margin-bottom: 0.25rem; ${isCompleted ? 'text-decoration: line-through; color: #999;' : ''}">
+            <div class="task-title" style="font-weight: 500; margin-bottom: 0.25rem; ${isCompleted ? "text-decoration: line-through; color: #999;" : ""}">
               ${task.title}
             </div>
-            ${task.description ? `<div class="task-time" style="font-size: 0.9rem; color: #666; ${isCompleted ? 'color: #999;' : ''}">${task.description}</div>` : ''}
+            ${task.description ? `<div class="task-time" style="font-size: 0.9rem; color: #666; ${isCompleted ? "color: #999;" : ""}">${task.description}</div>` : ""}
           </div>
           <div class="task-priority ${priorityClass}" style="padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; ${priorityColors[task.priority]}">
             ${task.priority}
           </div>
-          ${showDelete ? `
+          ${
+            showDelete
+              ? `
             <button class="btn btn-secondary" onclick="deleteTask(${task.id})" style="margin-left: 1rem; padding: 0.5rem;">
               <i class="fas fa-trash"></i>
             </button>
-          ` : ''}
+          `
+              : ""
+          }
         `;
-        
+
         return taskElement;
       }
 
@@ -844,16 +1664,17 @@
       function updateCharts() {
         // Weekly productivity chart
         const weeklyData = [65, 72, 85, 78, 90, 60, 55];
-        const chartContainer = document.getElementById('productivityChart');
+        const chartContainer = document.getElementById("productivityChart");
         if (chartContainer) {
-          chartContainer.innerHTML = '';
-          
-          const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+          chartContainer.innerHTML = "";
+
+          const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
           days.forEach((day, index) => {
             const barHeight = (weeklyData[index] / 100) * 150;
-            const bar = document.createElement('div');
-            bar.className = 'chart-bar';
-            bar.style.cssText = 'flex: 1; display: flex; flex-direction: column; align-items: center;';
+            const bar = document.createElement("div");
+            bar.className = "chart-bar";
+            bar.style.cssText =
+              "flex: 1; display: flex; flex-direction: column; align-items: center;";
             bar.innerHTML = `
               <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #2978a0, #bcab79); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
               <div class="bar-label" style="margin-top: 0.5rem; color: #315659; font-size: 0.9rem;">${day}</div>
@@ -861,18 +1682,19 @@
             chartContainer.appendChild(bar);
           });
         }
-        
+
         // Monthly chart
         const monthlyData = [70, 75, 80, 82, 85, 83, 87, 85, 88, 90];
-        const monthlyChart = document.getElementById('monthlyChart');
+        const monthlyChart = document.getElementById("monthlyChart");
         if (monthlyChart) {
-          monthlyChart.innerHTML = '';
-          
+          monthlyChart.innerHTML = "";
+
           monthlyData.forEach((value, index) => {
             const barHeight = (value / 100) * 150;
-            const bar = document.createElement('div');
-            bar.className = 'chart-bar';
-            bar.style.cssText = 'flex: 1; display: flex; flex-direction: column; align-items: center;';
+            const bar = document.createElement("div");
+            bar.className = "chart-bar";
+            bar.style.cssText =
+              "flex: 1; display: flex; flex-direction: column; align-items: center;";
             bar.innerHTML = `
               <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #2978a0, #bcab79); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
               <div class="bar-label" style="margin-top: 0.5rem; color: #315659; font-size: 0.9rem;">${index + 1}</div>
@@ -884,28 +1706,38 @@
 
       function updateOverview() {
         // Update task completion stats
-        const completedCount = managedTasks.filter(t => t.status === 'completed').length;
+        const completedCount = managedTasks.filter(
+          (t) => t.status === "completed",
+        ).length;
         const totalCount = managedTasks.length;
-        const completionRate = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-        
-        if (document.getElementById('completedCount')) {
-          document.getElementById('completedCount').textContent = completedCount;
-          document.getElementById('totalTaskCount').textContent = totalCount;
-          document.getElementById('completionRate').textContent = completionRate;
+        const completionRate =
+          totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+        if (document.getElementById("completedCount")) {
+          document.getElementById("completedCount").textContent =
+            completedCount;
+          document.getElementById("totalTaskCount").textContent = totalCount;
+          document.getElementById("completionRate").textContent =
+            completionRate;
         }
       }
 
-      window.quickOptimizeSchedule = function() {
-        if (managedTasks.filter(t => t.status === 'pending').length === 0) {
-          alert('No pending tasks to optimize!');
+      window.quickOptimizeSchedule = function () {
+        if (managedTasks.filter((t) => t.status === "pending").length === 0) {
+          alert("No pending tasks to optimize!");
           return;
         }
-        alert('AI is optimizing your schedule...');
+        alert("AI is optimizing your schedule...");
         setTimeout(() => {
-          currentUser.productivityScore = Math.min(100, currentUser.productivityScore + 5);
+          currentUser.productivityScore = Math.min(
+            100,
+            currentUser.productivityScore + 5,
+          );
           saveUser();
           updateUserUI();
-          alert('Schedule optimized! Check the Schedule Optimizer section for details.');
+          alert(
+            "Schedule optimized! Check the Schedule Optimizer section for details.",
+          );
         }, 1000);
       };
 
@@ -921,20 +1753,20 @@
 
         // Update sections
         document.querySelectorAll(".dashboard-section").forEach((sec) => {
-          sec.style.display = 'none';
+          sec.style.display = "none";
         });
         const targetSection = document.getElementById(section + "Section");
         if (targetSection) {
-          targetSection.style.display = 'block';
+          targetSection.style.display = "block";
         }
 
         // Refresh section content
-        if (section === 'tasks') {
+        if (section === "tasks") {
           renderManagedTasks();
-        } else if (section === 'overview') {
+        } else if (section === "overview") {
           updateOverview();
           renderManagedTasks();
-        } else if (section === 'analytics') {
+        } else if (section === "analytics") {
           updateCharts();
         }
       };
