@@ -1,18 +1,19 @@
 /**
  * UI Rendering for schedule visualization
- * Displays three schedule proposals with time slots
+ * Displays three schedule proposals with timeline visual
  */
 
-// Category color mapping
+// Category color mapping - 3 color groups by task type
+// RED = Focus/creative work | BLUE = Communication | GREEN = Admin/physical
 const CATEGORY_COLORS = {
-  "Deep Work": "#ef4444", // Red
-  Admin: "#f59e0b", // Yellow
-  Calls: "#3b82f6", // Blue
-  Errands: "#22c55e", // Green
-  Communication: "#3b82f6", // Blue (alias for Calls)
-  Meeting: "#8b5cf6", // Purple
-  Creative: "#ec4899", // Pink
-  Break: "#6b7280", // Gray
+  "Deep Work": { bg: "#ef4444", text: "#ffffff", border: "#f87171" },    // Red - focus
+  Creative: { bg: "#dc2626", text: "#ffffff", border: "#ef4444" },        // Red - focus
+  Calls: { bg: "#3b82f6", text: "#ffffff", border: "#60a5fa" },           // Blue - communication
+  Meeting: { bg: "#2563eb", text: "#ffffff", border: "#3b82f6" },         // Blue - communication
+  Communication: { bg: "#1d4ed8", text: "#ffffff", border: "#2563eb" },   // Blue - communication
+  Admin: { bg: "#22c55e", text: "#ffffff", border: "#4ade80" },           // Green - admin
+  Errands: { bg: "#16a34a", text: "#ffffff", border: "#22c55e" },         // Green - physical
+  Break: { bg: "#15803d", text: "#ffffff", border: "#16a34a" },           // Green - break
 };
 
 /**
@@ -31,90 +32,75 @@ function formatTime(minutes, startTime) {
 }
 
 /**
- * Creates a task card element with time display
+ * Creates a timeline task item (pill/chip style)
  * @param {Object} task - Task object
  * @param {number} startMinutes - Minutes from schedule start
  * @param {Date} startTime - Schedule start time
- * @returns {HTMLElement} Task card element
+ * @param {boolean} isLast - Whether this is the last item
+ * @returns {HTMLElement} Timeline item element
  */
-function createTaskCard(task, startMinutes, startTime) {
-  const card = document.createElement("div");
-  card.className = "task-card";
+function createTimelineItem(task, startMinutes, startTime, isLast) {
+  const item = document.createElement("div");
+  item.className = `timeline-item${isLast ? " last" : ""}`;
 
-  const color = CATEGORY_COLORS[task.category] || "#6b7280";
-  card.style.borderLeftColor = color;
+  const colors = CATEGORY_COLORS[task.category] || CATEGORY_COLORS.Break;
+  const timeStart = formatTime(startMinutes, startTime);
+  const timeEnd = formatTime(startMinutes + task.duration, startTime);
+
+  const isBreak = task.category === "Break";
+  const priorityIndicator = task.priority === "high" 
+    ? '<span class="priority-dot high"></span>' 
+    : task.priority === "low" 
+    ? '<span class="priority-dot low"></span>' 
+    : '';
+
+  item.innerHTML = `
+    <div class="timeline-time">
+      <span class="time-start">${timeStart}</span>
+      <span class="time-end">${timeEnd}</span>
+    </div>
+    <div class="timeline-marker">
+      <div class="timeline-dot" style="background: ${colors.bg}; box-shadow: 0 0 0 3px #ffffff, 0 0 0 4px ${colors.bg};"></div>
+      ${!isLast ? '<div class="timeline-line"></div>' : ''}
+    </div>
+    <div class="timeline-pill" style="border-left-color: ${colors.bg};">
+      ${isBreak ? '<span class="pill-icon">☕</span>' : ''}
+      <span class="pill-name">${task.task}</span>
+      <span class="pill-duration">${task.duration}m</span>
+      ${priorityIndicator}
+    </div>
+  `;
 
   if (task.rationale) {
-    card.setAttribute("data-reason", task.rationale);
-    card.classList.add("has-tooltip");
+    item.setAttribute("data-reason", task.rationale);
+    item.classList.add("has-tooltip");
   }
 
-  const timeStart = formatTime(startMinutes, startTime);
-  const timeEnd = formatTime(startMinutes + task.duration, startTime);
-  const priorityBadge =
-    task.priority && task.priority !== "medium"
-      ? `<span class="priority-badge priority-${task.priority}">${task.priority}</span>`
-      : "";
-
-  card.innerHTML = `
-    <div class="task-time-slot">${timeStart} - ${timeEnd}</div>
-    <div class="task-header">
-      <span class="task-name">${task.task}</span>
-      <span class="task-duration">${task.duration}m</span>
-    </div>
-    <div class="task-meta">
-      <span class="task-category" style="color: ${color}">${task.category}</span>
-      ${priorityBadge}
-    </div>
-  `;
-
-  return card;
+  return item;
 }
 
 /**
- * Creates a break card element
- * @param {Object} task - Break task object
- * @param {number} startMinutes - Minutes from schedule start
- * @param {Date} startTime - Schedule start time
- * @returns {HTMLElement} Break card element
- */
-function createBreakCard(task, startMinutes, startTime) {
-  const card = document.createElement("div");
-  card.className = "task-card break-card";
-
-  const timeStart = formatTime(startMinutes, startTime);
-  const timeEnd = formatTime(startMinutes + task.duration, startTime);
-
-  card.innerHTML = `
-    <div class="task-time-slot">${timeStart} - ${timeEnd}</div>
-    <div class="break-content">
-      <span class="break-icon">☕</span>
-      <span class="break-text">Break</span>
-      <span class="break-duration">${task.duration}m</span>
-    </div>
-  `;
-
-  return card;
-}
-
-/**
- * Renders a single schedule column
+ * Renders a single schedule column with timeline
  * @param {Array} tasks - Array of tasks
  * @param {HTMLElement} container - Container element
  * @param {Date} startTime - Schedule start time
  */
 function renderScheduleColumn(tasks, container, startTime) {
   container.innerHTML = "";
+  
+  // Add timeline wrapper
+  const timeline = document.createElement("div");
+  timeline.className = "timeline";
+  
   let currentMinutes = 0;
 
-  tasks.forEach((task) => {
-    if (task.category === "Break") {
-      container.appendChild(createBreakCard(task, currentMinutes, startTime));
-    } else {
-      container.appendChild(createTaskCard(task, currentMinutes, startTime));
-    }
+  tasks.forEach((task, index) => {
+    const isLast = index === tasks.length - 1;
+    timeline.appendChild(createTimelineItem(task, currentMinutes, startTime, isLast));
     currentMinutes += task.duration;
   });
+  
+  container.appendChild(timeline);
 }
 
 /**
@@ -208,8 +194,13 @@ export function renderSchedules(scheduleData, startTimeStr = "09:00") {
   }
   if (switchesSavedEl) {
     const switchesSaved = deadlineSwitches - efficiencySwitches;
-    switchesSavedEl.textContent =
-      switchesSaved > 0 ? `${switchesSaved} fewer` : "optimal";
+    if (switchesSaved > 0) {
+      switchesSavedEl.textContent = `(${switchesSaved} fewer than Priority)`;
+    } else if (switchesSaved < 0) {
+      switchesSavedEl.textContent = `(${Math.abs(switchesSaved)} more than Priority)`;
+    } else {
+      switchesSavedEl.textContent = `(same as Priority)`;
+    }
   }
 
   console.log(`[RENDER] Schedules rendered with start time ${startTimeStr}`);
