@@ -15,6 +15,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="stylesheet" href="/src/styles/common.css" />
+    <link rel="stylesheet" href="/src/styles/auth.css" />
     <style>
       :root {
         --color-primary: #ff6600;
@@ -389,6 +390,8 @@
             <a href="/pages/dashboard.html">Dashboard</a>
             <a href="#about">About</a>
             <a href="#features">Features</a>
+            <button class="btn-nav guest-only" onclick="showAuthModal()" style="margin-left: 1rem;">Sign In</button>
+            <button class="btn-nav auth-required" onclick="window.location.href='/pages/dashboard.html'" style="margin-left: 1rem; display: none;">Go to App</button>
           </nav>
         </div>
       </header>
@@ -407,8 +410,11 @@
                   similar tasks, minimize switching costs, and maximize your
                   deep work time.
                 </p>
-                <a href="/pages/dashboard.html" class="btn">
+                <button class="btn guest-only" onclick="showAuthModal()">
                   Get Started <i class="fas fa-arrow-right"></i>
+                </button>
+                <a href="/pages/dashboard.html" class="btn auth-required" style="display: none;">
+                  Go to Dashboard <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
               <div class="hero-visual">
@@ -653,6 +659,27 @@
 
         requestAnimationFrame(updateCounter);
       }
+    </script>
+
+    <!-- Auth Module -->
+    <script type="module">
+      import { showAuthModal, initializeAuthState } from '/src/ui/auth.js';
+      
+      // Make showAuthModal globally available
+      window.showAuthModal = showAuthModal;
+      
+      // Initialize auth state
+      initializeAuthState();
+      
+      // Check current session and update UI
+      import { getSession } from '/src/services/supabase.js';
+      getSession().then(({ session }) => {
+        if (session) {
+          // User is logged in, show authenticated UI
+          document.querySelectorAll('.auth-required').forEach(el => el.style.display = '');
+          document.querySelectorAll('.guest-only').forEach(el => el.style.display = 'none');
+        }
+      });
     </script>
   </body>
 </html>
