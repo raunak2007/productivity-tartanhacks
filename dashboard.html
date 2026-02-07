@@ -1,0 +1,1584 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Context Defender - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #f5f5f5;
+        color: #333;
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      #app {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        width: 100%;
+      }
+
+      header {
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      header h1 {
+        font-size: 1.5rem;
+        color: #4a9eff;
+      }
+
+      nav {
+        display: flex;
+        gap: 2rem;
+      }
+
+      nav a {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      nav a:hover {
+        color: #4a9eff;
+      }
+
+      /* Dashboard Styles */
+      .dashboard {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        min-height: calc(100vh - 140px);
+      }
+
+      .sidebar {
+        background: #fff;
+        border-right: 1px solid #e5e5e5;
+        padding: 2rem 0;
+        box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .user-profile {
+        padding: 0 2rem 2rem;
+        border-bottom: 1px solid #e5e5e5;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .avatar {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: white;
+        font-weight: bold;
+      }
+
+      .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0 1rem;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        color: #666;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.2s;
+      }
+
+      .nav-item:hover {
+        background: #f0f5ff;
+        color: #4a9eff;
+      }
+
+      .nav-item.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .main-content {
+        padding: 2rem;
+        background: #f9f9f9;
+      }
+
+      .content-header {
+        background: white;
+        padding: 1.5rem 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .content-header h2 {
+        color: #333;
+        font-size: 1.8rem;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-card h3 {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #4a9eff;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-change {
+        font-size: 0.9rem;
+        color: #28a745;
+      }
+
+      .stat-change.negative {
+        color: #dc3545;
+      }
+
+      .chart-container {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .chart-container h3 {
+        color: #333;
+        margin-bottom: 1rem;
+      }
+
+      .productivity-chart {
+        height: 200px;
+        display: flex;
+        align-items: flex-end;
+        gap: 20px;
+        padding: 1rem 0;
+      }
+
+      .chart-bar {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .bar {
+        width: 40px;
+        background: linear-gradient(to top, #667eea, #764ba2);
+        border-radius: 4px 4px 0 0;
+        transition: height 0.3s ease;
+      }
+
+      .bar-label {
+        margin-top: 0.5rem;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .task-list {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .task-list h3 {
+        color: #333;
+        margin-bottom: 1rem;
+      }
+
+      .task-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+        transition: background 0.2s;
+      }
+
+      .task-item:hover {
+        background: #f8f9fa;
+      }
+
+      .task-item:last-child {
+        border-bottom: none;
+      }
+
+      .task-checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        margin-right: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .task-checkbox.checked {
+        background: #4a9eff;
+        border-color: #4a9eff;
+        color: white;
+      }
+
+      .task-content {
+        flex: 1;
+      }
+
+      .task-title {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+      }
+
+      .task-time {
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      .task-priority {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      .priority-high {
+        background: #fee;
+        color: #dc3545;
+      }
+
+      .priority-medium {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .priority-low {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .action-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .action-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .action-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        color: white;
+        font-size: 1.5rem;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: transform 0.2s;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: #6c757d;
+      }
+
+      footer {
+        background: #333;
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+        margin-top: auto;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-header h3 {
+        color: #333;
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-weight: 500;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #4a9eff;
+        box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+      }
+
+      .select-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: white;
+        cursor: pointer;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      /* Toast Styles */
+      .toastify {
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+      }
+      /* Dark Mode Styles */
+      body.dark-mode {
+        background: #121212;
+        color: #e0e0e0;
+      }
+
+      body.dark-mode header {
+        background: #1e1e1e;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      body.dark-mode header h1 {
+        color: #64b5f6;
+      }
+
+      body.dark-mode nav a {
+        color: #e0e0e0;
+      }
+
+      body.dark-mode nav a:hover {
+        color: #64b5f6;
+      }
+
+      body.dark-mode .sidebar {
+        background: #1e1e1e;
+        border-right: 1px solid #333;
+      }
+
+      body.dark-mode .user-profile h3,
+      body.dark-mode .user-profile p {
+        color: #e0e0e0;
+      }
+
+      body.dark-mode .nav-item {
+        color: #b0b0b0;
+      }
+
+      body.dark-mode .nav-item:hover {
+        background: #2d2d2d;
+        color: #64b5f6;
+      }
+
+      body.dark-mode .main-content {
+        background: #121212;
+      }
+
+      body.dark-mode .content-header,
+      body.dark-mode .stat-card,
+      body.dark-mode .chart-container,
+      body.dark-mode .task-list,
+      body.dark-mode .action-card,
+      body.dark-mode .modal-content {
+        background: #1e1e1e;
+        color: #e0e0e0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      body.dark-mode .content-header h2,
+      body.dark-mode .chart-container h3,
+      body.dark-mode .task-list h3 {
+        color: #e0e0e0;
+      }
+
+      body.dark-mode .stat-card h3,
+      body.dark-mode .bar-label {
+        color: #b0b0b0;
+      }
+
+      body.dark-mode .task-item {
+        border-bottom: 1px solid #333;
+      }
+
+      body.dark-mode .task-item:hover {
+        background: #2d2d2d;
+      }
+
+      body.dark-mode .form-control,
+      body.dark-mode .select-control {
+        background: #2d2d2d;
+        border: 1px solid #444;
+        color: #e0e0e0;
+      }
+
+      body.dark-mode .form-control:focus,
+      body.dark-mode .select-control:focus {
+        border-color: #64b5f6;
+        box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.1);
+      }
+
+      body.dark-mode .priority-high {
+        background: #442222;
+        color: #ff6b6b;
+      }
+
+      body.dark-mode .priority-medium {
+        background: #443d22;
+        color: #ffd166;
+      }
+
+      body.dark-mode .priority-low {
+        background: #224422;
+        color: #83d483;
+      }
+
+      body.dark-mode footer {
+        background: #1e1e1e;
+        color: #b0b0b0;
+      }
+
+      /* Toggle Switch Styles */
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+      }
+
+      .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .toggle-slider {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      input:checked + .toggle-slider:before {
+        transform: translateX(26px);
+      }
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          display: none;
+        }
+
+        .container {
+          padding: 0 1rem;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .quick-actions {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="container">
+          <h1>Context Defender</h1>
+          <nav>
+            <a href="https://raunak2007.github.io/productivity-tartanhacks/index.html">Home</a>
+            <a href="#about">About</a>
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="#contact">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="user-profile">
+            <div class="avatar" id="userAvatar">JD</div>
+            <h3 id="userName">John Doe</h3>
+            <p id="userEmail">john@example.com</p>
+            <div class="productivity-score">
+              <p style="color: #666; margin-top: 0.5rem;">
+                <i class="fas fa-chart-line" style="color: #4a9eff;"></i>
+                Productivity: <span id="productivityValue">85</span>/100
+              </p>
+            </div>
+          </div>
+
+          <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" onclick="showSection('overview')">
+              <i class="fas fa-tachometer-alt"></i>
+              Overview
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('tasks')">
+              <i class="fas fa-tasks"></i>
+              Tasks
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('schedule')">
+              <i class="fas fa-calendar-alt"></i>
+              Schedule
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('analytics')">
+              <i class="fas fa-chart-bar"></i>
+              Analytics
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('settings')">
+              <i class="fas fa-cog"></i>
+              Settings
+            </a>
+            <a href="#" class="nav-item" onclick="logout()" style="margin-top: 2rem; color: #dc3545;">
+              <i class="fas fa-sign-out-alt"></i>
+              Logout
+            </a>
+          </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+          <!-- Overview Section -->
+          <section id="overviewSection" class="dashboard-section">
+            <div class="content-header">
+              <div>
+                <h2>Productivity Dashboard</h2>
+                <p style="color: #666; margin-top: 0.5rem;">Welcome back! Here's your productivity overview</p>
+              </div>
+              <button class="btn" onclick="openAddTaskModal()">
+                <i class="fas fa-plus"></i> Add Task
+              </button>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-card">
+                <h3>Today's Focus</h3>
+                <div class="stat-value">4h 23m</div>
+                <div class="stat-change">+45m from yesterday</div>
+              </div>
+              <div class="stat-card">
+                <h3>Tasks Completed</h3>
+                <div class="stat-value">12/15</div>
+                <div class="stat-change">80% completion rate</div>
+              </div>
+              <div class="stat-card">
+                <h3>Productivity Score</h3>
+                <div class="stat-value" id="overviewScore">85</div>
+                <div class="stat-change">+5 this week</div>
+              </div>
+              <div class="stat-card">
+                <h3>AI Optimizations</h3>
+                <div class="stat-value">6</div>
+                <div class="stat-change">3 new suggestions</div>
+              </div>
+            </div>
+
+            <div class="chart-container">
+              <h3>Weekly Productivity Trend</h3>
+              <div class="productivity-chart" id="productivityChart">
+                <!-- Chart bars will be generated by JavaScript -->
+              </div>
+            </div>
+
+            <div class="task-list">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3>Today's Tasks</h3>
+                <button class="btn-secondary" onclick="optimizeSchedule()">
+                  <i class="fas fa-bolt"></i> AI Optimize
+                </button>
+              </div>
+              <div id="todayTasks">
+                <!-- Today's tasks will be loaded here -->
+              </div>
+            </div>
+
+            <div class="quick-actions">
+              <div class="action-card" onclick="openAddTaskModal()">
+                <div class="action-icon">
+                  <i class="fas fa-plus"></i>
+                </div>
+                <h3>Add New Task</h3>
+                <p style="color: #666; font-size: 0.9rem;">Create a new task with AI assistance</p>
+              </div>
+              <div class="action-card" onclick="optimizeSchedule()">
+                <div class="action-icon">
+                  <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Optimize Schedule</h3>
+                <p style="color: #666; font-size: 0.9rem;">Let AI optimize your daily schedule</p>
+              </div>
+              <div class="action-card" onclick="showSection('analytics')">
+                <div class="action-icon">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>View Analytics</h3>
+                <p style="color: #666; font-size: 0.9rem;">Check your productivity trends</p>
+              </div>
+              <div class="action-card" onclick="openSettingsModal()">
+                <div class="action-icon">
+                  <i class="fas fa-cog"></i>
+                </div>
+                <h3>Settings</h3>
+                <p style="color: #666; font-size: 0.9rem;">Customize your preferences</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Tasks Section -->
+          <section id="tasksSection" class="dashboard-section" style="display: none;">
+            <div class="content-header">
+              <div>
+                <h2>Task Management</h2>
+                <p style="color: #666; margin-top: 0.5rem;">Manage all your tasks in one place</p>
+              </div>
+              <div style="display: flex; gap: 1rem;">
+                <button class="btn-secondary" onclick="filterTasks('all')">All</button>
+                <button class="btn-secondary" onclick="filterTasks('pending')">Pending</button>
+                <button class="btn" onclick="openAddTaskModal()">
+                  <i class="fas fa-plus"></i> Add Task
+                </button>
+              </div>
+            </div>
+
+            <div class="task-list">
+              <div id="allTasks">
+                <!-- All tasks will be loaded here -->
+              </div>
+            </div>
+          </section>
+
+          <!-- Schedule Section -->
+          <section id="scheduleSection" class="dashboard-section" style="display: none;">
+            <div class="content-header">
+              <div>
+                <h2>Daily Schedule</h2>
+                <p style="color: #666; margin-top: 0.5rem;">AI-optimized daily schedule</p>
+              </div>
+              <button class="btn" onclick="optimizeSchedule()">
+                <i class="fas fa-bolt"></i> Re-optimize
+              </button>
+            </div>
+
+            <div class="chart-container">
+              <h3>Today's Timeline</h3>
+              <div id="scheduleTimeline" style="padding: 2rem 0;">
+                <!-- Schedule timeline will be generated here -->
+              </div>
+            </div>
+          </section>
+
+          <!-- Analytics Section -->
+          <section id="analyticsSection" class="dashboard-section" style="display: none;">
+            <div class="content-header">
+              <div>
+                <h2>Productivity Analytics</h2>
+                <p style="color: #666; margin-top: 0.5rem;">Detailed insights into your productivity</p>
+              </div>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-card">
+                <h3>Weekly Average</h3>
+                <div class="stat-value">82%</div>
+                <div class="stat-change">+7% from last week</div>
+              </div>
+              <div class="stat-card">
+                <h3>Focus Streak</h3>
+                <div class="stat-value">14 days</div>
+                <div class="stat-change">Personal best!</div>
+              </div>
+              <div class="stat-card">
+                <h3>Task Completion</h3>
+                <div class="stat-value">94%</div>
+                <div class="stat-change">+4% this month</div>
+              </div>
+              <div class="stat-card">
+                <h3>AI Effectiveness</h3>
+                <div class="stat-value">92%</div>
+                <div class="stat-change">High optimization rate</div>
+              </div>
+            </div>
+
+            <div class="chart-container">
+              <h3>Monthly Performance</h3>
+              <div class="productivity-chart" id="monthlyChart">
+                <!-- Monthly chart will be generated here -->
+              </div>
+            </div>
+          </section>
+
+          <!-- Settings Section -->
+          <section id="settingsSection" class="dashboard-section" style="display: none;">
+            <div class="content-header">
+              <div>
+                <h2>Settings</h2>
+                <p style="color: #666; margin-top: 0.5rem;">Customize your experience</p>
+              </div>
+            </div>
+
+            <div class="task-list">
+              <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Profile Settings</h3>
+                <div class="form-group">
+                  <label>Full Name</label>
+                  <input type="text" class="form-control" id="settingsName" value="John Doe">
+                </div>
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" class="form-control" id="settingsEmail" value="john@example.com">
+                </div>
+                <div class="form-group">
+                  <label>Daily Work Hours</label>
+                  <input type="number" class="form-control" id="settingsHours" value="8" min="1" max="24">
+                </div>
+              </div>
+
+              <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Preferences</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid #eee;">
+                  <span>Enable AI Optimizations</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="aiOptimizations" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid #eee;">
+                  <span>Daily Notifications</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="dailyNotifications" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+                  <span>Dark Mode</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="darkMode">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <button class="btn" onclick="saveSettings()" style="width: 100%;">
+                <i class="fas fa-save"></i> Save Settings
+              </button>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <footer>
+        <div class="container">
+          <p>&copy; 2026 Context Defender. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="addTaskModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Add New Task</h3>
+          <button class="close-modal" onclick="closeModal('addTaskModal')">&times;</button>
+        </div>
+        
+        <form id="taskForm" onsubmit="addTask(event)">
+          <div class="form-group">
+            <label>Task Title *</label>
+            <input type="text" class="form-control" id="taskTitle" placeholder="What needs to be done?" required>
+          </div>
+          
+          <div class="form-group">
+            <label>Description</label>
+            <textarea class="form-control" id="taskDescription" rows="3" placeholder="Add details about the task..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Category</label>
+            <select class="select-control" id="taskCategory">
+              <option value="work">Work</option>
+              <option value="personal">Personal</option>
+              <option value="learning">Learning</option>
+              <option value="health">Health</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Priority</label>
+            <select class="select-control" id="taskPriority">
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label>Estimated Time (minutes)</label>
+              <button type="button" class="btn-secondary" onclick="estimateTimeWithAI()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                AI Estimate
+              </button>
+            </div>
+            <input type="number" class="form-control" id="taskTime" placeholder="Or let AI estimate">
+          </div>
+          
+          <div class="form-group">
+            <label>Energy Level Required</label>
+            <select class="select-control" id="taskEnergy">
+              <option value="high">High Energy</option>
+              <option value="medium">Medium Energy</option>
+              <option value="low">Low Energy</option>
+            </select>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" onclick="closeModal('addTaskModal')" style="flex: 1;">
+              Cancel
+            </button>
+            <button type="submit" class="btn" style="flex: 2;">
+              Add Task
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Settings</h3>
+          <button class="close-modal" onclick="closeModal('settingsModal')">&times;</button>
+        </div>
+        <!-- Settings content can be added here -->
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+    <script>
+      // Initialize app state
+      let currentUser = null;
+      let tasks = [];
+      let currentSection = 'overview';
+
+      // Toast notifications
+      function showToast(message, type = 'info') {
+        const colors = {
+          success: '#28a745',
+          error: '#dc3545',
+          info: '#4a9eff',
+          warning: '#ffc107'
+        };
+        
+        Toastify({
+          text: message,
+          duration: 3000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: colors[type] || colors.info,
+          stopOnFocus: true
+        }).showToast();
+      }
+
+      // Modal functions
+      function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+      }
+
+      function openAddTaskModal() {
+        openModal('addTaskModal');
+      }
+
+      function openSettingsModal() {
+        openModal('settingsModal');
+      }
+
+      // Navigation
+      function showSection(section) {
+        // Hide all sections
+        document.querySelectorAll('.dashboard-section').forEach(el => {
+          el.style.display = 'none';
+        });
+        
+        // Remove active class from all nav items
+        document.querySelectorAll('.nav-item').forEach(el => {
+          el.classList.remove('active');
+        });
+        
+        // Show selected section
+        document.getElementById(section + 'Section').style.display = 'block';
+        
+        // Add active class to clicked nav item
+        event.target.classList.add('active');
+        
+        // Update current section
+        currentSection = section;
+        
+        // Refresh section content
+        if (section === 'tasks') {
+          loadTasks();
+        } else if (section === 'overview') {
+          updateOverview();
+        }
+      }
+
+      // User functions
+      function loadUser() {
+        const savedUser = localStorage.getItem('context_defender_user');
+        if (savedUser) {
+          currentUser = JSON.parse(savedUser);
+        } else {
+          // Create demo user
+          currentUser = {
+            id: 'user_' + Date.now(),
+            name: 'John Doe',
+            email: 'john@example.com',
+            productivityScore: 85,
+            workHours: 8,
+            avatar: 'JD'
+          };
+          saveUser();
+        }
+        
+        updateUserUI();
+      }
+
+      function saveUser() {
+        localStorage.setItem('context_defender_user', JSON.stringify(currentUser));
+      }
+
+      function updateUserUI() {
+        if (!currentUser) return;
+        
+        document.getElementById('userAvatar').textContent = currentUser.avatar;
+        document.getElementById('userName').textContent = currentUser.name;
+        document.getElementById('userEmail').textContent = currentUser.email;
+        document.getElementById('productivityValue').textContent = currentUser.productivityScore;
+        document.getElementById('overviewScore').textContent = currentUser.productivityScore;
+        
+        // Update settings form
+        document.getElementById('settingsName').value = currentUser.name;
+        document.getElementById('settingsEmail').value = currentUser.email;
+        document.getElementById('settingsHours').value = currentUser.workHours;
+      }
+
+      function saveSettings() {
+        const name = document.getElementById('settingsName').value;
+        const email = document.getElementById('settingsEmail').value;
+        const hours = parseInt(document.getElementById('settingsHours').value);
+        
+        currentUser.name = name;
+        currentUser.email = email;
+        currentUser.workHours = hours;
+        currentUser.avatar = name.split(' ').map(n => n[0]).join('').toUpperCase();
+        
+        saveUser();
+        updateUserUI();
+        showToast('Settings saved successfully!', 'success');
+        showSection('overview');
+      }
+
+      // Task functions
+      function loadTasks() {
+        const savedTasks = localStorage.getItem('context_defender_tasks');
+        if (savedTasks) {
+          tasks = JSON.parse(savedTasks);
+        } else {
+          // Create sample tasks
+          tasks = [
+            {
+              id: 1,
+              title: 'Complete project report',
+              description: 'Finish the quarterly project analysis',
+              priority: 'high',
+              category: 'work',
+              estimatedTime: 120,
+              energyLevel: 'high',
+              status: 'pending',
+              createdAt: new Date().toISOString(),
+              dueDate: new Date(Date.now() + 86400000).toISOString()
+            },
+            {
+              id: 2,
+              title: 'Learn new framework',
+              description: 'Study React advanced concepts',
+              priority: 'medium',
+              category: 'learning',
+              estimatedTime: 90,
+              energyLevel: 'medium',
+              status: 'pending',
+              createdAt: new Date().toISOString(),
+              dueDate: new Date(Date.now() + 172800000).toISOString()
+            },
+            {
+              id: 3,
+              title: 'Grocery shopping',
+              description: 'Buy weekly groceries',
+              priority: 'low',
+              category: 'personal',
+              estimatedTime: 45,
+              energyLevel: 'low',
+              status: 'completed',
+              createdAt: new Date().toISOString(),
+              completedAt: new Date().toISOString()
+            },
+            {
+              id: 4,
+              title: 'Team meeting',
+              description: 'Weekly team sync',
+              priority: 'medium',
+              category: 'work',
+              estimatedTime: 60,
+              energyLevel: 'medium',
+              status: 'pending',
+              createdAt: new Date().toISOString(),
+              dueDate: new Date(Date.now() + 3600000).toISOString()
+            },
+            {
+              id: 5,
+              title: 'Exercise',
+              description: 'Morning workout session',
+              priority: 'medium',
+              category: 'health',
+              estimatedTime: 60,
+              energyLevel: 'high',
+              status: 'pending',
+              createdAt: new Date().toISOString(),
+              dueDate: new Date(Date.now() + 28800000).toISOString()
+            }
+          ];
+          saveTasks();
+        }
+        
+        renderTasks();
+      }
+
+      function saveTasks() {
+        localStorage.setItem('context_defender_tasks', JSON.stringify(tasks));
+      }
+
+      function addTask(event) {
+        event.preventDefault();
+        
+        const title = document.getElementById('taskTitle').value;
+        const description = document.getElementById('taskDescription').value;
+        const category = document.getElementById('taskCategory').value;
+        const priority = document.getElementById('taskPriority').value;
+        const estimatedTime = parseInt(document.getElementById('taskTime').value) || null;
+        const energyLevel = document.getElementById('taskEnergy').value;
+        
+        const newTask = {
+          id: Date.now(),
+          title,
+          description,
+          category,
+          priority,
+          estimatedTime,
+          energyLevel,
+          status: 'pending',
+          createdAt: new Date().toISOString(),
+          dueDate: new Date(Date.now() + 86400000).toISOString()
+        };
+        
+        tasks.unshift(newTask);
+        saveTasks();
+        renderTasks();
+        
+        // Reset form and close modal
+        document.getElementById('taskForm').reset();
+        closeModal('addTaskModal');
+        
+        // Update productivity score
+        currentUser.productivityScore = Math.min(100, currentUser.productivityScore + 2);
+        saveUser();
+        updateUserUI();
+        
+        showToast('Task added successfully!', 'success');
+      }
+
+      function estimateTimeWithAI() {
+        const title = document.getElementById('taskTitle').value;
+        if (!title) {
+          showToast('Please enter a task title first', 'warning');
+          return;
+        }
+        
+        showToast('AI is estimating time...', 'info');
+        
+        // Simulate AI estimation
+        setTimeout(() => {
+          const estimatedTime = Math.floor(Math.random() * 120) + 15; // 15-135 minutes
+          document.getElementById('taskTime').value = estimatedTime;
+          showToast(`AI estimates ${estimatedTime} minutes for this task`, 'success');
+        }, 1000);
+      }
+
+      function toggleTask(taskId) {
+        const task = tasks.find(t => t.id === taskId);
+        if (task) {
+          task.status = task.status === 'completed' ? 'pending' : 'completed';
+          if (task.status === 'completed') {
+            task.completedAt = new Date().toISOString();
+            // Update productivity score
+            currentUser.productivityScore = Math.min(100, currentUser.productivityScore + 3);
+          } else {
+            currentUser.productivityScore = Math.max(0, currentUser.productivityScore - 1);
+          }
+          
+          saveTasks();
+          saveUser();
+          updateUserUI();
+          renderTasks();
+          
+          showToast(`Task marked as ${task.status}`, 'success');
+        }
+      }
+
+      function deleteTask(taskId) {
+        if (confirm('Are you sure you want to delete this task?')) {
+          tasks = tasks.filter(t => t.id !== taskId);
+          saveTasks();
+          renderTasks();
+          showToast('Task deleted successfully', 'info');
+        }
+      }
+
+      function filterTasks(filter) {
+        renderTasks(filter);
+      }
+
+      function renderTasks(filter = 'all') {
+        const todayTasksContainer = document.getElementById('todayTasks');
+        const allTasksContainer = document.getElementById('allTasks');
+        
+        if (!todayTasksContainer || !allTasksContainer) return;
+        
+        // Clear containers
+        todayTasksContainer.innerHTML = '';
+        allTasksContainer.innerHTML = '';
+        
+        // Filter tasks
+        let filteredTasks = tasks;
+        if (filter === 'pending') {
+          filteredTasks = tasks.filter(task => task.status === 'pending');
+        } else if (filter === 'completed') {
+          filteredTasks = tasks.filter(task => task.status === 'completed');
+        }
+        
+        // Get today's tasks (pending tasks due today or with no due date)
+        const today = new Date().toDateString();
+        const todayTasks = tasks.filter(task => 
+          task.status === 'pending' && 
+          (!task.dueDate || new Date(task.dueDate).toDateString() === today)
+        ).slice(0, 5); // Show only 5 tasks
+        
+        // Render today's tasks
+        if (todayTasks.length === 0) {
+          todayTasksContainer.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: #666;">
+              <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 1rem; color: #28a745;"></i>
+              <p>No tasks for today! Great job!</p>
+            </div>
+          `;
+        } else {
+          todayTasks.forEach(task => {
+            todayTasksContainer.appendChild(createTaskElement(task, false));
+          });
+        }
+        
+        // Render all tasks
+        if (filteredTasks.length === 0) {
+          allTasksContainer.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: #666;">
+              <i class="fas fa-tasks" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+              <p>No tasks found</p>
+            </div>
+          `;
+        } else {
+          filteredTasks.forEach(task => {
+            allTasksContainer.appendChild(createTaskElement(task, true));
+          });
+        }
+      }
+
+      function createTaskElement(task, showDelete = false) {
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task-item';
+        
+        const priorityClass = `priority-${task.priority}`;
+        const isCompleted = task.status === 'completed';
+        
+        taskElement.innerHTML = `
+          <div class="task-checkbox ${isCompleted ? 'checked' : ''}" onclick="toggleTask(${task.id})">
+            ${isCompleted ? '<i class="fas fa-check"></i>' : ''}
+          </div>
+          <div class="task-content">
+            <div class="task-title" style="${isCompleted ? 'text-decoration: line-through; color: #999;' : ''}">
+              ${task.title}
+            </div>
+            ${task.description ? `<div class="task-time" style="${isCompleted ? 'color: #999;' : ''}">${task.description}</div>` : ''}
+          </div>
+          <div class="task-priority ${priorityClass}">
+            ${task.priority}
+          </div>
+          ${showDelete ? `
+            <button class="btn-secondary" onclick="deleteTask(${task.id})" style="margin-left: 1rem; padding: 0.5rem;">
+              <i class="fas fa-trash"></i>
+            </button>
+          ` : ''}
+        `;
+        
+        return taskElement;
+      }
+
+      // AI Optimization
+      function optimizeSchedule() {
+        showToast('AI is optimizing your schedule...', 'info');
+        
+        // Simulate AI optimization
+        setTimeout(() => {
+          // Randomly mark some tasks as completed and optimize others
+          tasks.forEach(task => {
+            if (task.status === 'pending' && Math.random() > 0.7) {
+              task.status = 'completed';
+              task.completedAt = new Date().toISOString();
+            }
+          });
+          
+          saveTasks();
+          renderTasks();
+          
+          // Update productivity score
+          currentUser.productivityScore = Math.min(100, currentUser.productivityScore + 5);
+          saveUser();
+          updateUserUI();
+          
+          showToast('Schedule optimized! Your productivity has improved.', 'success');
+          
+          // Update charts
+          updateCharts();
+        }, 2000);
+      }
+
+      // Chart functions
+      function updateCharts() {
+        // Weekly productivity chart
+        const weeklyData = [65, 72, 85, 78, 90, 60, 55];
+        const chartContainer = document.getElementById('productivityChart');
+        chartContainer.innerHTML = '';
+        
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        days.forEach((day, index) => {
+          const barHeight = (weeklyData[index] / 100) * 150;
+          const bar = document.createElement('div');
+          bar.className = 'chart-bar';
+          bar.innerHTML = `
+            <div class="bar" style="height: ${barHeight}px;"></div>
+            <div class="bar-label">${day}</div>
+          `;
+          chartContainer.appendChild(bar);
+        });
+        
+        // Monthly chart
+        const monthlyData = [70, 75, 80, 82, 85, 83, 87, 85, 88, 90];
+        const monthlyChart = document.getElementById('monthlyChart');
+        monthlyChart.innerHTML = '';
+        
+        monthlyData.forEach((value, index) => {
+          const barHeight = (value / 100) * 150;
+          const bar = document.createElement('div');
+          bar.className = 'chart-bar';
+          bar.innerHTML = `
+            <div class="bar" style="height: ${barHeight}px;"></div>
+            <div class="bar-label">${index + 1}</div>
+          `;
+          monthlyChart.appendChild(bar);
+        });
+      }
+
+      function updateOverview() {
+        // Update stats based on current data
+        const pendingTasks = tasks.filter(t => t.status === 'pending').length;
+        const completedTasks = tasks.filter(t => t.status === 'completed').length;
+        
+        // You can update more stats here based on your needs
+      }
+
+      // Logout function
+      function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+          // In a real app, you would clear the session
+          showToast('Logged out successfully', 'info');
+          // Redirect to home page
+          setTimeout(() => {
+            window.location.href = 'https://raunak2007.github.io/productivity-tartanhacks/index.html';
+          }, 1000);
+        }
+      }
+      // Dark mode functions
+      function initializeDarkMode() {
+        const darkModeToggle = document.getElementById('darkMode');
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        
+        // Set initial state
+        if (isDarkMode) {
+          document.body.classList.add('dark-mode');
+          darkModeToggle.checked = true;
+        }
+        
+        // Add event listener
+        darkModeToggle.addEventListener('change', toggleDarkMode);
+      }
+
+      function toggleDarkMode() {
+        const isDarkMode = document.getElementById('darkMode').checked;
+        
+        if (isDarkMode) {
+          document.body.classList.add('dark-mode');
+          localStorage.setItem('darkMode', 'true');
+          showToast('Dark mode enabled', 'success');
+        } else {
+          document.body.classList.remove('dark-mode');
+          localStorage.setItem('darkMode', 'false');
+          showToast('Dark mode disabled', 'info');
+        }
+      }
+
+      function saveSettings() {
+        const name = document.getElementById('settingsName').value;
+        const email = document.getElementById('settingsEmail').value;
+        const hours = parseInt(document.getElementById('settingsHours').value);
+        const aiOptimizations = document.getElementById('aiOptimizations').checked;
+        const dailyNotifications = document.getElementById('dailyNotifications').checked;
+        
+        currentUser.name = name;
+        currentUser.email = email;
+        currentUser.workHours = hours;
+        currentUser.aiOptimizations = aiOptimizations;
+        currentUser.dailyNotifications = dailyNotifications;
+        currentUser.avatar = name.split(' ').map(n => n[0]).join('').toUpperCase();
+        
+        saveUser();
+        updateUserUI();
+        showToast('Settings saved successfully!', 'success');
+        showSection('overview');
+      }
+            // Initialize the dashboard
+        window.addEventListener('DOMContentLoaded', () => {
+          console.log('Dashboard initialized');
+          
+          // Load user and tasks
+          loadUser();
+          loadTasks();
+          
+          // Update charts
+          updateCharts();
+          
+          // Initialize dark mode
+          initializeDarkMode();
+          
+          // Set up event listeners
+          const addTaskBtn = document.querySelector('.cta-btn');
+          if (addTaskBtn) {
+            addTaskBtn.addEventListener('click', () => {
+              openAddTaskModal();
+            });
+          }
+          
+          // Navigation
+          document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+              if (this.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                  targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+              }
+            });
+          });
+        });
+    </script>
+  </body>
+</html>

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/src/styles/common.css" />
@@ -46,7 +46,7 @@
             </p>
             <div class="productivity-score">
               <p style="color: #666; margin-top: 0.5rem">
-                <i class="fas fa-chart-line" style="color: #2978a0"></i>
+                <i class="fas fa-chart-line" style="color: #000000"></i>
                 Productivity: <span id="productivityValue">85</span>/100
               </p>
             </div>
@@ -182,7 +182,7 @@
                   style="
                     font-size: 2rem;
                     font-weight: bold;
-                    color: #2978a0;
+                    color: #000000;
                     margin-bottom: 0.5rem;
                   "
                 >
@@ -219,7 +219,7 @@
                   style="
                     font-size: 2rem;
                     font-weight: bold;
-                    color: #2978a0;
+                    color: #000000;
                     margin-bottom: 0.5rem;
                   "
                 >
@@ -258,7 +258,7 @@
                   style="
                     font-size: 2rem;
                     font-weight: bold;
-                    color: #2978a0;
+                    color: #000000;
                     margin-bottom: 0.5rem;
                   "
                   id="overviewScore"
@@ -296,7 +296,7 @@
                   style="
                     font-size: 2rem;
                     font-weight: bold;
-                    color: #2978a0;
+                    color: #000000;
                     margin-bottom: 0.5rem;
                   "
                 >
@@ -398,8 +398,8 @@
                     height: 60px;
                     background: linear-gradient(
                       135deg,
-                      #2978a0 0%,
-                      #315659 100%
+                      #000000 0%,
+                      #1f1f1f 100%
                     );
                     border-radius: 50%;
                     display: flex;
@@ -440,8 +440,8 @@
                     height: 60px;
                     background: linear-gradient(
                       135deg,
-                      #2978a0 0%,
-                      #315659 100%
+                      #000000 0%,
+                      #1f1f1f 100%
                     );
                     border-radius: 50%;
                     display: flex;
@@ -482,8 +482,8 @@
                     height: 60px;
                     background: linear-gradient(
                       135deg,
-                      #2978a0 0%,
-                      #315659 100%
+                      #000000 0%,
+                      #1f1f1f 100%
                     );
                     border-radius: 50%;
                     display: flex;
@@ -524,8 +524,8 @@
                     height: 60px;
                     background: linear-gradient(
                       135deg,
-                      #2978a0 0%,
-                      #315659 100%
+                      #000000 0%,
+                      #1f1f1f 100%
                     );
                     border-radius: 50%;
                     display: flex;
@@ -783,7 +783,7 @@
                   style="
                     font-size: 2rem;
                     font-weight: bold;
-                    color: #2978a0;
+                    color: #000000;
                     margin-bottom: 0.5rem;
                   "
                 >
@@ -820,7 +820,7 @@
                   style="
                     font-size: 2rem;
                     font-weight: bold;
-                    color: #2978a0;
+                    color: #000000;
                     margin-bottom: 0.5rem;
                   "
                 >
@@ -857,7 +857,7 @@
                   style="
                     font-size: 2rem;
                     font-weight: bold;
-                    color: #2978a0;
+                    color: #000000;
                     margin-bottom: 0.5rem;
                   "
                 >
@@ -894,7 +894,7 @@
                   style="
                     font-size: 2rem;
                     font-weight: bold;
-                    color: #2978a0;
+                    color: #000000;
                     margin-bottom: 0.5rem;
                   "
                 >
@@ -2037,7 +2037,7 @@
         };
 
         taskElement.innerHTML = `
-          <div class="task-checkbox ${isCompleted ? "checked" : ""}" onclick="toggleTask(${task.id})" style="width: 20px; height: 20px; border: 2px solid #ddd; border-radius: 4px; margin-right: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; ${isCompleted ? "background: #2978a0; border-color: #2978a0; color: white;" : ""}">
+          <div class="task-checkbox ${isCompleted ? "checked" : ""}" onclick="toggleTask(${task.id})" style="width: 20px; height: 20px; border: 2px solid #ddd; border-radius: 4px; margin-right: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; ${isCompleted ? "background: #000000; border-color: #000000; color: white;" : ""}">
             ${isCompleted ? '<i class="fas fa-check"></i>' : ""}
           </div>
           <div class="task-content" style="flex: 1;">
@@ -2079,8 +2079,8 @@
             bar.style.cssText =
               "flex: 1; display: flex; flex-direction: column; align-items: center;";
             bar.innerHTML = `
-              <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #2978a0, #bcab79); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
-              <div class="bar-label" style="margin-top: 0.5rem; color: #315659; font-size: 0.9rem;">${day}</div>
+              <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #000000, #bcab79); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
+              <div class="bar-label" style="margin-top: 0.5rem; color: #000000; font-size: 0.9rem;">${day}</div>
             `;
             chartContainer.appendChild(bar);
           });
@@ -2099,8 +2099,8 @@
             bar.style.cssText =
               "flex: 1; display: flex; flex-direction: column; align-items: center;";
             bar.innerHTML = `
-              <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #2978a0, #bcab79); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
-              <div class="bar-label" style="margin-top: 0.5rem; color: #315659; font-size: 0.9rem;">${index + 1}</div>
+              <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #000000, #bcab79); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
+              <div class="bar-label" style="margin-top: 0.5rem; color: #000000; font-size: 0.9rem;">${index + 1}</div>
             `;
             monthlyChart.appendChild(bar);
           });
