@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Context Defender - Dashboard</title>
+    <title>Utilio - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
     <style>
@@ -659,7 +659,7 @@
     <div id="app">
       <header>
         <div class="container">
-          <h1>Context Defender</h1>
+          <h1>Utilio</h1>
           <nav>
             <a href="https://raunak2007.github.io/productivity-tartanhacks/index.html">Home</a>
             <a href="#about">About</a>
@@ -944,7 +944,7 @@
 
       <footer>
         <div class="container">
-          <p>&copy; 2026 Context Defender. All rights reserved.</p>
+          <p>&copy; 2026 Utilio. All rights reserved.</p>
         </div>
       </footer>
     </div>
@@ -1104,7 +1104,7 @@
 
       // User functions
       function loadUser() {
-        const savedUser = localStorage.getItem('context_defender_user');
+        const savedUser = localStorage.getItem('utilio_user');
         if (savedUser) {
           currentUser = JSON.parse(savedUser);
         } else {
@@ -1124,7 +1124,7 @@
       }
 
       function saveUser() {
-        localStorage.setItem('context_defender_user', JSON.stringify(currentUser));
+        localStorage.setItem('utilio_user', JSON.stringify(currentUser));
       }
 
       function updateUserUI() {
@@ -1160,7 +1160,7 @@
 
       // Task functions
       function loadTasks() {
-        const savedTasks = localStorage.getItem('context_defender_tasks');
+        const savedTasks = localStorage.getItem('utilio_tasks');
         if (savedTasks) {
           tasks = JSON.parse(savedTasks);
         } else {
@@ -1234,7 +1234,7 @@
       }
 
       function saveTasks() {
-        localStorage.setItem('context_defender_tasks', JSON.stringify(tasks));
+        localStorage.setItem('utilio_tasks', JSON.stringify(tasks));
       }
 
       function addTask(event) {
