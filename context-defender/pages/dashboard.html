@@ -697,529 +697,1072 @@
               </div>
             </div>
 
-            <div class="input-section">
-              <h3><i class="fas fa-tasks"></i> Add Tasks</h3>
-              <p
-                style="color: var(--color-text-secondary); margin-bottom: 1rem"
-              >
-                Add your tasks one by one - AI will automatically categorize
-                them
-              </p>
-
-              <div class="task-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="taskName">Task Name</label>
-                    <input
-                      type="text"
-                      id="taskName"
-                      placeholder="e.g., Review backend APIs"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="taskDuration">Duration (mins)</label>
-                    <input
-                      type="number"
-                      id="taskDuration"
-                      min="1"
-                      placeholder="30"
-                    />
-                  </div>
-                </div>
-                <button class="btn btn-secondary" onclick="addTask()">
-                  <i class="fas fa-plus"></i> Add Task
-                </button>
-              </div>
-
-              <div id="taskListSection" style="display: none; margin-top: 2rem">
-                <h3>Your Tasks (<span id="taskCount">0</span>)</h3>
-                <div id="taskList" class="task-list-items"></div>
-              </div>
-
-              <div class="button-group" style="margin-top: 1.5rem">
-                <button
-                  class="btn btn-primary"
-                  onclick="optimizeSchedule()"
-                  id="optimizeBtn"
-                  disabled
-                >
-                  <i class="fas fa-bolt"></i> Optimize with AI
-                </button>
-                <button class="btn btn-secondary" onclick="clearAllTasks()">
-                  <i class="fas fa-eraser"></i> Clear All
-                </button>
-              </div>
-            </div>
-
-            <div id="loadingState" style="display: none">
-              <div class="loading-spinner">
-                <div class="spinner"></div>
-                <p style="margin-top: 1rem; color: #666">
-                  Analyzing your schedule...
-                </p>
-              </div>
-            </div>
-
-            <div id="resultsContainer" style="display: none">
-              <div class="schedules">
-                <div class="schedule-column">
-                  <div class="column-header">
-                    <h3 class="column-title chaos-title">
-                      <i class="fas fa-bolt"></i> Chaos Mode
-                    </h3>
-                    <div class="time-badge" id="chaosTime">0 mins</div>
-                  </div>
-                  <div class="schedule-list" id="chaosList">
-                    <!-- Chaos schedule will be rendered here -->
-                  </div>
-                </div>
-
-                <div class="schedule-column">
-                  <div class="column-header">
-                    <h3 class="column-title flow-title">
-                      <i class="fas fa-water"></i> Flow Mode
-                    </h3>
-                    <div class="time-badge" id="flowTime">0 mins</div>
-                  </div>
-                  <div class="schedule-list" id="flowList">
-                    <!-- Flow schedule will be rendered here -->
-                  </div>
-                </div>
-              </div>
-
-              <div class="stats-panel">
-                <h3 style="margin-bottom: 1.5rem; text-align: center">
-                  <i class="fas fa-chart-bar"></i> Optimization Results
-                </h3>
-                <div class="stats-grid">
-                  <div class="stat-item">
-                    <div class="stat-label">Context Switches</div>
-                    <div class="stat-value" id="switchCount">0</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-label">Time Saved</div>
-                    <div class="stat-value" id="timeSaved">0 mins</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-label">Efficiency Gain</div>
-                    <div class="stat-value" id="efficiencyGain">0%</div>
-                  </div>
-                </div>
-              </div>
-
-              <div style="margin-top: 2rem; text-align: center">
-                <button
-                  class="btn"
-                  onclick="importFromOptimizer()"
-                  style="font-size: 1rem; padding: 0.875rem 2rem"
-                >
-                  <i class="fas fa-calendar-plus"></i> Import to Calendar
-                </button>
+            <!-- Step 1: Task Input -->
+            <div id="step1Container">
+              <div class="input-section">
+                <h3><i class="fas fa-tasks"></i> Add Tasks</h3>
                 <p
                   style="
-                    color: var(--color-text-tertiary);
-                    margin-top: 0.5rem;
-                    font-size: 0.875rem;
+                    color: var(--color-text-secondary);
+                    margin-bottom: 1rem;
                   "
                 >
-                  Import the optimized schedule directly to your calendar with
-                  scheduled time slots
+                  Add your tasks with name and duration. Category is optional -
+                  AI will auto-categorize if left blank.
                 </p>
+
+                <div class="task-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="taskName">Task Name</label>
+                      <input
+                        type="text"
+                        id="taskName"
+                        placeholder="e.g., Review backend APIs"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="taskDuration">Duration (mins)</label>
+                      <input
+                        type="number"
+                        id="taskDuration"
+                        min="1"
+                        placeholder="30"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="taskCategory"
+                        >Category
+                        <span
+                          style="
+                            color: var(--color-text-tertiary);
+                            font-weight: 400;
+                          "
+                          >(optional)</span
+                        ></label
+                      >
+                      <select
+                        id="taskCategory"
+                        style="
+                          padding: 0.75rem;
+                          border: 1px solid var(--color-border);
+                          border-radius: 8px;
+                          font-size: 0.95rem;
+                          background: var(--color-bg-primary);
+                        "
+                      >
+                        <option value="">AI will decide</option>
+                        <option value="Deep Work">
+                          Deep Work (coding, writing, analysis)
+                        </option>
+                        <option value="Admin">
+                          Admin (email, scheduling, paperwork)
+                        </option>
+                        <option value="Calls">Calls (meetings, calls)</option>
+                        <option value="Communication">
+                          Communication (Slack, messages)
+                        </option>
+                        <option value="Errands">
+                          Errands (shopping, appointments)
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <button class="btn btn-secondary" onclick="addTask()">
+                    <i class="fas fa-plus"></i> Add Task
+                  </button>
+                </div>
+
+                <div
+                  id="taskListSection"
+                  style="display: none; margin-top: 2rem"
+                >
+                  <h3>Your Tasks (<span id="taskCount">0</span>)</h3>
+                  <div id="taskList" class="task-list-items"></div>
+                </div>
+
+                <div class="button-group" style="margin-top: 1.5rem">
+                  <button class="btn btn-secondary" onclick="clearAllTasks()">
+                    <i class="fas fa-eraser"></i> Clear All
+                  </button>
+                </div>
+                <!-- Optimization Status & View Button -->
+                <div
+                  id="optimizationStatus"
+                  style="
+                    margin-top: 1.5rem;
+                    padding: 1rem;
+                    border-radius: 12px;
+                    background: var(--color-bg-secondary);
+                    border: 1px solid var(--color-border);
+                  "
+                >
+                  <div
+                    id="statusContent"
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      flex-wrap: wrap;
+                      gap: 1rem;
+                    "
+                  >
+                    <div
+                      style="display: flex; align-items: center; gap: 0.75rem"
+                    >
+                      <div id="statusIcon" style="font-size: 1.25rem">⏳</div>
+                      <div>
+                        <div
+                          id="statusText"
+                          style="
+                            font-weight: 600;
+                            color: var(--color-text-primary);
+                          "
+                        >
+                          Add 3+ tasks to optimize
+                        </div>
+                        <div
+                          id="statusSubtext"
+                          style="
+                            font-size: 0.8rem;
+                            color: var(--color-text-tertiary);
+                          "
+                        >
+                          AI will analyze your schedule automatically
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      id="viewSchedulesBtn"
+                      class="btn btn-primary"
+                      onclick="showStep2()"
+                      disabled
+                      style="opacity: 0.5"
+                    >
+                      <i class="fas fa-calendar-alt"></i> View Schedules
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
+            <!-- End Step 1 -->
+
+            <!-- Step 2: Schedule Results -->
+            <div id="step2Container" style="display: none">
+              <!-- Back to Edit Button -->
+              <div style="margin-bottom: 1.5rem">
+                <button
+                  class="btn btn-secondary"
+                  onclick="showStep1()"
+                  style="display: flex; align-items: center; gap: 0.5rem"
+                >
+                  <i class="fas fa-arrow-left"></i> Edit Tasks
+                </button>
+              </div>
+
+              <div id="loadingState" style="display: none">
+                <div class="loading-spinner">
+                  <div class="spinner"></div>
+                  <p style="margin-top: 1rem; color: #666">
+                    Analyzing your schedule...
+                  </p>
+                </div>
+              </div>
+
+              <div id="resultsContainer" style="display: none">
+                <!-- Start Time Input -->
+                <div
+                  class="start-time-picker"
+                  style="
+                    margin-bottom: 1.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <label
+                    for="scheduleStartTime"
+                    style="font-weight: 600; color: var(--color-text-primary)"
+                  >
+                    <i class="fas fa-clock" style="margin-right: 0.5rem"></i
+                    >Start Time:
+                  </label>
+                  <input
+                    type="time"
+                    id="scheduleStartTime"
+                    value="09:00"
+                    onchange="updateScheduleTimes()"
+                    style="
+                      padding: 0.5rem 1rem;
+                      border: 1px solid var(--color-border);
+                      border-radius: 8px;
+                      font-size: 1rem;
+                    "
+                  />
+                  <span
+                    style="
+                      color: var(--color-text-secondary);
+                      font-size: 0.875rem;
+                    "
+                  >
+                    Times shown are based on this start
+                  </span>
+                </div>
+
+                <div class="schedules three-column">
+                  <!-- Efficiency Schedule -->
+                  <div class="schedule-column">
+                    <div class="column-header">
+                      <h3 class="column-title efficiency-title">
+                        <i class="fas fa-rocket"></i> Efficiency
+                      </h3>
+                      <p class="column-subtitle">Maximum throughput</p>
+                      <div class="time-badge" id="efficiencyTime">0 mins</div>
+                    </div>
+                    <div class="schedule-list" id="efficiencyList">
+                      <!-- Efficiency schedule will be rendered here -->
+                    </div>
+                  </div>
+
+                  <!-- Balanced Schedule -->
+                  <div class="schedule-column featured">
+                    <div class="column-header">
+                      <h3 class="column-title balanced-title">
+                        <i class="fas fa-balance-scale"></i> Balanced
+                      </h3>
+                      <p class="column-subtitle">With recovery breaks</p>
+                      <div class="time-badge" id="balancedTime">0 mins</div>
+                    </div>
+                    <div class="schedule-list" id="balancedList">
+                      <!-- Balanced schedule will be rendered here -->
+                    </div>
+                  </div>
+
+                  <!-- Deadline Schedule -->
+                  <div class="schedule-column">
+                    <div class="column-header">
+                      <h3 class="column-title deadline-title">
+                        <i class="fas fa-fire"></i> Priority
+                      </h3>
+                      <p class="column-subtitle">Important tasks first</p>
+                      <div class="time-badge" id="deadlineTime">0 mins</div>
+                    </div>
+                    <div class="schedule-list" id="deadlineList">
+                      <!-- Deadline schedule will be rendered here -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Time Saved Summary -->
+                <div
+                  id="timeSavedSummary"
+                  style="
+                    margin-top: 1.5rem;
+                    padding: 1rem;
+                    background: linear-gradient(
+                      135deg,
+                      #f0fdf4 0%,
+                      #dcfce7 100%
+                    );
+                    border-radius: 12px;
+                    border: 1px solid #bbf7d0;
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 2rem;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        color: #16a34a;
+                      "
+                    >
+                      <i class="fas fa-clock"></i>
+                      <span style="font-weight: 600">Time Saved:</span>
+                      <span
+                        id="timeSavedValue"
+                        style="font-weight: 700; font-size: 1.1rem"
+                        >0 mins</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        color: #2563eb;
+                      "
+                    >
+                      <i class="fas fa-exchange-alt"></i>
+                      <span style="font-weight: 600">Context Switches:</span>
+                      <span
+                        id="contextSwitchValue"
+                        style="font-weight: 700; font-size: 1.1rem"
+                        >0</span
+                      >
+                      <span style="font-size: 0.85rem; color: #64748b"
+                        >(<span id="switchesSavedValue">0</span> vs
+                        Priority)</span
+                      >
+                    </div>
+                  </div>
+                  <p
+                    style="
+                      color: #64748b;
+                      font-size: 0.8rem;
+                      margin-top: 0.5rem;
+                      text-align: center;
+                    "
+                  >
+                    Efficiency batches similar tasks to minimize mental context
+                    switching
+                  </p>
+                </div>
+
+                <div style="margin-top: 1.5rem; text-align: center">
+                  <div
+                    style="
+                      display: flex;
+                      gap: 1rem;
+                      justify-content: center;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <button
+                      class="btn"
+                      onclick="importScheduleToCalendar('efficiency')"
+                      style="font-size: 0.95rem; padding: 0.75rem 1.5rem"
+                    >
+                      <i class="fas fa-rocket"></i> Use Efficiency
+                    </button>
+                    <button
+                      class="btn"
+                      onclick="importScheduleToCalendar('balanced')"
+                      style="font-size: 0.95rem; padding: 0.75rem 1.5rem"
+                    >
+                      <i class="fas fa-balance-scale"></i> Use Balanced
+                    </button>
+                    <button
+                      class="btn"
+                      onclick="importScheduleToCalendar('deadline')"
+                      style="font-size: 0.95rem; padding: 0.75rem 1.5rem"
+                    >
+                      <i class="fas fa-fire"></i> Use Priority
+                    </button>
+                  </div>
+                  <p
+                    style="
+                      color: var(--color-text-tertiary);
+                      margin-top: 0.75rem;
+                      font-size: 0.875rem;
+                    "
+                  >
+                    Choose a schedule to import to your calendar
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- End Step 2 -->
           </section>
 
           <!-- Analytics Section -->
-<section id="analyticsSection" class="dashboard-section" style="display: none">
-  <div class="content-header">
-    <div>
-      <h2>Productivity Analytics</h2>
-      <p style="color: var(--color-text-secondary); margin-top: 0.5rem">
-        Detailed insights into your productivity and optimizer performance
-      </p>
-    </div>
-    <button class="btn btn-secondary" onclick="refreshAnalytics()">
-      <i class="fas fa-sync-alt"></i> Refresh Data
-    </button>
-  </div>
+          <section
+            id="analyticsSection"
+            class="dashboard-section"
+            style="display: none"
+          >
+            <div class="content-header">
+              <div>
+                <h2>Productivity Analytics</h2>
+                <p
+                  style="color: var(--color-text-secondary); margin-top: 0.5rem"
+                >
+                  Detailed insights into your productivity and optimizer
+                  performance
+                </p>
+              </div>
+              <button class="btn btn-secondary" onclick="refreshAnalytics()">
+                <i class="fas fa-sync-alt"></i> Refresh Data
+              </button>
+            </div>
 
-  <div class="stats-grid" style="
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  ">
-    <div class="stat-card" style="
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    ">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-        <h3 style="
-          color: #666;
-          font-size: 0.9rem;
-          text-transform: uppercase;
-        ">
-          Optimizer Efficiency
-        </h3>
-        <i class="fas fa-bolt" style="color: #ff6600;"></i>
-      </div>
-      <div class="stat-value" style="
-        font-size: 2rem;
-        font-weight: bold;
-        color: #000000;
-        margin-bottom: 0.5rem;
-      ">
-        <span id="optimizerEfficiency">0</span>%
-      </div>
-      <div class="stat-change" id="optimizerEfficiencyChange" style="font-size: 0.9rem; color: #28a745">
-        +0% from last week
-      </div>
-    </div>
-    
-    <div class="stat-card" style="
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    ">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-        <h3 style="
-          color: #666;
-          font-size: 0.9rem;
-          text-transform: uppercase;
-        ">
-          Time Saved
-        </h3>
-        <i class="fas fa-clock" style="color: #28a745;"></i>
-      </div>
-      <div class="stat-value" style="
-        font-size: 2rem;
-        font-weight: bold;
-        color: #000000;
-        margin-bottom: 0.5rem;
-      ">
-        <span id="totalTimeSaved">0</span>h
-      </div>
-      <div class="stat-change" id="timeSavedChange" style="font-size: 0.9rem; color: #28a745">
-        +0h this week
-      </div>
-    </div>
-    
-    <div class="stat-card" style="
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    ">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-        <h3 style="
-          color: #666;
-          font-size: 0.9rem;
-          text-transform: uppercase;
-        ">
-          Context Switches Reduced
-        </h3>
-        <i class="fas fa-exchange-alt" style="color: #dc2626;"></i>
-      </div>
-      <div class="stat-value" style="
-        font-size: 2rem;
-        font-weight: bold;
-        color: #000000;
-        margin-bottom: 0.5rem;
-      ">
-        <span id="contextSwitchesReduced">0</span>
-      </div>
-      <div class="stat-change" id="switchesReducedChange" style="font-size: 0.9rem; color: #28a745">
-        -0 this week
-      </div>
-    </div>
-    
-    <div class="stat-card" style="
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    ">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-        <h3 style="
-          color: #666;
-          font-size: 0.9rem;
-          text-transform: uppercase;
-        ">
-          Optimization Success Rate
-        </h3>
-        <i class="fas fa-chart-line" style="color: #2563eb;"></i>
-      </div>
-      <div class="stat-value" style="
-        font-size: 2rem;
-        font-weight: bold;
-        color: #000000;
-        margin-bottom: 0.5rem;
-      ">
-        <span id="optimizationSuccessRate">0</span>%
-      </div>
-      <div class="stat-change" id="successRateChange" style="font-size: 0.9rem; color: #28a745">
-        +0% from last month
-      </div>
-    </div>
-  </div>
+            <div
+              class="stats-grid"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+              "
+            >
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <h3
+                    style="
+                      color: #666;
+                      font-size: 0.9rem;
+                      text-transform: uppercase;
+                    "
+                  >
+                    Optimizer Efficiency
+                  </h3>
+                  <i class="fas fa-bolt" style="color: #ff6600"></i>
+                </div>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #000000;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <span id="optimizerEfficiency">0</span>%
+                </div>
+                <div
+                  class="stat-change"
+                  id="optimizerEfficiencyChange"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  +0% from last week
+                </div>
+              </div>
 
-  <div style="
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  ">
-    <!-- Optimizer Performance Chart -->
-    <div class="chart-container" style="
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    ">
-      <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
-        <i class="fas fa-chart-bar"></i> Optimizer Performance Over Time
-      </h3>
-      <div id="optimizerPerformanceChart" style="height: 300px; padding: 1rem 0">
-        <!-- Performance chart will be generated here -->
-      </div>
-    </div>
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <h3
+                    style="
+                      color: #666;
+                      font-size: 0.9rem;
+                      text-transform: uppercase;
+                    "
+                  >
+                    Time Saved
+                  </h3>
+                  <i class="fas fa-clock" style="color: #28a745"></i>
+                </div>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #000000;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <span id="totalTimeSaved">0</span>h
+                </div>
+                <div
+                  class="stat-change"
+                  id="timeSavedChange"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  +0h this week
+                </div>
+              </div>
 
-    <!-- Category Optimization Effectiveness -->
-    <div class="chart-container" style="
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    ">
-      <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
-        <i class="fas fa-layer-group"></i> Category Optimization Effectiveness
-      </h3>
-      <div id="categoryEffectivenessChart" style="height: 300px; padding: 1rem 0">
-        <!-- Category effectiveness chart will be generated here -->
-      </div>
-    </div>
-  </div>
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <h3
+                    style="
+                      color: #666;
+                      font-size: 0.9rem;
+                      text-transform: uppercase;
+                    "
+                  >
+                    Context Switches Reduced
+                  </h3>
+                  <i class="fas fa-exchange-alt" style="color: #dc2626"></i>
+                </div>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #000000;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <span id="contextSwitchesReduced">0</span>
+                </div>
+                <div
+                  class="stat-change"
+                  id="switchesReducedChange"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  -0 this week
+                </div>
+              </div>
 
-  <!-- Detailed Optimizer Metrics -->
-  <div class="chart-container" style="
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  ">
-    <h3 style="color: var(--color-text-primary); margin-bottom: 1.5rem">
-      <i class="fas fa-cogs"></i> Detailed Optimizer Metrics
-    </h3>
-    
-    <div style="
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    ">
-      <!-- Algorithm Performance -->
-      <div class="metric-card" style="
-        background: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 8px;
-        border-left: 4px solid #ff6600;
-      ">
-        <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem;">
-          <i class="fas fa-brain"></i> Algorithm Performance
-        </h4>
-        <div class="metric-item" style="margin-bottom: 0.75rem;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-            <span style="color: #666; font-size: 0.875rem;">Batch Grouping Accuracy</span>
-            <span style="font-weight: 600; color: #000;" id="batchAccuracy">0%</span>
-          </div>
-          <div style="
-            background: #e5e7eb;
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-          ">
-            <div id="batchAccuracyBar" style="
-              height: 100%;
-              background: #ff6600;
-              width: 0%;
-              transition: width 0.3s ease;
-            "></div>
-          </div>
-        </div>
-        <div class="metric-item" style="margin-bottom: 0.75rem;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-            <span style="color: #666; font-size: 0.875rem;">Context Switch Prediction</span>
-            <span style="font-weight: 600; color: #000;" id="switchPrediction">0%</span>
-          </div>
-          <div style="
-            background: #e5e7eb;
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-          ">
-            <div id="switchPredictionBar" style="
-              height: 100%;
-              background: #2563eb;
-              width: 0%;
-              transition: width 0.3s ease;
-            "></div>
-          </div>
-        </div>
-        <div class="metric-item">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-            <span style="color: #666; font-size: 0.875rem;">Task Sequencing Score</span>
-            <span style="font-weight: 600; color: #000;" id="sequencingScore">0%</span>
-          </div>
-          <div style="
-            background: #e5e7eb;
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-          ">
-            <div id="sequencingScoreBar" style="
-              height: 100%;
-              background: #10b981;
-              width: 0%;
-              transition: width 0.3s ease;
-            "></div>
-          </div>
-        </div>
-      </div>
+              <div
+                class="stat-card"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <h3
+                    style="
+                      color: #666;
+                      font-size: 0.9rem;
+                      text-transform: uppercase;
+                    "
+                  >
+                    Optimization Success Rate
+                  </h3>
+                  <i class="fas fa-chart-line" style="color: #2563eb"></i>
+                </div>
+                <div
+                  class="stat-value"
+                  style="
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #000000;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  <span id="optimizationSuccessRate">0</span>%
+                </div>
+                <div
+                  class="stat-change"
+                  id="successRateChange"
+                  style="font-size: 0.9rem; color: #28a745"
+                >
+                  +0% from last month
+                </div>
+              </div>
+            </div>
 
-      <!-- Time Optimization -->
-      <div class="metric-card" style="
-        background: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 8px;
-        border-left: 4px solid #10b981;
-      ">
-        <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem;">
-          <i class="fas fa-clock"></i> Time Optimization
-        </h4>
-        <div class="metric-item" style="margin-bottom: 0.75rem;">
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: #666; font-size: 0.875rem;">Average Time Saved per Session</span>
-            <span style="font-weight: 600; color: #000;" id="avgTimeSaved">0m</span>
-          </div>
-        </div>
-        <div class="metric-item" style="margin-bottom: 0.75rem;">
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: #666; font-size: 0.875rem;">Total Optimized Tasks</span>
-            <span style="font-weight: 600; color: #000;" id="totalOptimizedTasks">0</span>
-          </div>
-        </div>
-        <div class="metric-item" style="margin-bottom: 0.75rem;">
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: #666; font-size: 0.875rem;">Average Session Duration</span>
-            <span style="font-weight: 600; color: #000;" id="avgSessionDuration">0m</span>
-          </div>
-        </div>
-        <div class="metric-item">
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: #666; font-size: 0.875rem;">Peak Optimization Time</span>
-            <span style="font-weight: 600; color: #000;" id="peakOptimizationTime">N/A</span>
-          </div>
-        </div>
-      </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+              "
+            >
+              <!-- Optimizer Performance Chart -->
+              <div
+                class="chart-container"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="color: var(--color-text-primary); margin-bottom: 1rem"
+                >
+                  <i class="fas fa-chart-bar"></i> Optimizer Performance Over
+                  Time
+                </h3>
+                <div
+                  id="optimizerPerformanceChart"
+                  style="height: 300px; padding: 1rem 0"
+                >
+                  <!-- Performance chart will be generated here -->
+                </div>
+              </div>
 
-      <!-- User Engagement -->
-      <div class="metric-card" style="
-        background: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 8px;
-        border-left: 4px solid #8b5cf6;
-      ">
-        <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem;">
-          <i class="fas fa-user-check"></i> User Engagement
-        </h4>
-        <div class="metric-item" style="margin-bottom: 0.75rem;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-            <span style="color: #666; font-size: 0.875rem;">Adoption Rate</span>
-            <span style="font-weight: 600; color: #000;" id="adoptionRate">0%</span>
-          </div>
-          <div style="
-            background: #e5e7eb;
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-          ">
-            <div id="adoptionRateBar" style="
-              height: 100%;
-              background: #8b5cf6;
-              width: 0%;
-              transition: width 0.3s ease;
-            "></div>
-          </div>
-        </div>
-        <div class="metric-item" style="margin-bottom: 0.75rem;">
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: #666; font-size: 0.875rem;">Weekly Optimizations</span>
-            <span style="font-weight: 600; color: #000;" id="weeklyOptimizations">0</span>
-          </div>
-        </div>
-        <div class="metric-item" style="margin-bottom: 0.75rem;">
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: #666; font-size: 0.875rem;">Tasks Imported to Calendar</span>
-            <span style="font-weight: 600; color: #000;" id="tasksImported">0</span>
-          </div>
-        </div>
-        <div class="metric-item">
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: #666; font-size: 0.875rem;">User Satisfaction Score</span>
-            <span style="font-weight: 600; color: #000;" id="userSatisfaction">0/5</span>
-          </div>
-        </div>
-      </div>
-    </div>
+              <!-- Category Optimization Effectiveness -->
+              <div
+                class="chart-container"
+                style="
+                  background: white;
+                  padding: 1.5rem;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <h3
+                  style="color: var(--color-text-primary); margin-bottom: 1rem"
+                >
+                  <i class="fas fa-layer-group"></i> Category Optimization
+                  Effectiveness
+                </h3>
+                <div
+                  id="categoryEffectivenessChart"
+                  style="height: 300px; padding: 1rem 0"
+                >
+                  <!-- Category effectiveness chart will be generated here -->
+                </div>
+              </div>
+            </div>
 
-    <!-- Optimization History Table -->
-    <div style="margin-top: 2rem;">
-      <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem;">
-        <i class="fas fa-history"></i> Recent Optimization Sessions
-      </h4>
-      <div style="overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="background: #f8f9fa;">
-              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Date</th>
-              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Tasks</th>
-              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Time Saved</th>
-              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Switches Reduced</th>
-              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Efficiency</th>
-              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Status</th>
-            </tr>
-          </thead>
-          <tbody id="optimizationHistory">
-            <!-- History rows will be generated here -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+            <!-- Detailed Optimizer Metrics -->
+            <div
+              class="chart-container"
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                margin-bottom: 2rem;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+              "
+            >
+              <h3
+                style="color: var(--color-text-primary); margin-bottom: 1.5rem"
+              >
+                <i class="fas fa-cogs"></i> Detailed Optimizer Metrics
+              </h3>
 
-  <!-- AI Recommendations -->
-  <div class="chart-container" style="
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  ">
-    <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
-      <i class="fas fa-lightbulb"></i> AI Optimization Recommendations
-    </h3>
-    <div id="aiRecommendations" style="
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
-    ">
-      <!-- Recommendations will be generated here -->
-    </div>
-  </div>
-</section>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                  gap: 1.5rem;
+                  margin-bottom: 2rem;
+                "
+              >
+                <!-- Algorithm Performance -->
+                <div
+                  class="metric-card"
+                  style="
+                    background: #f8f9fa;
+                    padding: 1.5rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #ff6600;
+                  "
+                >
+                  <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem">
+                    <i class="fas fa-brain"></i> Algorithm Performance
+                  </h4>
+                  <div class="metric-item" style="margin-bottom: 0.75rem">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 0.25rem;
+                      "
+                    >
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Batch Grouping Accuracy</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="batchAccuracy"
+                        >0%</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        background: #e5e7eb;
+                        height: 6px;
+                        border-radius: 3px;
+                        overflow: hidden;
+                      "
+                    >
+                      <div
+                        id="batchAccuracyBar"
+                        style="
+                          height: 100%;
+                          background: #ff6600;
+                          width: 0%;
+                          transition: width 0.3s ease;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="metric-item" style="margin-bottom: 0.75rem">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 0.25rem;
+                      "
+                    >
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Context Switch Prediction</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="switchPrediction"
+                        >0%</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        background: #e5e7eb;
+                        height: 6px;
+                        border-radius: 3px;
+                        overflow: hidden;
+                      "
+                    >
+                      <div
+                        id="switchPredictionBar"
+                        style="
+                          height: 100%;
+                          background: #2563eb;
+                          width: 0%;
+                          transition: width 0.3s ease;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="metric-item">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 0.25rem;
+                      "
+                    >
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Task Sequencing Score</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="sequencingScore"
+                        >0%</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        background: #e5e7eb;
+                        height: 6px;
+                        border-radius: 3px;
+                        overflow: hidden;
+                      "
+                    >
+                      <div
+                        id="sequencingScoreBar"
+                        style="
+                          height: 100%;
+                          background: #10b981;
+                          width: 0%;
+                          transition: width 0.3s ease;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Time Optimization -->
+                <div
+                  class="metric-card"
+                  style="
+                    background: #f8f9fa;
+                    padding: 1.5rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #10b981;
+                  "
+                >
+                  <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem">
+                    <i class="fas fa-clock"></i> Time Optimization
+                  </h4>
+                  <div class="metric-item" style="margin-bottom: 0.75rem">
+                    <div style="display: flex; justify-content: space-between">
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Average Time Saved per Session</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="avgTimeSaved"
+                        >0m</span
+                      >
+                    </div>
+                  </div>
+                  <div class="metric-item" style="margin-bottom: 0.75rem">
+                    <div style="display: flex; justify-content: space-between">
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Total Optimized Tasks</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="totalOptimizedTasks"
+                        >0</span
+                      >
+                    </div>
+                  </div>
+                  <div class="metric-item" style="margin-bottom: 0.75rem">
+                    <div style="display: flex; justify-content: space-between">
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Average Session Duration</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="avgSessionDuration"
+                        >0m</span
+                      >
+                    </div>
+                  </div>
+                  <div class="metric-item">
+                    <div style="display: flex; justify-content: space-between">
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Peak Optimization Time</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="peakOptimizationTime"
+                        >N/A</span
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- User Engagement -->
+                <div
+                  class="metric-card"
+                  style="
+                    background: #f8f9fa;
+                    padding: 1.5rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #8b5cf6;
+                  "
+                >
+                  <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem">
+                    <i class="fas fa-user-check"></i> User Engagement
+                  </h4>
+                  <div class="metric-item" style="margin-bottom: 0.75rem">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 0.25rem;
+                      "
+                    >
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Adoption Rate</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="adoptionRate"
+                        >0%</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        background: #e5e7eb;
+                        height: 6px;
+                        border-radius: 3px;
+                        overflow: hidden;
+                      "
+                    >
+                      <div
+                        id="adoptionRateBar"
+                        style="
+                          height: 100%;
+                          background: #8b5cf6;
+                          width: 0%;
+                          transition: width 0.3s ease;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="metric-item" style="margin-bottom: 0.75rem">
+                    <div style="display: flex; justify-content: space-between">
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Weekly Optimizations</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="weeklyOptimizations"
+                        >0</span
+                      >
+                    </div>
+                  </div>
+                  <div class="metric-item" style="margin-bottom: 0.75rem">
+                    <div style="display: flex; justify-content: space-between">
+                      <span style="color: #666; font-size: 0.875rem"
+                        >Tasks Imported to Calendar</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="tasksImported"
+                        >0</span
+                      >
+                    </div>
+                  </div>
+                  <div class="metric-item">
+                    <div style="display: flex; justify-content: space-between">
+                      <span style="color: #666; font-size: 0.875rem"
+                        >User Satisfaction Score</span
+                      >
+                      <span
+                        style="font-weight: 600; color: #000"
+                        id="userSatisfaction"
+                        >0/5</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Optimization History Table -->
+              <div style="margin-top: 2rem">
+                <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem">
+                  <i class="fas fa-history"></i> Recent Optimization Sessions
+                </h4>
+                <div style="overflow-x: auto">
+                  <table style="width: 100%; border-collapse: collapse">
+                    <thead>
+                      <tr style="background: #f8f9fa">
+                        <th
+                          style="
+                            padding: 0.75rem;
+                            text-align: left;
+                            font-weight: 600;
+                            color: #666;
+                            border-bottom: 2px solid #e5e7eb;
+                          "
+                        >
+                          Date
+                        </th>
+                        <th
+                          style="
+                            padding: 0.75rem;
+                            text-align: left;
+                            font-weight: 600;
+                            color: #666;
+                            border-bottom: 2px solid #e5e7eb;
+                          "
+                        >
+                          Tasks
+                        </th>
+                        <th
+                          style="
+                            padding: 0.75rem;
+                            text-align: left;
+                            font-weight: 600;
+                            color: #666;
+                            border-bottom: 2px solid #e5e7eb;
+                          "
+                        >
+                          Time Saved
+                        </th>
+                        <th
+                          style="
+                            padding: 0.75rem;
+                            text-align: left;
+                            font-weight: 600;
+                            color: #666;
+                            border-bottom: 2px solid #e5e7eb;
+                          "
+                        >
+                          Switches Reduced
+                        </th>
+                        <th
+                          style="
+                            padding: 0.75rem;
+                            text-align: left;
+                            font-weight: 600;
+                            color: #666;
+                            border-bottom: 2px solid #e5e7eb;
+                          "
+                        >
+                          Efficiency
+                        </th>
+                        <th
+                          style="
+                            padding: 0.75rem;
+                            text-align: left;
+                            font-weight: 600;
+                            color: #666;
+                            border-bottom: 2px solid #e5e7eb;
+                          "
+                        >
+                          Status
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody id="optimizationHistory">
+                      <!-- History rows will be generated here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Recommendations -->
+            <div
+              class="chart-container"
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+              "
+            >
+              <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
+                <i class="fas fa-lightbulb"></i> AI Optimization Recommendations
+              </h3>
+              <div
+                id="aiRecommendations"
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                  gap: 1rem;
+                "
+              >
+                <!-- Recommendations will be generated here -->
+              </div>
+            </div>
+          </section>
 
           <!-- Settings Section -->
           <section
@@ -1887,7 +2430,9 @@
             margin-bottom: 1.5rem;
           "
         >
-          <h3 style="color: var(--color-text-primary)">Add New Task</h3>
+          <h3 id="taskModalTitle" style="color: var(--color-text-primary)">
+            Add New Task
+          </h3>
           <button
             class="close-modal"
             onclick="closeModal('addTaskModal')"
@@ -2081,7 +2626,14 @@
             >
               Cancel
             </button>
-            <button type="submit" class="btn" style="flex: 2">Add Task</button>
+            <button
+              type="submit"
+              class="btn"
+              id="taskModalSubmit"
+              style="flex: 2"
+            >
+              Add Task
+            </button>
           </div>
         </form>
       </div>
@@ -2105,6 +2657,99 @@
       let tasks = [];
       let managedTasks = []; // For the task management section
       let lastOptimizedSchedule = null; // Store the last optimization result for calendar import
+      let editingTaskId = null;
+      let autoOptimizeTimer = null;
+      let isOptimizing = false;
+      let optimizationReady = false;
+      const AUTO_OPTIMIZE_DELAY = 3000; // 3 second debounce
+      const MIN_TASKS_FOR_AUTO_OPTIMIZE = 3;
+
+      // Step Navigation
+      window.showStep1 = function () {
+        document.getElementById("step1Container").style.display = "block";
+        document.getElementById("step2Container").style.display = "none";
+      };
+
+      window.showStep2 = function () {
+        if (!optimizationReady || !lastOptimizedSchedule) {
+          alert("Please wait for optimization to complete.");
+          return;
+        }
+        document.getElementById("step1Container").style.display = "none";
+        document.getElementById("step2Container").style.display = "block";
+
+        // Render schedules
+        const startTime =
+          document.getElementById("scheduleStartTime").value || "09:00";
+        renderSchedules(lastOptimizedSchedule, startTime);
+        document.getElementById("resultsContainer").style.display = "block";
+        document.getElementById("loadingState").style.display = "none";
+      };
+
+      // Update optimization status UI
+      function updateOptimizationStatus() {
+        const statusIcon = document.getElementById("statusIcon");
+        const statusText = document.getElementById("statusText");
+        const statusSubtext = document.getElementById("statusSubtext");
+        const viewBtn = document.getElementById("viewSchedulesBtn");
+        const statusDiv = document.getElementById("optimizationStatus");
+
+        if (tasks.length < MIN_TASKS_FOR_AUTO_OPTIMIZE) {
+          statusIcon.textContent = "⏳";
+          statusText.textContent = `Add ${MIN_TASKS_FOR_AUTO_OPTIMIZE - tasks.length} more task${MIN_TASKS_FOR_AUTO_OPTIMIZE - tasks.length !== 1 ? "s" : ""} to optimize`;
+          statusSubtext.textContent =
+            "AI will analyze your schedule automatically";
+          viewBtn.disabled = true;
+          viewBtn.style.opacity = "0.5";
+          statusDiv.style.background = "var(--color-bg-secondary)";
+          statusDiv.style.borderColor = "var(--color-border)";
+          optimizationReady = false;
+        } else if (isOptimizing) {
+          statusIcon.innerHTML = '<div class="spinner-small"></div>';
+          statusText.textContent = "Analyzing your schedule...";
+          statusSubtext.textContent = "AI is optimizing your tasks";
+          viewBtn.disabled = true;
+          viewBtn.style.opacity = "0.5";
+          statusDiv.style.background =
+            "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)";
+          statusDiv.style.borderColor = "#93c5fd";
+          optimizationReady = false;
+        } else if (optimizationReady && lastOptimizedSchedule) {
+          statusIcon.textContent = "✅";
+          statusText.textContent = `${tasks.length} tasks optimized into 3 schedules`;
+          statusSubtext.textContent =
+            "Click to view Efficiency, Balanced, and Priority schedules";
+          viewBtn.disabled = false;
+          viewBtn.style.opacity = "1";
+          statusDiv.style.background =
+            "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)";
+          statusDiv.style.borderColor = "#bbf7d0";
+        }
+      }
+
+      // Auto-optimize with debounce
+      function scheduleAutoOptimize() {
+        if (autoOptimizeTimer) {
+          clearTimeout(autoOptimizeTimer);
+        }
+
+        // Always update status when tasks change
+        updateOptimizationStatus();
+
+        if (tasks.length < MIN_TASKS_FOR_AUTO_OPTIMIZE) {
+          console.log(
+            `Auto-optimize skipped: need ${MIN_TASKS_FOR_AUTO_OPTIMIZE}+ tasks (have ${tasks.length})`,
+          );
+          return;
+        }
+
+        autoOptimizeTimer = setTimeout(async () => {
+          console.log("Auto-optimizing schedule...");
+          isOptimizing = true;
+          updateOptimizationStatus();
+          await runOptimization();
+        }, AUTO_OPTIMIZE_DELAY);
+      }
       let currentUser = {
         id: "user_" + Date.now(),
         name: "Utilio",
@@ -2120,6 +2765,7 @@
         await loadManagedTasks();
         updateCharts();
         updateOverview();
+        updateOptimizationStatus();
 
         // Show sync status
         updateSyncStatus();
@@ -2147,6 +2793,38 @@
       };
 
       window.openAddTaskModal = function () {
+        editingTaskId = null;
+        const title = document.getElementById("taskModalTitle");
+        const submit = document.getElementById("taskModalSubmit");
+        if (title) title.textContent = "Add New Task";
+        if (submit) submit.textContent = "Add Task";
+        const form = document.getElementById("taskForm");
+        if (form) form.reset();
+        openModal("addTaskModal");
+      };
+
+      window.openEditTaskModal = function (taskId) {
+        const task = managedTasks.find((t) => t.id === taskId);
+        if (!task) return;
+
+        editingTaskId = taskId;
+
+        document.getElementById("taskTitle").value = task.title || "";
+        document.getElementById("taskDescription").value =
+          task.description || "";
+        document.getElementById("taskCategory").value =
+          task.category || "other";
+        document.getElementById("taskPriority").value =
+          task.priority || "medium";
+        document.getElementById("taskTime").value = task.estimatedTime || 30;
+        document.getElementById("taskEnergy").value =
+          task.energyLevel || "medium";
+
+        const title = document.getElementById("taskModalTitle");
+        const submit = document.getElementById("taskModalSubmit");
+        if (title) title.textContent = "Edit Task";
+        if (submit) submit.textContent = "Save Changes";
+
         openModal("addTaskModal");
       };
 
@@ -2548,6 +3226,20 @@
         }
       }
 
+      function syncOptimizerTasksFromManaged() {
+        const pending = managedTasks.filter(
+          (task) => task.status !== "completed",
+        );
+        tasks = pending.map((task) => ({
+          name: task.title,
+          duration: task.estimatedTime || 30,
+          sourceTaskId: task.id,
+        }));
+
+        renderTaskList();
+        scheduleAutoOptimize();
+      }
+
       function saveManagedTasks() {
         // Keep for backward compatibility, but localStorage is now handled by dataSync
         localStorage.setItem(
@@ -2578,6 +3270,58 @@
           status: "pending",
           createdAt: new Date().toISOString(),
         };
+
+        if (editingTaskId) {
+          const taskIndex = managedTasks.findIndex(
+            (task) => task.id === editingTaskId,
+          );
+
+          if (taskIndex !== -1) {
+            const updatedTask = {
+              ...managedTasks[taskIndex],
+              title,
+              description,
+              category,
+              priority,
+              estimatedTime,
+              energyLevel,
+              updatedAt: new Date().toISOString(),
+            };
+
+            managedTasks[taskIndex] = updatedTask;
+            saveManagedTasks();
+            renderManagedTasks();
+
+            try {
+              await updateTaskInSupabase(editingTaskId, {
+                title,
+                description,
+                category,
+                priority,
+                estimatedTime,
+                energyLevel,
+              });
+              updateSyncStatus();
+            } catch (error) {
+              console.error("Error updating task:", error);
+            }
+
+            if (typeof syncManagedTasksToUnscheduled === "function") {
+              const didSync = syncManagedTasksToUnscheduled();
+              if (didSync) {
+                saveCalendarData();
+                renderUnscheduledTasks();
+              }
+            }
+
+            document.getElementById("taskForm").reset();
+            closeModal("addTaskModal");
+            editingTaskId = null;
+            updateOverview();
+            alert("Task updated successfully!");
+            return;
+          }
+        }
 
         try {
           // Save to Supabase
@@ -2732,7 +3476,7 @@
           `;
         } else {
           todayTasks.forEach((task) => {
-            todayTasksContainer.appendChild(createTaskElement(task, false));
+            todayTasksContainer.appendChild(createTaskElement(task, true));
           });
         }
 
@@ -2753,11 +3497,10 @@
 
       function createTaskElement(task, showDelete = false) {
         const taskElement = document.createElement("div");
-        taskElement.className = "task-item";
-        taskElement.style.cssText =
-          "display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #eee; transition: background 0.2s;";
+        taskElement.className = "managed-task";
 
-        const priorityClass = `priority-${task.priority}`;
+        const priorityKey = task.priority || "medium";
+        const priorityClass = `priority-${priorityKey}`;
         const isCompleted = task.status === "completed";
 
         const priorityColors = {
@@ -2767,27 +3510,38 @@
         };
 
         taskElement.innerHTML = `
-          <div class="task-checkbox ${isCompleted ? "checked" : ""}" onclick="toggleTask(${task.id})" style="width: 20px; height: 20px; border: 2px solid #ddd; border-radius: 4px; margin-right: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; ${isCompleted ? "background: #000000; border-color: #000000; color: white;" : ""}">
+          <div class="task-checkbox ${isCompleted ? "checked" : ""}" onclick="toggleTask(${task.id})">
             ${isCompleted ? '<i class="fas fa-check"></i>' : ""}
           </div>
-          <div class="task-content" style="flex: 1;">
-            <div class="task-title" style="font-weight: 500; margin-bottom: 0.25rem; ${isCompleted ? "text-decoration: line-through; color: #999;" : ""}">
+          <div class="managed-task-main">
+            <div class="managed-task-title ${isCompleted ? "is-completed" : ""}">
               ${task.title}
             </div>
-            ${task.description ? `<div class="task-time" style="font-size: 0.9rem; color: #666; ${isCompleted ? "color: #999;" : ""}">${task.description}</div>` : ""}
+            <div class="managed-task-meta">
+              <span class="managed-task-time">
+                <i class="fas fa-clock"></i>
+                ${task.estimatedTime || 30} min
+              </span>
+              ${task.description ? `<span class="managed-task-desc">${task.description}</span>` : ""}
+            </div>
           </div>
-          <div class="task-priority ${priorityClass}" style="padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; ${priorityColors[task.priority]}">
-            ${task.priority}
+          <div class="task-priority ${priorityClass}" style="${priorityColors[priorityKey]}">
+            ${priorityKey}
           </div>
-          ${
-            showDelete
-              ? `
-            <button class="btn btn-secondary" onclick="deleteTask(${task.id})" style="margin-left: 1rem; padding: 0.5rem;">
-              <i class="fas fa-trash"></i>
+          <div class="managed-task-actions">
+            <button class="btn btn-secondary" onclick="openEditTaskModal(${task.id})" aria-label="Edit task">
+              <i class="fas fa-pen"></i>
             </button>
-          `
-              : ""
-          }
+            ${
+              showDelete
+                ? `
+              <button class="btn btn-secondary" onclick="deleteTask(${task.id})" aria-label="Delete task">
+                <i class="fas fa-trash"></i>
+              </button>
+            `
+                : ""
+            }
+          </div>
         `;
 
         return taskElement;
@@ -2972,6 +3726,8 @@
         } else if (section === "overview") {
           updateOverview();
           renderManagedTasks();
+        } else if (section === "schedule") {
+          syncOptimizerTasksFromManaged();
         } else if (section === "analytics") {
           updateCharts();
         } else if (section === "calendar") {
@@ -2982,9 +3738,11 @@
       window.addTask = function () {
         const nameInput = document.getElementById("taskName");
         const durationInput = document.getElementById("taskDuration");
+        const categoryInput = document.getElementById("taskCategory");
 
         const name = nameInput.value.trim();
         const duration = parseInt(durationInput.value);
+        const category = categoryInput.value; // Optional - empty string if not selected
 
         if (!name) {
           alert("Please enter a task name!");
@@ -2996,18 +3754,25 @@
           return;
         }
 
-        // Add task to array
-        tasks.push({ name, duration });
+        // Add task to array (category may be empty)
+        const task = { name, duration };
+        if (category) task.category = category;
+        tasks.push(task);
+
+        // Invalidate old optimization when tasks change
+        optimizationReady = false;
+        lastOptimizedSchedule = null;
 
         // Clear inputs
         nameInput.value = "";
         durationInput.value = "";
+        categoryInput.value = "";
 
         // Render task list
         renderTaskList();
 
-        // Enable optimize button
-        document.getElementById("optimizeBtn").disabled = false;
+        // Trigger auto-optimize
+        scheduleAutoOptimize();
       };
 
       function renderTaskList() {
@@ -3030,6 +3795,7 @@
           <div class="task-item-content">
             <div class="task-item-name">${task.name}</div>
             <div class="task-item-duration">${task.duration} mins</div>
+            ${task.category ? `<div class="task-item-category" style="font-size: 0.75rem; color: var(--color-primary); font-weight: 500;">${task.category}</div>` : '<div class="task-item-category" style="font-size: 0.75rem; color: var(--color-text-tertiary); font-style: italic;">AI categorized</div>'}
           </div>
           <button class="task-item-remove" onclick="removeTask(${index})">
             <i class="fas fa-times"></i> Remove
@@ -3042,11 +3808,13 @@
 
       window.removeTask = function (index) {
         tasks.splice(index, 1);
+        // Invalidate old optimization when tasks change
+        optimizationReady = false;
+        lastOptimizedSchedule = null;
         renderTaskList();
 
-        if (tasks.length === 0) {
-          document.getElementById("optimizeBtn").disabled = true;
-        }
+        // Re-trigger auto-optimize with updated list
+        scheduleAutoOptimize();
       };
 
       window.clearAllTasks = function () {
@@ -3056,9 +3824,18 @@
 
         if (confirm("Are you sure you want to clear all tasks?")) {
           tasks = [];
+          lastOptimizedSchedule = null;
+          optimizationReady = false;
+          isOptimizing = false;
           renderTaskList();
-          document.getElementById("optimizeBtn").disabled = true;
-          document.getElementById("resultsContainer").style.display = "none";
+          // Clear any pending auto-optimize
+          if (autoOptimizeTimer) {
+            clearTimeout(autoOptimizeTimer);
+            autoOptimizeTimer = null;
+          }
+          // Reset to step 1 and update status
+          showStep1();
+          updateOptimizationStatus();
         }
       };
 
@@ -3073,23 +3850,23 @@
             } else {
               durationStr = `${task.duration}m`;
             }
+            // Include category if user specified it
+            if (task.category) {
+              return `${task.name} (${durationStr}) [Category: ${task.category}]`;
+            }
             return `${task.name} (${durationStr})`;
           })
           .join("\n");
       }
 
-      window.optimizeSchedule = async function () {
+      // Shared optimization logic
+      async function runOptimization() {
         if (tasks.length === 0) {
-          alert("Please add some tasks first!");
           return;
         }
 
         // Convert tasks to text format
         const input = tasksToText();
-
-        // Show loading
-        document.getElementById("loadingState").style.display = "block";
-        document.getElementById("resultsContainer").style.display = "none";
 
         try {
           const result = await fetchSchedule(input);
@@ -3097,67 +3874,113 @@
 
           // Store the result for calendar import
           lastOptimizedSchedule = result;
+          optimizationReady = true;
+          isOptimizing = false;
 
           // Save optimization to Supabase with user profile
           try {
             const optimizationData = {
               input_text: input,
-              original_schedule: result.chaos,
-              optimized_schedule: result.flow,
-              efficiency_gain_min: result.metrics.time_saved,
-              context_switch_reduction: result.chaos.filter(
-                (task, i) =>
-                  i > 0 && task.category !== result.chaos[i - 1].category,
-              ).length,
+              efficiency_schedule: result.efficiency,
+              balanced_schedule: result.balanced,
+              deadline_schedule: result.deadline,
+              metrics: result.metrics,
             };
 
             await saveSchedule(optimizationData);
             console.log("Optimization saved to Supabase for current user");
           } catch (saveError) {
             console.error("Error saving optimization to Supabase:", saveError);
-            // Continue even if save fails - user can still see results
           }
 
-          // Hide loading
-          document.getElementById("loadingState").style.display = "none";
-          document.getElementById("resultsContainer").style.display = "block";
-
-          // Render schedules using the new format
-          renderSchedules(result.chaos, result.flow);
-
-          // Update metrics
-          document.getElementById("chaosTime").textContent =
-            `${result.metrics.total_chaos_duration} mins`;
-          document.getElementById("flowTime").textContent =
-            `${result.metrics.total_flow_duration} mins`;
-          document.getElementById("timeSaved").textContent =
-            `${result.metrics.time_saved} mins`;
-
-          // Calculate switches
-          let switches = 0;
-          for (let i = 1; i < result.chaos.length; i++) {
-            if (result.chaos[i].category !== result.chaos[i - 1].category) {
-              switches++;
-            }
-          }
-          document.getElementById("switchCount").textContent = switches;
-
-          const efficiency = Math.round(
-            (result.metrics.time_saved / result.metrics.total_chaos_duration) *
-              100,
+          // Update status (don't auto-show results anymore)
+          updateOptimizationStatus();
+          console.log(
+            "Optimization complete - click View Schedules to see results",
           );
-          document.getElementById("efficiencyGain").textContent =
-            `${efficiency}%`;
-
-          // Scroll to results
-          document
-            .getElementById("resultsContainer")
-            .scrollIntoView({ behavior: "smooth", block: "nearest" });
         } catch (error) {
-          document.getElementById("loadingState").style.display = "none";
+          isOptimizing = false;
+          optimizationReady = false;
+          updateOptimizationStatus();
           alert(`Error: ${error.message}`);
           console.error("Optimization error:", error);
         }
+      }
+
+      // Update schedule times when start time changes
+      window.updateScheduleTimes = function () {
+        if (!lastOptimizedSchedule) return;
+        const startTime =
+          document.getElementById("scheduleStartTime").value || "09:00";
+        renderSchedules(lastOptimizedSchedule, startTime);
+      };
+
+      // Import a specific schedule type to calendar
+      window.importScheduleToCalendar = function (scheduleType) {
+        if (!lastOptimizedSchedule || !lastOptimizedSchedule[scheduleType]) {
+          alert("No optimized schedule found. Please wait for AI to finish.");
+          return;
+        }
+
+        const schedule = lastOptimizedSchedule[scheduleType];
+        const startTimeStr =
+          document.getElementById("scheduleStartTime").value || "09:00";
+
+        // Parse start time
+        const [hours, minutes] = startTimeStr.split(":").map(Number);
+
+        // Prompt for date
+        const today = new Date();
+        const dateStr = prompt(
+          "Enter start date (YYYY-MM-DD):",
+          today.toISOString().split("T")[0],
+        );
+        if (!dateStr) return;
+
+        const startDate = new Date(dateStr);
+        if (isNaN(startDate.getTime())) {
+          alert("Invalid date format. Please use YYYY-MM-DD format.");
+          return;
+        }
+
+        // Set start time
+        startDate.setHours(hours, minutes, 0, 0);
+        let currentTime = new Date(startDate);
+
+        // Import tasks (skip breaks for calendar)
+        let importCount = 0;
+        schedule.forEach((taskItem) => {
+          if (taskItem.category === "Break") {
+            // Still advance time for breaks
+            currentTime = new Date(
+              currentTime.getTime() + taskItem.duration * 60000,
+            );
+            return;
+          }
+
+          const newEvent = {
+            id: Date.now() + importCount,
+            title: taskItem.task,
+            category: taskItem.category || "Other",
+            duration: taskItem.duration,
+            startTime: currentTime.toISOString(),
+          };
+
+          calendarEvents.push(newEvent);
+          currentTime = new Date(
+            currentTime.getTime() + taskItem.duration * 60000,
+          );
+          importCount++;
+        });
+
+        saveCalendarData();
+        showSection("calendar");
+
+        const scheduleName =
+          scheduleType.charAt(0).toUpperCase() + scheduleType.slice(1);
+        alert(
+          `Successfully imported ${importCount} tasks from ${scheduleName} schedule to your calendar starting at ${startTimeStr} on ${dateStr}!`,
+        );
       };
 
       window.clearInput = function () {
