@@ -694,16 +694,15 @@
                 border: 1px solid var(--color-border);
                 cursor: pointer;
               "
-              onclick="if(optimizationReady && lastOptimizedSchedule) showStep2();"
+              onclick="
+                if (optimizationReady && lastOptimizedSchedule) showStep2();
+              "
             >
               <span id="statusIcon" style="font-size: 1.2rem">⏳</span>
               <div style="flex: 1">
                 <div
                   id="statusText"
-                  style="
-                    font-weight: 600;
-                    color: var(--color-text-primary);
-                  "
+                  style="font-weight: 600; color: var(--color-text-primary)"
                 ></div>
                 <div
                   id="statusSubtext"
@@ -717,13 +716,12 @@
               <button
                 id="viewSchedulesBtn"
                 class="btn btn-secondary"
-                onclick="event.stopPropagation(); showStep2();"
-                disabled
-                style="
-                  opacity: 0.5;
-                  font-size: 0.85rem;
-                  padding: 0.4rem 1rem;
+                onclick="
+                  event.stopPropagation();
+                  showStep2();
                 "
+                disabled
+                style="opacity: 0.5; font-size: 0.85rem; padding: 0.4rem 1rem"
               >
                 <i class="fas fa-eye"></i> View Schedules
               </button>
@@ -773,210 +771,210 @@
                 </div>
 
                 <div id="resultsContainer" style="display: none">
-                <!-- Start Time Input -->
-                <div
-                  class="start-time-picker"
-                  style="
-                    margin-bottom: 1.5rem;
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                    flex-wrap: wrap;
-                  "
-                >
-                  <label
-                    for="scheduleStartTime"
-                    style="font-weight: 600; color: var(--color-text-primary)"
-                  >
-                    <i class="fas fa-clock" style="margin-right: 0.5rem"></i
-                    >Start Time:
-                  </label>
-                  <input
-                    type="time"
-                    id="scheduleStartTime"
-                    value="09:00"
-                    onchange="updateScheduleTimes()"
-                    style="
-                      padding: 0.5rem 1rem;
-                      border: 1px solid var(--color-border);
-                      border-radius: 8px;
-                      font-size: 1rem;
-                    "
-                  />
-                  <span
-                    style="
-                      color: var(--color-text-secondary);
-                      font-size: 0.875rem;
-                    "
-                  >
-                    Times shown are based on this start
-                  </span>
-                </div>
-
-                <div class="schedules three-column">
-                  <!-- Efficiency Schedule -->
-                  <div class="schedule-column">
-                    <div class="column-header">
-                      <h3 class="column-title efficiency-title">
-                        <i class="fas fa-rocket"></i> Efficiency
-                      </h3>
-                      <p class="column-subtitle">Maximum throughput</p>
-                      <div class="time-badge" id="efficiencyTime">0 mins</div>
-                    </div>
-                    <div class="schedule-list" id="efficiencyList">
-                      <!-- Efficiency schedule will be rendered here -->
-                    </div>
-                  </div>
-
-                  <!-- Balanced Schedule -->
-                  <div class="schedule-column featured">
-                    <div class="column-header">
-                      <h3 class="column-title balanced-title">
-                        <i class="fas fa-balance-scale"></i> Balanced
-                      </h3>
-                      <p class="column-subtitle">With recovery breaks</p>
-                      <div class="time-badge" id="balancedTime">0 mins</div>
-                    </div>
-                    <div class="schedule-list" id="balancedList">
-                      <!-- Balanced schedule will be rendered here -->
-                    </div>
-                  </div>
-
-                  <!-- Deadline Schedule -->
-                  <div class="schedule-column">
-                    <div class="column-header">
-                      <h3 class="column-title deadline-title">
-                        <i class="fas fa-fire"></i> Priority
-                      </h3>
-                      <p class="column-subtitle">Important tasks first</p>
-                      <div class="time-badge" id="deadlineTime">0 mins</div>
-                    </div>
-                    <div class="schedule-list" id="deadlineList">
-                      <!-- Deadline schedule will be rendered here -->
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Time Saved Summary -->
-                <div
-                  id="timeSavedSummary"
-                  style="
-                    margin-top: 1.5rem;
-                    padding: 1rem;
-                    background: linear-gradient(
-                      135deg,
-                      #f0fdf4 0%,
-                      #dcfce7 100%
-                    );
-                    border-radius: 12px;
-                    border: 1px solid #bbf7d0;
-                  "
-                >
+                  <!-- Start Time Input -->
                   <div
+                    class="start-time-picker"
                     style="
+                      margin-bottom: 1.5rem;
                       display: flex;
                       align-items: center;
-                      justify-content: center;
-                      gap: 2rem;
-                      flex-wrap: wrap;
-                    "
-                  >
-                    <div
-                      style="
-                        display: flex;
-                        align-items: center;
-                        gap: 0.5rem;
-                        color: #16a34a;
-                      "
-                    >
-                      <i class="fas fa-clock"></i>
-                      <span style="font-weight: 600">Time Saved:</span>
-                      <span
-                        id="timeSavedValue"
-                        style="font-weight: 700; font-size: 1.1rem"
-                        >0 mins</span
-                      >
-                    </div>
-                    <div
-                      style="
-                        display: flex;
-                        align-items: center;
-                        gap: 0.5rem;
-                        color: #2563eb;
-                      "
-                    >
-                      <i class="fas fa-exchange-alt"></i>
-                      <span style="font-weight: 600">Context Switches:</span>
-                      <span
-                        id="contextSwitchValue"
-                        style="font-weight: 700; font-size: 1.1rem"
-                        >0</span
-                      >
-                      <span style="font-size: 0.85rem; color: #64748b"
-                        >(<span id="switchesSavedValue">0</span> vs
-                        Priority)</span
-                      >
-                    </div>
-                  </div>
-                  <p
-                    style="
-                      color: #64748b;
-                      font-size: 0.8rem;
-                      margin-top: 0.5rem;
-                      text-align: center;
-                    "
-                  >
-                    Efficiency batches similar tasks to minimize mental context
-                    switching
-                  </p>
-                </div>
-
-                <div style="margin-top: 1.5rem; text-align: center">
-                  <div
-                    style="
-                      display: flex;
                       gap: 1rem;
-                      justify-content: center;
                       flex-wrap: wrap;
                     "
                   >
-                    <button
-                      class="btn"
-                      onclick="importScheduleToCalendar('efficiency')"
-                      style="font-size: 0.95rem; padding: 0.75rem 1.5rem"
+                    <label
+                      for="scheduleStartTime"
+                      style="font-weight: 600; color: var(--color-text-primary)"
                     >
-                      <i class="fas fa-rocket"></i> Use Efficiency
-                    </button>
-                    <button
-                      class="btn"
-                      onclick="importScheduleToCalendar('balanced')"
-                      style="font-size: 0.95rem; padding: 0.75rem 1.5rem"
+                      <i class="fas fa-clock" style="margin-right: 0.5rem"></i
+                      >Start Time:
+                    </label>
+                    <input
+                      type="time"
+                      id="scheduleStartTime"
+                      value="09:00"
+                      onchange="updateScheduleTimes()"
+                      style="
+                        padding: 0.5rem 1rem;
+                        border: 1px solid var(--color-border);
+                        border-radius: 8px;
+                        font-size: 1rem;
+                      "
+                    />
+                    <span
+                      style="
+                        color: var(--color-text-secondary);
+                        font-size: 0.875rem;
+                      "
                     >
-                      <i class="fas fa-balance-scale"></i> Use Balanced
-                    </button>
-                    <button
-                      class="btn"
-                      onclick="importScheduleToCalendar('deadline')"
-                      style="font-size: 0.95rem; padding: 0.75rem 1.5rem"
-                    >
-                      <i class="fas fa-fire"></i> Use Priority
-                    </button>
+                      Times shown are based on this start
+                    </span>
                   </div>
-                  <p
+
+                  <div class="schedules three-column">
+                    <!-- Efficiency Schedule -->
+                    <div class="schedule-column">
+                      <div class="column-header">
+                        <h3 class="column-title efficiency-title">
+                          <i class="fas fa-rocket"></i> Efficiency
+                        </h3>
+                        <p class="column-subtitle">Maximum throughput</p>
+                        <div class="time-badge" id="efficiencyTime">0 mins</div>
+                      </div>
+                      <div class="schedule-list" id="efficiencyList">
+                        <!-- Efficiency schedule will be rendered here -->
+                      </div>
+                    </div>
+
+                    <!-- Balanced Schedule -->
+                    <div class="schedule-column featured">
+                      <div class="column-header">
+                        <h3 class="column-title balanced-title">
+                          <i class="fas fa-balance-scale"></i> Balanced
+                        </h3>
+                        <p class="column-subtitle">With recovery breaks</p>
+                        <div class="time-badge" id="balancedTime">0 mins</div>
+                      </div>
+                      <div class="schedule-list" id="balancedList">
+                        <!-- Balanced schedule will be rendered here -->
+                      </div>
+                    </div>
+
+                    <!-- Deadline Schedule -->
+                    <div class="schedule-column">
+                      <div class="column-header">
+                        <h3 class="column-title deadline-title">
+                          <i class="fas fa-fire"></i> Priority
+                        </h3>
+                        <p class="column-subtitle">Important tasks first</p>
+                        <div class="time-badge" id="deadlineTime">0 mins</div>
+                      </div>
+                      <div class="schedule-list" id="deadlineList">
+                        <!-- Deadline schedule will be rendered here -->
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Time Saved Summary -->
+                  <div
+                    id="timeSavedSummary"
                     style="
-                      color: var(--color-text-tertiary);
-                      margin-top: 0.75rem;
-                      font-size: 0.875rem;
+                      margin-top: 1.5rem;
+                      padding: 1rem;
+                      background: linear-gradient(
+                        135deg,
+                        #f0fdf4 0%,
+                        #dcfce7 100%
+                      );
+                      border-radius: 12px;
+                      border: 1px solid #bbf7d0;
                     "
                   >
-                    Choose a schedule to import to your calendar
-                  </p>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 2rem;
+                        flex-wrap: wrap;
+                      "
+                    >
+                      <div
+                        style="
+                          display: flex;
+                          align-items: center;
+                          gap: 0.5rem;
+                          color: #16a34a;
+                        "
+                      >
+                        <i class="fas fa-clock"></i>
+                        <span style="font-weight: 600">Time Saved:</span>
+                        <span
+                          id="timeSavedValue"
+                          style="font-weight: 700; font-size: 1.1rem"
+                          >0 mins</span
+                        >
+                      </div>
+                      <div
+                        style="
+                          display: flex;
+                          align-items: center;
+                          gap: 0.5rem;
+                          color: #2563eb;
+                        "
+                      >
+                        <i class="fas fa-exchange-alt"></i>
+                        <span style="font-weight: 600">Context Switches:</span>
+                        <span
+                          id="contextSwitchValue"
+                          style="font-weight: 700; font-size: 1.1rem"
+                          >0</span
+                        >
+                        <span style="font-size: 0.85rem; color: #64748b"
+                          >(<span id="switchesSavedValue">0</span> vs
+                          Priority)</span
+                        >
+                      </div>
+                    </div>
+                    <p
+                      style="
+                        color: #64748b;
+                        font-size: 0.8rem;
+                        margin-top: 0.5rem;
+                        text-align: center;
+                      "
+                    >
+                      Efficiency batches similar tasks to minimize mental
+                      context switching
+                    </p>
+                  </div>
+
+                  <div style="margin-top: 1.5rem; text-align: center">
+                    <div
+                      style="
+                        display: flex;
+                        gap: 1rem;
+                        justify-content: center;
+                        flex-wrap: wrap;
+                      "
+                    >
+                      <button
+                        class="btn"
+                        onclick="importScheduleToCalendar('efficiency')"
+                        style="font-size: 0.95rem; padding: 0.75rem 1.5rem"
+                      >
+                        <i class="fas fa-rocket"></i> Use Efficiency
+                      </button>
+                      <button
+                        class="btn"
+                        onclick="importScheduleToCalendar('balanced')"
+                        style="font-size: 0.95rem; padding: 0.75rem 1.5rem"
+                      >
+                        <i class="fas fa-balance-scale"></i> Use Balanced
+                      </button>
+                      <button
+                        class="btn"
+                        onclick="importScheduleToCalendar('deadline')"
+                        style="font-size: 0.95rem; padding: 0.75rem 1.5rem"
+                      >
+                        <i class="fas fa-fire"></i> Use Priority
+                      </button>
+                    </div>
+                    <p
+                      style="
+                        color: var(--color-text-tertiary);
+                        margin-top: 0.75rem;
+                        font-size: 0.875rem;
+                      "
+                    >
+                      Choose a schedule to import to your calendar
+                    </p>
+                  </div>
                 </div>
               </div>
+              <!-- End Step 2 -->
             </div>
-            <!-- End Step 2 -->
-          </div>
-        </section>
+          </section>
 
           <!-- Analytics Section -->
           <section
@@ -3665,9 +3663,7 @@
           );
           saveUser();
           updateUserUI();
-          alert(
-            "Schedule optimized! Check the Tasks section for details.",
-          );
+          alert("Schedule optimized! Check the Tasks section for details.");
         }, 1000);
       };
 
@@ -4456,9 +4452,9 @@
         console.log("lastOptimizedSchedule:", lastOptimizedSchedule);
 
         if (!lastOptimizedSchedule || !lastOptimizedSchedule.flow) {
-        alert(
+          alert(
             "No optimized schedule found. Please run AI Task Batching in Tasks.",
-        );
+          );
           return;
         }
 
