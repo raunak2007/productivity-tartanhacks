@@ -650,12 +650,6 @@
                 >
                   Pending
                 </button>
-                <button
-                  class="btn btn-secondary"
-                  onclick="completeSchedule()"
-                >
-                  <i class="fas fa-wand-magic-sparkles"></i> Complete Schedule
-                </button>
                 <button class="btn" onclick="openAddTaskModal()">
                   <i class="fas fa-plus"></i> Add Task
                 </button>
@@ -686,24 +680,50 @@
             >
               <div class="content-header" style="margin-bottom: 1.5rem">
                 <div>
-                  <h2>Optimized Schedule Options</h2>
-                  <p style="color: var(--color-text-secondary)">
-                    Review the three AI-generated schedules after you complete
-                    your task list.
+                  <h2>AI-Optimized Schedules</h2>
+                  <p id="optimizerSubtext" style="color: var(--color-text-secondary)">
+                    Add at least 3 tasks and schedules will be generated automatically.
                   </p>
                 </div>
               </div>
 
-              <!-- Step 2: Schedule Results -->
-              <div id="step2Container" style="display: none">
-                <div id="loadingState" style="display: none">
-                  <div class="loading-spinner">
-                    <div class="spinner"></div>
-                    <p style="margin-top: 1rem; color: #666">
-                      Analyzing your schedule...
-                    </p>
-                  </div>
+              <!-- Toast notification for when schedules are ready -->
+              <div id="scheduleToast" style="
+                display: none;
+                padding: 0.75rem 1.25rem;
+                background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+                border: 1px solid #bbf7d0;
+                border-radius: 10px;
+                margin-bottom: 1.5rem;
+                display: none;
+                align-items: center;
+                gap: 0.75rem;
+                animation: slideDown 0.4s ease;
+              ">
+                <span style="font-size: 1.25rem;">✅</span>
+                <div>
+                  <div id="toastTitle" style="font-weight: 600; color: #15803d; font-size: 0.9rem;">Schedules ready!</div>
+                  <div id="toastSubtext" style="color: #64748b; font-size: 0.8rem;">3 optimized schedule options generated below.</div>
                 </div>
+              </div>
+
+              <!-- Loading indicator -->
+              <div id="optimizerLoading" style="
+                display: none;
+                padding: 1rem 1.25rem;
+                background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+                border: 1px solid #93c5fd;
+                border-radius: 10px;
+                margin-bottom: 1.5rem;
+                align-items: center;
+                gap: 0.75rem;
+              ">
+                <div class="spinner-small" style="display: inline-block;"></div>
+                <span style="color: #1e40af; font-weight: 500; font-size: 0.9rem;">AI is analyzing your tasks...</span>
+              </div>
+
+              <!-- Step 2: Schedule Results (shown automatically) -->
+              <div id="step2Container" style="display: none">
 
                 <div id="resultsContainer" style="display: none">
                 <!-- Start Time Input -->
@@ -2567,19 +2587,16 @@
       let optimizationReady = false;
       const AUTO_OPTIMIZE_DELAY = 3000; // 3 second debounce
       const MIN_TASKS_FOR_AUTO_OPTIMIZE = 3;
-      const ENABLE_AUTO_OPTIMIZE = false;
+      const ENABLE_AUTO_OPTIMIZE = true;
 
-      // Step Navigation
+      // Step Navigation (kept for internal use)
       window.showStep1 = function () {
         const step2 = document.getElementById("step2Container");
         if (step2) step2.style.display = "none";
       };
 
       window.showStep2 = function () {
-        if (!optimizationReady || !lastOptimizedSchedule) {
-          alert("Please wait for optimization to complete.");
-          return;
-        }
+        if (!optimizationReady || !lastOptimizedSchedule) return;
         const step2 = document.getElementById("step2Container");
         if (step2) step2.style.display = "block";
 
@@ -2588,56 +2605,24 @@
           document.getElementById("scheduleStartTime").value || "09:00";
         renderSchedules(lastOptimizedSchedule, startTime);
         document.getElementById("resultsContainer").style.display = "block";
-        document.getElementById("loadingState").style.display = "none";
       };
 
       // Update optimization status UI
       function updateOptimizationStatus() {
-        const statusIcon = document.getElementById("statusIcon");
-        const statusText = document.getElementById("statusText");
-        const statusSubtext = document.getElementById("statusSubtext");
-        const viewBtn = document.getElementById("viewSchedulesBtn");
-        const statusDiv = document.getElementById("optimizationStatus");
-        if (
-          !statusIcon ||
-          !statusText ||
-          !statusSubtext ||
-          !viewBtn ||
-          !statusDiv
-        ) {
-          return;
-        }
-
+        const subtext = document.getElementById("optimizerSubtext");
+        const loadingEl = document.getElementById("optimizerLoading");
+        
         if (tasks.length < MIN_TASKS_FOR_AUTO_OPTIMIZE) {
-          statusIcon.textContent = "⏳";
-          statusText.textContent = `Add ${MIN_TASKS_FOR_AUTO_OPTIMIZE - tasks.length} more task${MIN_TASKS_FOR_AUTO_OPTIMIZE - tasks.length !== 1 ? "s" : ""} to optimize`;
-          statusSubtext.textContent =
-            "AI will analyze your schedule automatically";
-          viewBtn.disabled = true;
-          viewBtn.style.opacity = "0.5";
-          statusDiv.style.background = "var(--color-bg-secondary)";
-          statusDiv.style.borderColor = "var(--color-border)";
+          if (subtext) subtext.textContent = `Add ${MIN_TASKS_FOR_AUTO_OPTIMIZE - tasks.length} more task${MIN_TASKS_FOR_AUTO_OPTIMIZE - tasks.length !== 1 ? 's' : ''} to auto-generate schedules.`;
+          if (loadingEl) loadingEl.style.display = "none";
+          showStep1();
           optimizationReady = false;
         } else if (isOptimizing) {
-          statusIcon.innerHTML = '<div class="spinner-small"></div>';
-          statusText.textContent = "Analyzing your schedule...";
-          statusSubtext.textContent = "AI is optimizing your tasks";
-          viewBtn.disabled = true;
-          viewBtn.style.opacity = "0.5";
-          statusDiv.style.background =
-            "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)";
-          statusDiv.style.borderColor = "#93c5fd";
-          optimizationReady = false;
+          if (subtext) subtext.textContent = "AI is analyzing your tasks...";
+          if (loadingEl) loadingEl.style.display = "flex";
         } else if (optimizationReady && lastOptimizedSchedule) {
-          statusIcon.textContent = "✅";
-          statusText.textContent = `${tasks.length} tasks optimized into 3 schedules`;
-          statusSubtext.textContent =
-            "Click to view Efficiency, Balanced, and Priority schedules";
-          viewBtn.disabled = false;
-          viewBtn.style.opacity = "1";
-          statusDiv.style.background =
-            "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)";
-          statusDiv.style.borderColor = "#bbf7d0";
+          if (subtext) subtext.textContent = `${tasks.length} tasks optimized into 3 schedule options.`;
+          if (loadingEl) loadingEl.style.display = "none";
         }
       }
 
@@ -2682,7 +2667,11 @@
         await loadManagedTasks();
         updateCharts();
         updateOverview();
+        
+        // Sync optimizer tasks and trigger auto-optimize if there are enough tasks
+        syncOptimizerTasksFromManaged();
         updateOptimizationStatus();
+        scheduleAutoOptimize();
 
         // Show sync status
         updateSyncStatus();
@@ -3233,6 +3222,10 @@
             editingTaskId = null;
             updateOverview();
             alert("Task updated successfully!");
+            
+            // Re-optimize when task is edited
+            syncOptimizerTasksFromManaged();
+            scheduleAutoOptimize();
             return;
           }
         }
@@ -3268,6 +3261,10 @@
           alert("Task added successfully!");
           updateOverview();
           updateSyncStatus();
+          
+          // Sync to optimizer and trigger auto-optimize
+          syncOptimizerTasksFromManaged();
+          scheduleAutoOptimize();
         } catch (error) {
           console.error("Error adding task:", error);
           alert("Task saved locally. Will sync when online.");
@@ -3280,6 +3277,10 @@
           document.getElementById("taskForm").reset();
           closeModal("addTaskModal");
           updateOverview();
+          
+          // Sync to optimizer and trigger auto-optimize
+          syncOptimizerTasksFromManaged();
+          scheduleAutoOptimize();
         }
       };
 
@@ -3323,6 +3324,10 @@
               renderUnscheduledTasks();
             }
           }
+          
+          // Re-optimize when task status changes
+          syncOptimizerTasksFromManaged();
+          scheduleAutoOptimize();
         }
       };
 
@@ -3347,6 +3352,10 @@
               renderUnscheduledTasks();
             }
           }
+          
+          // Re-optimize when task is deleted
+          syncOptimizerTasksFromManaged();
+          scheduleAutoOptimize();
         }
       };
 
@@ -3606,25 +3615,9 @@
       };
 
       window.completeSchedule = async function () {
-        if (typeof syncOptimizerTasksFromManaged === "function") {
-          syncOptimizerTasksFromManaged();
-        }
-        if (tasks.length === 0) {
-          alert("Add tasks to complete your schedule.");
-          return;
-        }
-        const step2 = document.getElementById("step2Container");
-        const loading = document.getElementById("loadingState");
-        const results = document.getElementById("resultsContainer");
-        if (step2) step2.style.display = "block";
-        if (loading) loading.style.display = "block";
-        if (results) results.style.display = "none";
-        isOptimizing = true;
-        optimizationReady = false;
-        await runOptimization();
-        if (optimizationReady) {
-          showStep2();
-        }
+        // Legacy - now auto-triggered
+        syncOptimizerTasksFromManaged();
+        scheduleAutoOptimize();
       };
 
       // Section navigation
@@ -3831,11 +3824,11 @@
             console.error("Error saving optimization to Supabase:", saveError);
           }
 
-          // Update status (don't auto-show results anymore)
+          // Auto-show schedules and notify
           updateOptimizationStatus();
-          console.log(
-            "Optimization complete - click View Schedules to see results",
-          );
+          showStep2();
+          showScheduleToast(tasks.length);
+          console.log("Optimization complete - schedules displayed automatically");
         } catch (error) {
           isOptimizing = false;
           optimizationReady = false;
@@ -3843,6 +3836,29 @@
           alert(`Error: ${error.message}`);
           console.error("Optimization error:", error);
         }
+      }
+
+      // Show toast notification when schedules are generated
+      function showScheduleToast(taskCount) {
+        const toast = document.getElementById("scheduleToast");
+        const toastTitle = document.getElementById("toastTitle");
+        const toastSubtext = document.getElementById("toastSubtext");
+        if (!toast) return;
+        
+        if (toastTitle) toastTitle.textContent = `Schedules ready!`;
+        if (toastSubtext) toastSubtext.textContent = `${taskCount} tasks optimized into 3 schedule options below.`;
+        
+        toast.style.display = "flex";
+        toast.style.animation = "none";
+        // Trigger reflow for animation restart
+        toast.offsetHeight;
+        toast.style.animation = "slideDown 0.4s ease";
+        
+        // Auto-hide toast after 6 seconds
+        setTimeout(() => {
+          toast.style.animation = "slideUp 0.3s ease forwards";
+          setTimeout(() => { toast.style.display = "none"; }, 300);
+        }, 6000);
       }
 
       // Update schedule times when start time changes

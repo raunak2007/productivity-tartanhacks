@@ -288,6 +288,15 @@ nav a.active {
   letter-spacing: -0.02em;
   text-transform: uppercase;
   font-size: 0.875rem;
+  background: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  background: var(--color-primary-hover);
+  box-shadow: 0 8px 20px rgba(255, 102, 0, 0.45);
+  transform: translateY(-3px);
 }
 
 .btn-primary {

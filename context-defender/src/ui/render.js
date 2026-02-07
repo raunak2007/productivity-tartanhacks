@@ -6,14 +6,14 @@
 // Category color mapping - 3 color groups by task type
 // RED = Focus/creative work | BLUE = Communication | GREEN = Admin/physical
 const CATEGORY_COLORS = {
-  "Deep Work": { bg: "#ef4444", text: "#ffffff", border: "#f87171" },    // Red - focus
-  Creative: { bg: "#dc2626", text: "#ffffff", border: "#ef4444" },        // Red - focus
-  Calls: { bg: "#3b82f6", text: "#ffffff", border: "#60a5fa" },           // Blue - communication
-  Meeting: { bg: "#2563eb", text: "#ffffff", border: "#3b82f6" },         // Blue - communication
-  Communication: { bg: "#1d4ed8", text: "#ffffff", border: "#2563eb" },   // Blue - communication
-  Admin: { bg: "#22c55e", text: "#ffffff", border: "#4ade80" },           // Green - admin
-  Errands: { bg: "#16a34a", text: "#ffffff", border: "#22c55e" },         // Green - physical
-  Break: { bg: "#15803d", text: "#ffffff", border: "#16a34a" },           // Green - break
+  "Deep Work": { bg: "#ef4444", text: "#ffffff", border: "#f87171" }, // Red - focus
+  Creative: { bg: "#dc2626", text: "#ffffff", border: "#ef4444" }, // Red - focus
+  Calls: { bg: "#3b82f6", text: "#ffffff", border: "#60a5fa" }, // Blue - communication
+  Meeting: { bg: "#2563eb", text: "#ffffff", border: "#3b82f6" }, // Blue - communication
+  Communication: { bg: "#1d4ed8", text: "#ffffff", border: "#2563eb" }, // Blue - communication
+  Admin: { bg: "#22c55e", text: "#ffffff", border: "#4ade80" }, // Green - admin
+  Errands: { bg: "#16a34a", text: "#ffffff", border: "#22c55e" }, // Green - physical
+  Break: { bg: "#15803d", text: "#ffffff", border: "#16a34a" }, // Green - break
 };
 
 /**
@@ -48,11 +48,12 @@ function createTimelineItem(task, startMinutes, startTime, isLast) {
   const timeEnd = formatTime(startMinutes + task.duration, startTime);
 
   const isBreak = task.category === "Break";
-  const priorityIndicator = task.priority === "high" 
-    ? '<span class="priority-dot high"></span>' 
-    : task.priority === "low" 
-    ? '<span class="priority-dot low"></span>' 
-    : '';
+  const priorityIndicator =
+    task.priority === "high"
+      ? '<span class="priority-dot high"></span>'
+      : task.priority === "low"
+        ? '<span class="priority-dot low"></span>'
+        : "";
 
   item.innerHTML = `
     <div class="timeline-time">
@@ -61,10 +62,10 @@ function createTimelineItem(task, startMinutes, startTime, isLast) {
     </div>
     <div class="timeline-marker">
       <div class="timeline-dot" style="background: ${colors.bg}; box-shadow: 0 0 0 3px #ffffff, 0 0 0 4px ${colors.bg};"></div>
-      ${!isLast ? '<div class="timeline-line"></div>' : ''}
+      ${!isLast ? '<div class="timeline-line"></div>' : ""}
     </div>
     <div class="timeline-pill" style="border-left-color: ${colors.bg};">
-      ${isBreak ? '<span class="pill-icon">☕</span>' : ''}
+      ${isBreak ? '<span class="pill-icon">☕</span>' : ""}
       <span class="pill-name">${task.task}</span>
       <span class="pill-duration">${task.duration}m</span>
       ${priorityIndicator}
@@ -87,19 +88,21 @@ function createTimelineItem(task, startMinutes, startTime, isLast) {
  */
 function renderScheduleColumn(tasks, container, startTime) {
   container.innerHTML = "";
-  
+
   // Add timeline wrapper
   const timeline = document.createElement("div");
   timeline.className = "timeline";
-  
+
   let currentMinutes = 0;
 
   tasks.forEach((task, index) => {
     const isLast = index === tasks.length - 1;
-    timeline.appendChild(createTimelineItem(task, currentMinutes, startTime, isLast));
+    timeline.appendChild(
+      createTimelineItem(task, currentMinutes, startTime, isLast),
+    );
     currentMinutes += task.duration;
   });
-  
+
   container.appendChild(timeline);
 }
 
