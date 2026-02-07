@@ -20,34 +20,43 @@
   <body>
     <!-- Auth Protection -->
     <script type="module">
-      import { requireAuth, initializeAuthState, handleLogout } from '/src/ui/auth.js';
-      import { getCurrentUser, getUserProfile } from '/src/services/supabase.js';
-      
+      import {
+        requireAuth,
+        initializeAuthState,
+        handleLogout,
+      } from "/src/ui/auth.js";
+      import {
+        getCurrentUser,
+        getUserProfile,
+      } from "/src/services/supabase.js";
+
       // Make logout globally available
       window.handleLogout = handleLogout;
-      
+
       // Check authentication before loading page
       (async () => {
         const isAuth = await requireAuth();
         if (!isAuth) return; // Will redirect to landing
-        
+
         // Initialize auth state listener
         initializeAuthState();
-        
+
         // Load and display user info
         const { user } = await getCurrentUser();
         if (user) {
-          const userName = document.getElementById('userName');
-          const userEmail = document.getElementById('userEmail');
-          const userAvatar = document.getElementById('userAvatar');
-          
-          const displayName = user.user_metadata?.full_name || user.email.split('@')[0];
+          window.__authUserId = user.id;
+          const userName = document.getElementById("userName");
+          const userEmail = document.getElementById("userEmail");
+          const userAvatar = document.getElementById("userAvatar");
+
+          const displayName =
+            user.user_metadata?.full_name || user.email.split("@")[0];
           const initial = displayName[0].toUpperCase();
-          
+
           if (userName) userName.textContent = displayName;
           if (userEmail) userEmail.textContent = user.email;
           if (userAvatar) userAvatar.textContent = initial;
-          
+
           // Try to load additional profile data
           const { profile } = await getUserProfile(user.id);
           if (profile && profile.full_name && userName) {
@@ -56,7 +65,7 @@
         }
       })();
     </script>
-    
+
     <div id="app">
       <header>
         <div class="container">
@@ -68,9 +77,7 @@
           </h1>
           <nav>
             <a href="/pages/landing.html">Home</a>
-            <a href="/pages/dashboard.html" class="active">Dashboard</a>
-            <a href="/pages/landing.html#about">About</a>
-            <a href="/pages/landing.html#features">Features</a>
+            <span class="nav-active">Dashboard</span>
           </nav>
         </div>
       </header>
@@ -95,7 +102,15 @@
                 ></i>
                 Productivity: <span id="productivityValue">85</span>/100
               </p>
-              <p id="syncStatus" class="sync-status" style="color: var(--color-text-tertiary); font-size: 0.75rem; margin-top: 0.5rem;">
+              <p
+                id="syncStatus"
+                class="sync-status"
+                style="
+                  color: var(--color-text-tertiary);
+                  font-size: 0.75rem;
+                  margin-top: 0.5rem;
+                "
+              >
                 <i class="fas fa-sync-alt"></i> Checking sync...
               </p>
             </div>
@@ -182,8 +197,16 @@
             <a
               href="#"
               class="nav-item logout-btn"
-              onclick="handleLogout(); return false;"
-              style="margin-top: auto; color: var(--color-error); border-top: 1px solid var(--color-border); padding-top: 1rem;"
+              onclick="
+                handleLogout();
+                return false;
+              "
+              style="
+                margin-top: auto;
+                color: var(--color-error);
+                border-top: 1px solid var(--color-border);
+                padding-top: 1rem;
+              "
             >
               <i class="fas fa-sign-out-alt"></i>
               Logout
@@ -1875,14 +1898,14 @@
       import { config } from "/src/config.js";
       import { fetchSchedule } from "/src/services/ai.js";
       import { renderSchedules } from "/src/ui/render.js";
-      import { 
-        loadTasks as loadTasksFromSupabase, 
+      import {
+        loadTasks as loadTasksFromSupabase,
         saveTask as saveTaskToSupabase,
         updateTask as updateTaskInSupabase,
         deleteTask as deleteTaskFromSupabase,
         saveSchedule,
         loadScheduleHistory,
-        getSyncStatus
+        getSyncStatus,
       } from "/src/logic/dataSync.js";
 
       // Task storage
@@ -1904,18 +1927,20 @@
         await loadManagedTasks();
         updateCharts();
         updateOverview();
-        
+
         // Show sync status
         updateSyncStatus();
       });
-      
+
       // Update sync status indicator
       async function updateSyncStatus() {
         const status = await getSyncStatus();
-        const statusElement = document.getElementById('syncStatus');
+        const statusElement = document.getElementById("syncStatus");
         if (statusElement) {
           statusElement.textContent = status;
-          statusElement.className = status.includes('Synced') ? 'sync-status online' : 'sync-status offline';
+          statusElement.className = status.includes("Synced")
+            ? "sync-status online"
+            : "sync-status offline";
         }
       }
 
@@ -2273,7 +2298,7 @@
       async function loadManagedTasks() {
         try {
           managedTasks = await loadTasksFromSupabase();
-          
+
           if (managedTasks.length === 0) {
             // Create sample tasks for new users
             const sampleTasks = [
@@ -2300,20 +2325,29 @@
                 createdAt: new Date().toISOString(),
               },
             ];
-            
+
             // Save sample tasks
             for (const task of sampleTasks) {
               await saveTaskToSupabase(task);
             }
-            
+
             managedTasks = sampleTasks;
           }
-          
+
           renderManagedTasks();
+          if (typeof syncManagedTasksToUnscheduled === "function") {
+            const didSync = syncManagedTasksToUnscheduled();
+            if (didSync) {
+              saveCalendarData();
+              renderUnscheduledTasks();
+            }
+          }
         } catch (error) {
-          console.error('Error loading tasks:', error);
+          console.error("Error loading tasks:", error);
           // Fallback to localStorage
-          const savedTasks = localStorage.getItem('context_defender_managed_tasks');
+          const savedTasks = localStorage.getItem(
+            "context_defender_managed_tasks",
+          );
           if (savedTasks) {
             managedTasks = JSON.parse(savedTasks);
             renderManagedTasks();
@@ -2355,11 +2389,18 @@
         try {
           // Save to Supabase
           const savedTask = await saveTaskToSupabase(newTask);
-          
+
           // Update local array with the saved task (which has the real ID from Supabase)
           managedTasks.unshift(savedTask);
           saveManagedTasks(); // Update localStorage cache
           renderManagedTasks();
+          if (typeof syncManagedTasksToUnscheduled === "function") {
+            const didSync = syncManagedTasksToUnscheduled();
+            if (didSync) {
+              saveCalendarData();
+              renderUnscheduledTasks();
+            }
+          }
 
           // Reset form and close modal
           document.getElementById("taskForm").reset();
@@ -2377,14 +2418,14 @@
           updateOverview();
           updateSyncStatus();
         } catch (error) {
-          console.error('Error adding task:', error);
-          alert('Task saved locally. Will sync when online.');
-          
+          console.error("Error adding task:", error);
+          alert("Task saved locally. Will sync when online.");
+
           // Still add to local array as fallback
           managedTasks.unshift(newTask);
           saveManagedTasks();
           renderManagedTasks();
-          
+
           document.getElementById("taskForm").reset();
           closeModal("addTaskModal");
           updateOverview();
@@ -2394,9 +2435,10 @@
       window.toggleTask = async function (taskId) {
         const task = managedTasks.find((t) => t.id === taskId);
         if (task) {
-          const newStatus = task.status === "completed" ? "pending" : "completed";
+          const newStatus =
+            task.status === "completed" ? "pending" : "completed";
           task.status = newStatus;
-          
+
           if (task.status === "completed") {
             task.completedAt = new Date().toISOString();
             currentUser.productivityScore = Math.min(
@@ -2415,14 +2457,21 @@
             await updateTaskInSupabase(taskId, { status: newStatus });
             updateSyncStatus();
           } catch (error) {
-            console.error('Error updating task:', error);
+            console.error("Error updating task:", error);
           }
-          
+
           saveManagedTasks();
           saveUser();
           updateUserUI();
           renderManagedTasks();
           updateOverview();
+          if (typeof syncManagedTasksToUnscheduled === "function") {
+            const didSync = syncManagedTasksToUnscheduled();
+            if (didSync) {
+              saveCalendarData();
+              renderUnscheduledTasks();
+            }
+          }
         }
       };
 
@@ -2433,13 +2482,20 @@
             await deleteTaskFromSupabase(taskId);
             updateSyncStatus();
           } catch (error) {
-            console.error('Error deleting task:', error);
+            console.error("Error deleting task:", error);
           }
-          
+
           managedTasks = managedTasks.filter((t) => t.id !== taskId);
           saveManagedTasks();
           renderManagedTasks();
           updateOverview();
+          if (typeof syncManagedTasksToUnscheduled === "function") {
+            const didSync = syncManagedTasksToUnscheduled();
+            if (didSync) {
+              saveCalendarData();
+              renderUnscheduledTasks();
+            }
+          }
         }
       };
 
@@ -2849,6 +2905,26 @@
           // Store the result for calendar import
           lastOptimizedSchedule = result;
 
+          // Save optimization to Supabase with user profile
+          try {
+            const optimizationData = {
+              input_text: input,
+              original_schedule: result.chaos,
+              optimized_schedule: result.flow,
+              efficiency_gain_min: result.metrics.time_saved,
+              context_switch_reduction: result.chaos.filter(
+                (task, i) =>
+                  i > 0 && task.category !== result.chaos[i - 1].category,
+              ).length,
+            };
+
+            await saveSchedule(optimizationData);
+            console.log("Optimization saved to Supabase for current user");
+          } catch (saveError) {
+            console.error("Error saving optimization to Supabase:", saveError);
+            // Continue even if save fails - user can still see results
+          }
+
           // Hide loading
           document.getElementById("loadingState").style.display = "none";
           document.getElementById("resultsContainer").style.display = "block";
@@ -2904,12 +2980,21 @@
       let currentWeekStart = new Date();
       let draggedItem = null;
 
+      function getUserStorageKey(baseKey) {
+        const userId = window.__authUserId;
+        return userId ? `${baseKey}_${userId}` : baseKey;
+      }
+
       // Initialize calendar on section show
       function initializeCalendar() {
         console.log("Initializing calendar...");
         // Set to start of week (Sunday)
         currentWeekStart = getStartOfWeek(new Date());
         loadCalendarData();
+        const didSync = syncManagedTasksToUnscheduled();
+        if (didSync) {
+          saveCalendarData();
+        }
         console.log("Loaded calendar events:", calendarEvents.length);
         generateCalendarGrid();
         updateWeekDisplay();
@@ -2925,23 +3010,91 @@
       }
 
       function loadCalendarData() {
-        const saved = localStorage.getItem("calendar_events");
+        const eventsKey = getUserStorageKey("calendar_events");
+        let saved = localStorage.getItem(eventsKey);
+        if (!saved) {
+          saved = localStorage.getItem("calendar_events");
+          if (saved) {
+            localStorage.setItem(eventsKey, saved);
+          }
+        }
         if (saved) {
           calendarEvents = JSON.parse(saved);
         }
 
-        const savedUnscheduled = localStorage.getItem("unscheduled_tasks");
+        const unscheduledKey = getUserStorageKey("unscheduled_tasks");
+        let savedUnscheduled = localStorage.getItem(unscheduledKey);
+        if (!savedUnscheduled) {
+          savedUnscheduled = localStorage.getItem("unscheduled_tasks");
+          if (savedUnscheduled) {
+            localStorage.setItem(unscheduledKey, savedUnscheduled);
+          }
+        }
         if (savedUnscheduled) {
           unscheduledTasks = JSON.parse(savedUnscheduled);
         }
       }
 
       function saveCalendarData() {
-        localStorage.setItem("calendar_events", JSON.stringify(calendarEvents));
+        const eventsKey = getUserStorageKey("calendar_events");
+        localStorage.setItem(eventsKey, JSON.stringify(calendarEvents));
         localStorage.setItem(
-          "unscheduled_tasks",
+          getUserStorageKey("unscheduled_tasks"),
           JSON.stringify(unscheduledTasks),
         );
+      }
+
+      function syncManagedTasksToUnscheduled() {
+        if (!Array.isArray(managedTasks) || managedTasks.length === 0) {
+          return false;
+        }
+
+        const activeTaskIds = new Set(
+          managedTasks
+            .filter((task) => task.status !== "completed")
+            .map((task) => task.id),
+        );
+
+        const scheduledSourceIds = new Set(
+          calendarEvents
+            .filter((event) => event.sourceTaskId)
+            .map((event) => event.sourceTaskId),
+        );
+
+        let changed = false;
+
+        // Remove unscheduled tasks that are no longer active
+        const filteredUnscheduled = unscheduledTasks.filter((task) => {
+          if (!task.sourceTaskId) return true;
+          return activeTaskIds.has(task.sourceTaskId);
+        });
+
+        if (filteredUnscheduled.length !== unscheduledTasks.length) {
+          unscheduledTasks = filteredUnscheduled;
+          changed = true;
+        }
+
+        const existingSourceIds = new Set(
+          unscheduledTasks
+            .filter((task) => task.sourceTaskId)
+            .map((task) => task.sourceTaskId),
+        );
+
+        managedTasks.forEach((task) => {
+          if (task.status === "completed") return;
+          if (scheduledSourceIds.has(task.id)) return;
+          if (existingSourceIds.has(task.id)) return;
+
+          unscheduledTasks.push({
+            sourceTaskId: task.id,
+            title: task.title,
+            category: task.category || "Other",
+            duration: task.estimatedTime || 30,
+          });
+          changed = true;
+        });
+
+        return changed;
       }
 
       function updateWeekDisplay() {
@@ -3015,9 +3168,11 @@
             const events = calendarEvents.filter((event) => {
               const eventDate = new Date(event.startTime);
               // Calculate end time from duration
-              const eventEndDate = event.endTime 
+              const eventEndDate = event.endTime
                 ? new Date(event.endTime)
-                : new Date(eventDate.getTime() + (event.duration || 60) * 60 * 1000);
+                : new Date(
+                    eventDate.getTime() + (event.duration || 60) * 60 * 1000,
+                  );
               const cellStartTime = cellDate.getTime();
               const cellEndTime = cellStartTime + 60 * 60 * 1000; // 1 hour
 
@@ -3102,6 +3257,9 @@
             : "";
 
         eventEl.innerHTML = `
+          <button class="calendar-event-delete" title="Delete event" aria-label="Delete event">
+            <i class="fas fa-times"></i>
+          </button>
           <div class="calendar-event-title" style="${titleStyle}" title="${event.title}">${event.title}</div>
           ${showTime ? `<div class="calendar-event-time" style="font-size: 0.625rem; line-height: 1.2;">${timeStr} (${duration} min)</div>` : ""}
           ${showCategory ? `<span class="calendar-event-category">${event.category}</span>` : ""}
@@ -3115,6 +3273,14 @@
         eventEl.addEventListener("dragend", (e) => {
           eventEl.classList.remove("dragging");
         });
+
+        const deleteBtn = eventEl.querySelector(".calendar-event-delete");
+        if (deleteBtn) {
+          deleteBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            deleteEvent(event.id);
+          });
+        }
 
         eventEl.addEventListener("dblclick", () => deleteEvent(event.id));
 
@@ -3182,18 +3348,23 @@
         if (draggedItem.type === "task") {
           // Move from unscheduled to calendar
           const task = draggedItem.data;
+          const sourceTaskId = task.sourceTaskId || null;
           const newEvent = {
             id: Date.now(),
             title: task.title,
             category: task.category,
             duration: task.duration,
             startTime: eventDate.toISOString(),
+            sourceTaskId,
           };
 
           calendarEvents.push(newEvent);
-          unscheduledTasks = unscheduledTasks.filter(
-            (t) => t.title !== task.title,
-          );
+          unscheduledTasks = unscheduledTasks.filter((t) => {
+            if (sourceTaskId) {
+              return t.sourceTaskId !== sourceTaskId;
+            }
+            return t.title !== task.title;
+          });
 
           saveCalendarData();
           generateCalendarGrid();
@@ -3282,15 +3453,19 @@
       window.importFromOptimizer = function () {
         console.log("Import from optimizer called");
         console.log("lastOptimizedSchedule:", lastOptimizedSchedule);
-        
+
         if (!lastOptimizedSchedule || !lastOptimizedSchedule.flow) {
           alert(
             "No optimized schedule found. Please run the Schedule Optimizer first.",
           );
           return;
         }
-        
-        console.log("Flow schedule has", lastOptimizedSchedule.flow.length, "tasks");
+
+        console.log(
+          "Flow schedule has",
+          lastOptimizedSchedule.flow.length,
+          "tasks",
+        );
 
         // Prompt for start time
         const startTimeStr = prompt(
@@ -3335,7 +3510,7 @@
         let importCount = 0;
         lastOptimizedSchedule.flow.forEach((taskItem) => {
           console.log("Importing task:", taskItem);
-          
+
           const newEvent = {
             id: Date.now() + importCount,
             title: taskItem.task || taskItem.name, // Support both field names
@@ -3347,12 +3522,14 @@
           calendarEvents.push(newEvent);
 
           // Move to next time slot
-          currentTime = new Date(currentTime.getTime() + taskItem.duration * 60000);
+          currentTime = new Date(
+            currentTime.getTime() + taskItem.duration * 60000,
+          );
           importCount++;
         });
 
         console.log("Imported", importCount, "tasks to calendar");
-        
+
         saveCalendarData();
 
         // Switch to calendar view and refresh

@@ -1068,11 +1068,40 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  position: relative;
 }
 
 .calendar-event:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
+}
+
+.calendar-event-delete {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.65rem;
+  opacity: 0;
+  transition: all var(--transition-base);
+}
+
+.calendar-event:hover .calendar-event-delete {
+  opacity: 1;
+}
+
+.calendar-event-delete:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-error);
 }
 
 .calendar-event.dragging {
@@ -1305,4 +1334,3 @@ textarea:focus {
 .sync-status i {
   font-size: 0.7rem;
 }
-

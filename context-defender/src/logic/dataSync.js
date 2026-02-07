@@ -4,14 +4,32 @@
  * Falls back to localStorage when offline
  */
 
-import { 
-  getTasks, 
-  createTask, 
+import {
+  getTasks,
+  createTask,
   updateTask as supabaseUpdateTask,
   deleteTask as supabaseDeleteTask,
   getOptimizations,
-  saveOptimization 
-} from '../services/supabase.js';
+  saveOptimization,
+  getCurrentUser,
+} from "../services/supabase.js";
+
+let cachedUserId = null;
+let cachedUserIdChecked = false;
+
+async function getUserStorageKey(baseKey) {
+  if (!cachedUserIdChecked) {
+    try {
+      const { user } = await getCurrentUser();
+      cachedUserId = user?.id || null;
+    } catch {
+      cachedUserId = null;
+    }
+    cachedUserIdChecked = true;
+  }
+
+  return cachedUserId ? `${baseKey}_${cachedUserId}` : baseKey;
+}
 
 // ============================================
 // TASKS SYNCHRONIZATION
@@ -24,36 +42,43 @@ import {
 export async function loadTasks() {
   try {
     const { tasks, error } = await getTasks();
-    
+
     if (error) {
-      console.error('Error loading tasks from Supabase:', error);
-      return loadTasksFromLocalStorage();
+      console.error("Error loading tasks from Supabase:", error);
+      return await loadTasksFromLocalStorage();
     }
-    
+
     // Convert Supabase format to dashboard format
-    const dashboardTasks = tasks.map(task => ({
+    const dashboardTasks = tasks.map((task) => ({
       id: task.id,
       title: task.title,
-      description: task.description || '',
-      category: task.tags && task.tags.length > 0 ? task.tags[0] : 'other',
+      description: task.description || "",
+      category: task.tags && task.tags.length > 0 ? task.tags[0] : "other",
       priority: task.priority,
       estimatedTime: task.estimated_minutes || 30,
-      energyLevel: task.tags && task.tags.includes('high-energy') ? 'high' : 
-                    task.tags && task.tags.includes('low-energy') ? 'low' : 'medium',
+      energyLevel:
+        task.tags && task.tags.includes("high-energy")
+          ? "high"
+          : task.tags && task.tags.includes("low-energy")
+            ? "low"
+            : "medium",
       status: task.status,
       createdAt: task.created_at,
       updatedAt: task.updated_at,
       dueDate: task.due_date,
-      actualTime: task.actual_minutes
+      actualTime: task.actual_minutes,
     }));
-    
+
     // Cache in localStorage
-    localStorage.setItem('context_defender_managed_tasks', JSON.stringify(dashboardTasks));
-    
+    const storageKey = await getUserStorageKey(
+      "context_defender_managed_tasks",
+    );
+    localStorage.setItem(storageKey, JSON.stringify(dashboardTasks));
+
     return dashboardTasks;
   } catch (error) {
-    console.error('Exception loading tasks:', error);
-    return loadTasksFromLocalStorage();
+    console.error("Exception loading tasks:", error);
+    return await loadTasksFromLocalStorage();
   }
 }
 
@@ -68,38 +93,38 @@ export async function saveTask(task) {
     const supabaseTask = {
       title: task.title,
       description: task.description || null,
-      status: task.status || 'pending',
-      priority: task.priority || 'medium',
+      status: task.status || "pending",
+      priority: task.priority || "medium",
       estimated_minutes: task.estimatedTime || task.estimated_minutes || null,
       actual_minutes: task.actualTime || task.actual_minutes || null,
       due_date: task.dueDate || task.due_date || null,
-      tags: buildTaskTags(task)
+      tags: buildTaskTags(task),
     };
-    
+
     const { task: createdTask, error } = await createTask(supabaseTask);
-    
+
     if (error) {
-      console.error('Error saving task:', error);
+      console.error("Error saving task:", error);
       // Fall back to localStorage
-      saveTaskToLocalStorage(task);
+      await saveTaskToLocalStorage(task);
       return task;
     }
-    
+
     // Convert back to dashboard format
     const dashboardTask = {
       ...task,
       id: createdTask.id,
       createdAt: createdTask.created_at,
-      updatedAt: createdTask.updated_at
+      updatedAt: createdTask.updated_at,
     };
-    
+
     // Update localStorage
-    updateTaskInLocalStorage(dashboardTask);
-    
+    await updateTaskInLocalStorage(dashboardTask);
+
     return dashboardTask;
   } catch (error) {
-    console.error('Exception saving task:', error);
-    saveTaskToLocalStorage(task);
+    console.error("Exception saving task:", error);
+    await saveTaskToLocalStorage(task);
     return task;
   }
 }
@@ -115,15 +140,19 @@ export async function updateTask(taskId, updates) {
     // Convert dashboard format to Supabase format
     const supabaseUpdates = {
       ...(updates.title && { title: updates.title }),
-      ...(updates.description !== undefined && { description: updates.description }),
+      ...(updates.description !== undefined && {
+        description: updates.description,
+      }),
       ...(updates.status && { status: updates.status }),
       ...(updates.priority && { priority: updates.priority }),
-      ...(updates.estimatedTime && { estimated_minutes: updates.estimatedTime }),
+      ...(updates.estimatedTime && {
+        estimated_minutes: updates.estimatedTime,
+      }),
       ...(updates.actualTime && { actual_minutes: updates.actualTime }),
       ...(updates.dueDate && { due_date: updates.dueDate }),
-      ...(updates.tags && { tags: updates.tags })
+      ...(updates.tags && { tags: updates.tags }),
     };
-    
+
     // Add energy level and category to tags if provided
     if (updates.energyLevel || updates.category) {
       const tags = supabaseUpdates.tags || [];
@@ -131,22 +160,25 @@ export async function updateTask(taskId, updates) {
       if (updates.category) tags.unshift(updates.category);
       supabaseUpdates.tags = tags;
     }
-    
-    const { task: updatedTask, error } = await supabaseUpdateTask(taskId, supabaseUpdates);
-    
+
+    const { task: updatedTask, error } = await supabaseUpdateTask(
+      taskId,
+      supabaseUpdates,
+    );
+
     if (error) {
-      console.error('Error updating task:', error);
-      updateTaskInLocalStorage({ id: taskId, ...updates });
+      console.error("Error updating task:", error);
+      await updateTaskInLocalStorage({ id: taskId, ...updates });
       return { id: taskId, ...updates };
     }
-    
+
     // Update localStorage
-    updateTaskInLocalStorage({ id: taskId, ...updates });
-    
+    await updateTaskInLocalStorage({ id: taskId, ...updates });
+
     return updatedTask;
   } catch (error) {
-    console.error('Exception updating task:', error);
-    updateTaskInLocalStorage({ id: taskId, ...updates });
+    console.error("Exception updating task:", error);
+    await updateTaskInLocalStorage({ id: taskId, ...updates });
     return { id: taskId, ...updates };
   }
 }
@@ -159,18 +191,18 @@ export async function updateTask(taskId, updates) {
 export async function deleteTask(taskId) {
   try {
     const { error } = await supabaseDeleteTask(taskId);
-    
+
     if (error) {
-      console.error('Error deleting task:', error);
-      deleteTaskFromLocalStorage(taskId);
+      console.error("Error deleting task:", error);
+      await deleteTaskFromLocalStorage(taskId);
       return false;
     }
-    
-    deleteTaskFromLocalStorage(taskId);
+
+    await deleteTaskFromLocalStorage(taskId);
     return true;
   } catch (error) {
-    console.error('Exception deleting task:', error);
-    deleteTaskFromLocalStorage(taskId);
+    console.error("Exception deleting task:", error);
+    await deleteTaskFromLocalStorage(taskId);
     return false;
   }
 }
@@ -187,20 +219,23 @@ export async function deleteTask(taskId) {
 export async function saveSchedule(optimization) {
   try {
     const { optimization: saved, error } = await saveOptimization(optimization);
-    
+
     if (error) {
-      console.error('Error saving optimization:', error);
-      saveScheduleToLocalStorage(optimization);
+      console.error("Error saving optimization:", error);
+      await saveScheduleToLocalStorage(optimization);
       return optimization;
     }
-    
+
     // Cache latest optimization
-    localStorage.setItem('context_defender_latest_optimization', JSON.stringify(saved));
-    
+    const latestKey = await getUserStorageKey(
+      "context_defender_latest_optimization",
+    );
+    localStorage.setItem(latestKey, JSON.stringify(saved));
+
     return saved;
   } catch (error) {
-    console.error('Exception saving schedule:', error);
-    saveScheduleToLocalStorage(optimization);
+    console.error("Exception saving schedule:", error);
+    await saveScheduleToLocalStorage(optimization);
     return optimization;
   }
 }
@@ -212,19 +247,22 @@ export async function saveSchedule(optimization) {
 export async function loadScheduleHistory() {
   try {
     const { optimizations, error } = await getOptimizations();
-    
+
     if (error) {
-      console.error('Error loading optimizations:', error);
-      return loadScheduleHistoryFromLocalStorage();
+      console.error("Error loading optimizations:", error);
+      return await loadScheduleHistoryFromLocalStorage();
     }
-    
+
     // Cache in localStorage
-    localStorage.setItem('context_defender_optimizations', JSON.stringify(optimizations));
-    
+    const historyKey = await getUserStorageKey(
+      "context_defender_optimizations",
+    );
+    localStorage.setItem(historyKey, JSON.stringify(optimizations));
+
     return optimizations;
   } catch (error) {
-    console.error('Exception loading schedule history:', error);
-    return loadScheduleHistoryFromLocalStorage();
+    console.error("Exception loading schedule history:", error);
+    return await loadScheduleHistoryFromLocalStorage();
   }
 }
 
@@ -237,55 +275,76 @@ export async function loadScheduleHistory() {
  */
 function buildTaskTags(task) {
   const tags = [];
-  
+
   if (task.category) tags.push(task.category);
   if (task.energyLevel) tags.push(`${task.energyLevel}-energy`);
-  
+
   return tags.length > 0 ? tags : null;
 }
 
 /**
  * LocalStorage fallback functions
  */
-function loadTasksFromLocalStorage() {
-  const savedTasks = localStorage.getItem('context_defender_managed_tasks');
+async function loadTasksFromLocalStorage() {
+  const storageKey = await getUserStorageKey("context_defender_managed_tasks");
+  let savedTasks = localStorage.getItem(storageKey);
+  if (!savedTasks) {
+    savedTasks = localStorage.getItem("context_defender_managed_tasks");
+    if (savedTasks) {
+      localStorage.setItem(storageKey, savedTasks);
+    }
+  }
   return savedTasks ? JSON.parse(savedTasks) : [];
 }
 
-function saveTaskToLocalStorage(task) {
-  const tasks = loadTasksFromLocalStorage();
+async function saveTaskToLocalStorage(task) {
+  const tasks = await loadTasksFromLocalStorage();
   tasks.push(task);
-  localStorage.setItem('context_defender_managed_tasks', JSON.stringify(tasks));
+  const storageKey = await getUserStorageKey("context_defender_managed_tasks");
+  localStorage.setItem(storageKey, JSON.stringify(tasks));
 }
 
-function updateTaskInLocalStorage(updatedTask) {
-  const tasks = loadTasksFromLocalStorage();
-  const index = tasks.findIndex(t => t.id === updatedTask.id);
-  
+async function updateTaskInLocalStorage(updatedTask) {
+  const tasks = await loadTasksFromLocalStorage();
+  const index = tasks.findIndex((t) => t.id === updatedTask.id);
+
   if (index !== -1) {
     tasks[index] = { ...tasks[index], ...updatedTask };
   } else {
     tasks.push(updatedTask);
   }
-  
-  localStorage.setItem('context_defender_managed_tasks', JSON.stringify(tasks));
+
+  const storageKey = await getUserStorageKey("context_defender_managed_tasks");
+  localStorage.setItem(storageKey, JSON.stringify(tasks));
 }
 
-function deleteTaskFromLocalStorage(taskId) {
-  const tasks = loadTasksFromLocalStorage();
-  const filtered = tasks.filter(t => t.id !== taskId);
-  localStorage.setItem('context_defender_managed_tasks', JSON.stringify(filtered));
+async function deleteTaskFromLocalStorage(taskId) {
+  const tasks = await loadTasksFromLocalStorage();
+  const filtered = tasks.filter((t) => t.id !== taskId);
+  const storageKey = await getUserStorageKey("context_defender_managed_tasks");
+  localStorage.setItem(storageKey, JSON.stringify(filtered));
 }
 
-function saveScheduleToLocalStorage(optimization) {
-  const optimizations = loadScheduleHistoryFromLocalStorage();
+async function saveScheduleToLocalStorage(optimization) {
+  const optimizations = await loadScheduleHistoryFromLocalStorage();
   optimizations.unshift(optimization);
-  localStorage.setItem('context_defender_optimizations', JSON.stringify(optimizations));
-  localStorage.setItem('context_defender_latest_optimization', JSON.stringify(optimization));
+  const historyKey = await getUserStorageKey("context_defender_optimizations");
+  const latestKey = await getUserStorageKey(
+    "context_defender_latest_optimization",
+  );
+  localStorage.setItem(historyKey, JSON.stringify(optimizations));
+  localStorage.setItem(latestKey, JSON.stringify(optimization));
 }
 
-function loadScheduleHistoryFromLocalStorage() {
-  const saved = localStorage.getItem('context_defender_optimizations');
+async function loadScheduleHistoryFromLocalStorage() {
+  const historyKey = await getUserStorageKey("context_defender_optimizations");
+  let saved = localStorage.getItem(historyKey);
+  if (!saved) {
+    saved = localStorage.getItem("context_defender_optimizations");
+    if (saved) {
+      localStorage.setItem(historyKey, saved);
+    }
+  }
   return saved ? JSON.parse(saved) : [];
 }
 
@@ -301,9 +360,9 @@ export async function canSync() {
   if (!navigator.onLine) {
     return false;
   }
-  
+
   try {
-    const { getCurrentUser } = await import('../services/supabase.js');
+    const { getCurrentUser } = await import("../services/supabase.js");
     const { user } = await getCurrentUser();
     return !!user;
   } catch {
@@ -317,5 +376,5 @@ export async function canSync() {
  */
 export async function getSyncStatus() {
   const online = await canSync();
-  return online ? 'Synced with cloud' : 'Offline - using local storage';
+  return online ? "Synced with cloud" : "Offline - using local storage";
 }

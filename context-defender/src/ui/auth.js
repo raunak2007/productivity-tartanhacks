@@ -1,4 +1,10 @@
-import { signIn, signUp, signInWithGoogle, signOut, onAuthStateChange } from '../services/supabase.js';
+import {
+  signIn,
+  signUp,
+  signInWithGoogle,
+  signOut,
+  onAuthStateChange,
+} from "../services/supabase.js";
 
 // ============================================
 // AUTH UI COMPONENTS
@@ -9,14 +15,14 @@ import { signIn, signUp, signInWithGoogle, signOut, onAuthStateChange } from '..
  */
 export function showAuthModal() {
   // Remove existing modal if any
-  const existingModal = document.getElementById('authModal');
+  const existingModal = document.getElementById("authModal");
   if (existingModal) {
     existingModal.remove();
   }
 
-  const modal = document.createElement('div');
-  modal.id = 'authModal';
-  modal.className = 'auth-modal';
+  const modal = document.createElement("div");
+  modal.id = "authModal";
+  modal.className = "auth-modal";
   modal.innerHTML = `
     <div class="auth-modal-overlay"></div>
     <div class="auth-modal-content">
@@ -126,48 +132,54 @@ export function showAuthModal() {
  */
 function initializeAuthModal() {
   // Tab switching
-  const tabs = document.querySelectorAll('.auth-tab');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
+  const tabs = document.querySelectorAll(".auth-tab");
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
       const targetTab = tab.dataset.tab;
       switchAuthTab(targetTab);
     });
   });
 
   // Sign in form
-  const signinForm = document.getElementById('signinFormElement');
-  signinForm.addEventListener('submit', handleSignIn);
+  const signinForm = document.getElementById("signinFormElement");
+  signinForm.addEventListener("submit", handleSignIn);
 
   // Sign up form
-  const signupForm = document.getElementById('signupFormElement');
-  signupForm.addEventListener('submit', handleSignUp);
+  const signupForm = document.getElementById("signupFormElement");
+  signupForm.addEventListener("submit", handleSignUp);
 
   // Google OAuth buttons
-  document.getElementById('googleSigninBtn').addEventListener('click', handleGoogleAuth);
-  document.getElementById('googleSignupBtn').addEventListener('click', handleGoogleAuth);
+  document
+    .getElementById("googleSigninBtn")
+    .addEventListener("click", handleGoogleAuth);
+  document
+    .getElementById("googleSignupBtn")
+    .addEventListener("click", handleGoogleAuth);
 
   // Close modal on overlay click
-  document.querySelector('.auth-modal-overlay').addEventListener('click', () => {
-    document.getElementById('authModal').remove();
-  });
+  document
+    .querySelector(".auth-modal-overlay")
+    .addEventListener("click", () => {
+      document.getElementById("authModal").remove();
+    });
 }
 
 /**
  * Switch between sign in and sign up tabs
  */
 function switchAuthTab(tab) {
-  const tabs = document.querySelectorAll('.auth-tab');
-  const forms = document.querySelectorAll('.auth-form');
+  const tabs = document.querySelectorAll(".auth-tab");
+  const forms = document.querySelectorAll(".auth-form");
 
-  tabs.forEach(t => t.classList.remove('active'));
-  forms.forEach(f => f.classList.remove('active'));
+  tabs.forEach((t) => t.classList.remove("active"));
+  forms.forEach((f) => f.classList.remove("active"));
 
-  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-  document.getElementById(`${tab}Form`).classList.add('active');
+  document.querySelector(`[data-tab="${tab}"]`).classList.add("active");
+  document.getElementById(`${tab}Form`).classList.add("active");
 
   // Clear errors
-  document.getElementById('signinError').textContent = '';
-  document.getElementById('signupError').textContent = '';
+  document.getElementById("signinError").textContent = "";
+  document.getElementById("signupError").textContent = "";
 }
 
 /**
@@ -175,26 +187,26 @@ function switchAuthTab(tab) {
  */
 async function handleSignIn(e) {
   e.preventDefault();
-  
-  const email = document.getElementById('signinEmail').value;
-  const password = document.getElementById('signinPassword').value;
-  const errorDiv = document.getElementById('signinError');
+
+  const email = document.getElementById("signinEmail").value;
+  const password = document.getElementById("signinPassword").value;
+  const errorDiv = document.getElementById("signinError");
   const submitBtn = e.target.querySelector('button[type="submit"]');
 
   // Clear previous errors
-  errorDiv.textContent = '';
+  errorDiv.textContent = "";
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Signing in...';
+  submitBtn.textContent = "Signing in...";
 
   const { user, error } = await signIn(email, password);
 
   if (error) {
     errorDiv.textContent = error.message;
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Sign In';
+    submitBtn.textContent = "Sign In";
   } else {
     // Success! Redirect to dashboard
-    window.location.href = '/pages/dashboard.html';
+    window.location.href = "/pages/dashboard.html";
   }
 }
 
@@ -203,43 +215,66 @@ async function handleSignIn(e) {
  */
 async function handleSignUp(e) {
   e.preventDefault();
-  
-  const name = document.getElementById('signupName').value;
-  const email = document.getElementById('signupEmail').value;
-  const password = document.getElementById('signupPassword').value;
-  const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
-  const errorDiv = document.getElementById('signupError');
+
+  const name = document.getElementById("signupName").value;
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+  const passwordConfirm = document.getElementById(
+    "signupPasswordConfirm",
+  ).value;
+  const errorDiv = document.getElementById("signupError");
   const submitBtn = e.target.querySelector('button[type="submit"]');
 
   // Clear previous errors
-  errorDiv.textContent = '';
+  errorDiv.textContent = "";
 
   // Validate passwords match
   if (password !== passwordConfirm) {
-    errorDiv.textContent = 'Passwords do not match';
+    errorDiv.textContent = "Passwords do not match";
     return;
   }
 
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Creating account...';
+  submitBtn.textContent = "Creating account...";
 
   const { user, error } = await signUp(email, password, name);
 
   if (error) {
-    errorDiv.textContent = error.message;
+    // Check if it's a rate limit error
+    if (
+      error.message.includes("rate limit") ||
+      error.message.includes("Email rate limit exceeded")
+    ) {
+      errorDiv.textContent =
+        "Too many signup attempts. Please try again in a few minutes, or use Google Sign In instead.";
+    } else {
+      errorDiv.textContent = error.message;
+    }
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Create Account';
+    submitBtn.textContent = "Create Account";
   } else {
-    // Success! Show success message
-    errorDiv.classList.remove('auth-error');
-    errorDiv.classList.add('auth-success');
-    errorDiv.textContent = 'Account created! Please check your email to verify your account.';
-    submitBtn.textContent = 'Account Created!';
-    
-    // Redirect after 2 seconds
-    setTimeout(() => {
-      window.location.href = '/pages/dashboard.html';
-    }, 2000);
+    // Success! Check if user is already confirmed (email confirmation disabled)
+    const isConfirmed = user && user.email_confirmed_at;
+
+    errorDiv.classList.remove("auth-error");
+    errorDiv.classList.add("auth-success");
+
+    if (isConfirmed) {
+      // Email confirmation is disabled, user can log in immediately
+      errorDiv.textContent = "Account created successfully! Redirecting...";
+      submitBtn.textContent = "Success!";
+      setTimeout(() => {
+        window.location.href = "/pages/dashboard.html";
+      }, 1000);
+    } else {
+      // Email confirmation is enabled
+      errorDiv.textContent =
+        "Account created! Please check your email to verify your account.";
+      submitBtn.textContent = "Account Created!";
+      setTimeout(() => {
+        window.location.href = "/pages/dashboard.html";
+      }, 3000);
+    }
   }
 }
 
@@ -248,9 +283,9 @@ async function handleSignUp(e) {
  */
 async function handleGoogleAuth() {
   const { error } = await signInWithGoogle();
-  
+
   if (error) {
-    const errorDiv = document.querySelector('.auth-form.active .auth-error');
+    const errorDiv = document.querySelector(".auth-form.active .auth-error");
     errorDiv.textContent = error.message;
   }
   // OAuth will redirect automatically
@@ -261,11 +296,11 @@ async function handleGoogleAuth() {
  */
 export function initializeAuthState() {
   onAuthStateChange((event, session) => {
-    console.log('Auth state changed:', event, session);
-    
-    if (event === 'SIGNED_IN') {
+    console.log("Auth state changed:", event, session);
+
+    if (event === "SIGNED_IN") {
       updateUIForAuthenticatedUser(session.user);
-    } else if (event === 'SIGNED_OUT') {
+    } else if (event === "SIGNED_OUT") {
       updateUIForUnauthenticatedUser();
     }
   });
@@ -276,12 +311,13 @@ export function initializeAuthState() {
  */
 function updateUIForAuthenticatedUser(user) {
   // Update user profile display
-  const userName = document.getElementById('userName');
-  const userEmail = document.getElementById('userEmail');
-  const userAvatar = document.getElementById('userAvatar');
+  const userName = document.getElementById("userName");
+  const userEmail = document.getElementById("userEmail");
+  const userAvatar = document.getElementById("userAvatar");
 
   if (userName) {
-    userName.textContent = user.user_metadata?.full_name || user.email.split('@')[0];
+    userName.textContent =
+      user.user_metadata?.full_name || user.email.split("@")[0];
   }
 
   if (userEmail) {
@@ -289,16 +325,17 @@ function updateUIForAuthenticatedUser(user) {
   }
 
   if (userAvatar) {
-    const initial = (user.user_metadata?.full_name || user.email)[0].toUpperCase();
+    const initial = (user.user_metadata?.full_name ||
+      user.email)[0].toUpperCase();
     userAvatar.textContent = initial;
   }
 
   // Show/hide appropriate UI elements
-  const authButtons = document.querySelectorAll('.auth-required');
-  authButtons.forEach(btn => btn.style.display = 'block');
+  const authButtons = document.querySelectorAll(".auth-required");
+  authButtons.forEach((btn) => (btn.style.display = "block"));
 
-  const guestButtons = document.querySelectorAll('.guest-only');
-  guestButtons.forEach(btn => btn.style.display = 'none');
+  const guestButtons = document.querySelectorAll(".guest-only");
+  guestButtons.forEach((btn) => (btn.style.display = "none"));
 }
 
 /**
@@ -306,17 +343,17 @@ function updateUIForAuthenticatedUser(user) {
  */
 function updateUIForUnauthenticatedUser() {
   // Redirect to landing if on protected page
-  const protectedPages = ['/pages/dashboard.html', '/dashboard.html'];
-  if (protectedPages.some(page => window.location.pathname.includes(page))) {
-    window.location.href = '/pages/landing.html';
+  const protectedPages = ["/pages/dashboard.html", "/dashboard.html"];
+  if (protectedPages.some((page) => window.location.pathname.includes(page))) {
+    window.location.href = "/pages/landing.html";
   }
 
   // Show/hide appropriate UI elements
-  const authButtons = document.querySelectorAll('.auth-required');
-  authButtons.forEach(btn => btn.style.display = 'none');
+  const authButtons = document.querySelectorAll(".auth-required");
+  authButtons.forEach((btn) => (btn.style.display = "none"));
 
-  const guestButtons = document.querySelectorAll('.guest-only');
-  guestButtons.forEach(btn => btn.style.display = 'block');
+  const guestButtons = document.querySelectorAll(".guest-only");
+  guestButtons.forEach((btn) => (btn.style.display = "block"));
 }
 
 /**
@@ -324,12 +361,12 @@ function updateUIForUnauthenticatedUser() {
  */
 export async function handleLogout() {
   const { error } = await signOut();
-  
+
   if (error) {
-    console.error('Logout error:', error);
-    alert('Error signing out. Please try again.');
+    console.error("Logout error:", error);
+    alert("Error signing out. Please try again.");
   } else {
-    window.location.href = '/pages/landing.html';
+    window.location.href = "/pages/landing.html";
   }
 }
 
@@ -337,13 +374,13 @@ export async function handleLogout() {
  * Check if user is authenticated
  */
 export async function requireAuth() {
-  const { getCurrentUser } = await import('../services/supabase.js');
+  const { getCurrentUser } = await import("../services/supabase.js");
   const { user, error } = await getCurrentUser();
-  
+
   if (error || !user) {
-    window.location.href = '/pages/landing.html';
+    window.location.href = "/pages/landing.html";
     return false;
   }
-  
+
   return true;
 }

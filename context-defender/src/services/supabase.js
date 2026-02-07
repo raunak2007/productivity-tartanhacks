@@ -1,8 +1,11 @@
-import { createClient } from '@supabase/supabase-js';
-import { config } from '../config.js';
+import { createClient } from "@supabase/supabase-js";
+import { config } from "../config.js";
 
 // Initialize Supabase client
-export const supabase = createClient(config.supabase.url, config.supabase.anonKey);
+export const supabase = createClient(
+  config.supabase.url,
+  config.supabase.anonKey,
+);
 
 // ============================================
 // AUTHENTICATION FUNCTIONS
@@ -23,6 +26,7 @@ export async function signUp(email, password, fullName) {
       data: {
         full_name: fullName,
       },
+      emailRedirectTo: `${window.location.origin}/pages/dashboard.html`,
     },
   });
 
@@ -30,7 +34,7 @@ export async function signUp(email, password, fullName) {
     return { user: null, error };
   }
 
-  // Create profile after signup
+  // Create profile after signup (works with auto-confirm)
   if (data.user) {
     await createUserProfile(data.user.id, fullName, email);
   }
@@ -59,7 +63,7 @@ export async function signIn(email, password) {
  */
 export async function signInWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
+    provider: "google",
     options: {
       redirectTo: `${window.location.origin}/pages/dashboard.html`,
     },
@@ -117,7 +121,7 @@ export function onAuthStateChange(callback) {
  */
 export async function createUserProfile(userId, fullName, email) {
   const { data, error } = await supabase
-    .from('profiles')
+    .from("profiles")
     .insert([
       {
         id: userId,
@@ -138,9 +142,9 @@ export async function createUserProfile(userId, fullName, email) {
  */
 export async function getUserProfile(userId) {
   const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', userId)
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
     .single();
 
   return { profile: data, error };
@@ -154,9 +158,9 @@ export async function getUserProfile(userId) {
  */
 export async function updateUserProfile(userId, updates) {
   const { data, error } = await supabase
-    .from('profiles')
+    .from("profiles")
     .update(updates)
-    .eq('id', userId)
+    .eq("id", userId)
     .select()
     .single();
 
@@ -173,14 +177,19 @@ export async function updateUserProfile(userId, updates) {
  * @returns {Promise<{task, error}>}
  */
 export async function createTask(task) {
-  const { data: { user } } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) {
-    return { task: null, error: new Error('Not authenticated') };
+    console.error("createTask: User not authenticated");
+    return { task: null, error: new Error("Not authenticated") };
   }
 
+  console.log("createTask: Saving task for user:", user.id, "Task:", task);
+
   const { data, error } = await supabase
-    .from('tasks')
+    .from("tasks")
     .insert([
       {
         user_id: user.id,
@@ -190,6 +199,12 @@ export async function createTask(task) {
     .select()
     .single();
 
+  if (error) {
+    console.error("createTask: Error saving task:", error);
+  } else {
+    console.log("createTask: Task saved successfully:", data);
+  }
+
   return { task: data, error };
 }
 
@@ -198,17 +213,33 @@ export async function createTask(task) {
  * @returns {Promise<{tasks, error}>}
  */
 export async function getTasks() {
-  const { data: { user } } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) {
-    return { tasks: [], error: new Error('Not authenticated') };
+    console.error("getTasks: User not authenticated");
+    return { tasks: [], error: new Error("Not authenticated") };
   }
 
+  console.log("getTasks: Loading tasks for user:", user.id);
+
   const { data, error } = await supabase
-    .from('tasks')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
+    .from("tasks")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("getTasks: Error loading tasks:", error);
+  } else {
+    console.log(
+      "getTasks: Loaded",
+      data?.length || 0,
+      "tasks for user:",
+      user.id,
+    );
+  }
 
   return { tasks: data || [], error };
 }
@@ -221,9 +252,9 @@ export async function getTasks() {
  */
 export async function updateTask(taskId, updates) {
   const { data, error } = await supabase
-    .from('tasks')
+    .from("tasks")
     .update(updates)
-    .eq('id', taskId)
+    .eq("id", taskId)
     .select()
     .single();
 
@@ -236,10 +267,7 @@ export async function updateTask(taskId, updates) {
  * @returns {Promise<{error}>}
  */
 export async function deleteTask(taskId) {
-  const { error } = await supabase
-    .from('tasks')
-    .delete()
-    .eq('id', taskId);
+  const { error } = await supabase.from("tasks").delete().eq("id", taskId);
 
   return { error };
 }
@@ -254,14 +282,19 @@ export async function deleteTask(taskId) {
  * @returns {Promise<{optimization, error}>}
  */
 export async function saveOptimization(optimization) {
-  const { data: { user } } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) {
-    return { optimization: null, error: new Error('Not authenticated') };
+    console.error("saveOptimization: User not authenticated");
+    return { optimization: null, error: new Error("Not authenticated") };
   }
 
+  console.log("saveOptimization: Saving optimization for user:", user.id);
+
   const { data, error } = await supabase
-    .from('optimizations')
+    .from("optimizations")
     .insert([
       {
         user_id: user.id,
@@ -271,6 +304,12 @@ export async function saveOptimization(optimization) {
     .select()
     .single();
 
+  if (error) {
+    console.error("saveOptimization: Error saving optimization:", error);
+  } else {
+    console.log("saveOptimization: Optimization saved successfully:", data.id);
+  }
+
   return { optimization: data, error };
 }
 
@@ -279,17 +318,33 @@ export async function saveOptimization(optimization) {
  * @returns {Promise<{optimizations, error}>}
  */
 export async function getOptimizations() {
-  const { data: { user } } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) {
-    return { optimizations: [], error: new Error('Not authenticated') };
+    console.error("getOptimizations: User not authenticated");
+    return { optimizations: [], error: new Error("Not authenticated") };
   }
 
+  console.log("getOptimizations: Loading optimizations for user:", user.id);
+
   const { data, error } = await supabase
-    .from('optimizations')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
+    .from("optimizations")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("getOptimizations: Error loading optimizations:", error);
+  } else {
+    console.log(
+      "getOptimizations: Loaded",
+      data?.length || 0,
+      "optimizations for user:",
+      user.id,
+    );
+  }
 
   return { optimizations: data || [], error };
 }
@@ -299,17 +354,19 @@ export async function getOptimizations() {
  * @returns {Promise<{optimization, error}>}
  */
 export async function getLatestOptimization() {
-  const { data: { user } } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) {
-    return { optimization: null, error: new Error('Not authenticated') };
+    return { optimization: null, error: new Error("Not authenticated") };
   }
 
   const { data, error } = await supabase
-    .from('optimizations')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+    .from("optimizations")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
     .limit(1)
     .single();
 
@@ -321,6 +378,6 @@ export async function getLatestOptimization() {
  * @returns {Promise<{totalMinutes, error}>}
  */
 export async function getGlobalSavedMinutes() {
-  const { data, error } = await supabase.rpc('get_global_saved_minutes');
+  const { data, error } = await supabase.rpc("get_global_saved_minutes");
   return { totalMinutes: data, error };
 }

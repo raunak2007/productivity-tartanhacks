@@ -22,11 +22,13 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
+  z-index: 0;
 }
 
 .auth-modal-content {
   position: relative;
   background: var(--color-bg-primary, #ffffff);
+  color: var(--color-text-primary, #000000);
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   width: 90%;
@@ -35,6 +37,7 @@
   overflow-y: auto;
   padding: 2rem;
   animation: modalSlideIn 0.3s ease-out;
+  z-index: 1;
 }
 
 @keyframes modalSlideIn {
@@ -234,7 +237,7 @@
 
 .auth-divider::before,
 .auth-divider::after {
-  content: '';
+  content: "";
   flex: 1;
   height: 1px;
   background: var(--color-border, #e5e7eb);
