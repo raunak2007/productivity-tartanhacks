@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Context Defender</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #f5f5f5;
+        color: #333;
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      #app {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        width: 100%;
+      }
+
+      header {
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      header h1 {
+        font-size: 1.5rem;
+        color: #4a9eff;
+      }
+
+      nav {
+        display: flex;
+        gap: 2rem;
+      }
+
+      nav a {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      nav a:hover {
+        color: #4a9eff;
+      }
+
+      main {
+        flex: 1;
+      }
+
+      #hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4rem 0;
+        text-align: center;
+      }
+
+      #hero h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      #hero p {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+
+      .cta-btn {
+        background: white;
+        color: #667eea;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      #content {
+        padding: 4rem 0;
+        background: white;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .card {
+        background: #f9f9f9;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .card h3 {
+        color: #4a9eff;
+        margin-bottom: 0.5rem;
+      }
+
+      .card p {
+        color: #666;
+      }
+
+      footer {
+        background: #333;
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="container">
+          <h1>Context Defender</h1>
+          <nav>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="https://raunak2007.github.io/productivity-tartanhacks/dashboard.html">Dashboard</a>
+            <a href="#contact">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section id="hero">
+          <div class="container">
+            <h2>Welcome to Context Defender</h2>
+            <p>Your productivity companion</p>
+            <button class="cta-btn">Get Started</button>
+          </div>
+        </section>
+
+        <section id="content">
+          <div class="container">
+            <div class="content-grid">
+              <div class="card">
+                <h3>Feature One</h3>
+                <p>Description of your first feature</p>
+              </div>
+              <div class="card">
+                <h3>Feature Two</h3>
+                <p>Description of your second feature</p>
+              </div>
+              <div class="card">
+                <h3>Feature Three</h3>
+                <p>Description of your third feature</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="container">
+          <p>&copy; 2026 Context Defender. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Initialize the app
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("Context Defender initialized");
+
+        // Set up event listeners
+        const ctaBtn = document.querySelector(".cta-btn");
+        const navLinks = document.querySelectorAll("nav a");
+
+        if (ctaBtn) {
+          ctaBtn.addEventListener("click", () => {
+            console.log("Get Started clicked");
+            // You can add more functionality here, like opening a modal or navigating
+            alert("Welcome to Context Defender! This is a demo application.");
+          });
+        }
+
+        // Smooth scrolling for navigation links
+        navLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute("href");
+            console.log("Navigating to:", targetId);
+            
+            // Simple navigation functionality
+            if (targetId.startsWith("#")) {
+              const targetElement = document.querySelector(targetId);
+              if (targetElement) {
+                targetElement.scrollIntoView({ behavior: "smooth" });
+              }
+            }
+          });
+        });
+
+        // Note: Since we're in a single HTML file, the imported modules 
+        // from the original main.js are not available here.
+        // You would need to include their content directly in this script tag
+        // or use a bundler for production.
+      });
+    </script>
+  </body>
+</html>
