@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Context Defender - Calendar</title>
+    <title>Utilio - Calendar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
     <style>
@@ -1001,8 +1001,8 @@
         <!-- Left Sidebar Navigation -->
         <aside class="sidebar">
           <div class="logo">
-            <div class="logo-icon">CD</div>
-            <div class="logo-text">Context Defender</div>
+            <div class="logo-icon">U</div>
+            <div class="logo-text">Utilio</div>
           </div>
 
           <div class="nav-section">
@@ -1645,7 +1645,7 @@
       }
 
       function loadCalendarEvents() {
-        const savedEvents = localStorage.getItem('context_defender_calendar_events');
+        const savedEvents = localStorage.getItem('utilio_calendar_events');
         if (savedEvents) {
           calendarEvents = JSON.parse(savedEvents);
         } else {
@@ -1690,7 +1690,7 @@
       }
 
       function saveCalendarEvents() {
-        localStorage.setItem('context_defender_calendar_events', JSON.stringify(calendarEvents));
+        localStorage.setItem('utilio_calendar_events', JSON.stringify(calendarEvents));
       }
     </script>
   </body>
