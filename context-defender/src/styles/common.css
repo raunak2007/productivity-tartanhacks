@@ -1,32 +1,32 @@
 /* Common Styles for Context Defender */
 
 :root {
-  /* Color System - Coolors Palette */
+  /* Modern SaaS Color System - Refined Grayscale */
   --color-bg-primary: #ffffff;
-  --color-bg-secondary: #c6e0ff;
-  --color-bg-tertiary: #e8f3ff;
-  --color-bg-hover: #b8d6f7;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  --color-bg-hover: #e2e8f0;
 
-  --color-text-primary: #253031;
-  --color-text-secondary: #315659;
-  --color-text-tertiary: #5a7679;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
 
-  --color-border: #c6e0ff;
-  --color-border-hover: #2978a0;
+  --color-border: #e2e8f0;
+  --color-border-hover: #cbd5e1;
 
-  --color-primary: #2978a0;
-  --color-primary-hover: #1f5c7d;
-  --color-primary-light: #c6e0ff;
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-primary-light: #eef2ff;
 
-  --color-success: #00d084;
-  --color-warning: #bcab79;
-  --color-error: #eb5757;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08);
-  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.12);
+  /* Refined Shadows - Subtle & Clean */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.08);
 
   /* Spacing */
   --space-xs: 4px;
@@ -61,20 +61,20 @@ html {
 
 body {
   font-family:
-    "Inter",
+    "Roboto",
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
-    "Roboto",
     system-ui,
     sans-serif;
-  background: var(--color-bg-tertiary);
+  background: var(--color-bg-secondary);
   color: var(--color-text-primary);
   min-height: 100vh;
-  line-height: 1.65;
+  line-height: 1.6;
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.011em;
 }
 
 /* Typography */
@@ -204,23 +204,25 @@ nav a {
   font-size: 0.9375rem;
   transition: color var(--transition-fast);
   padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  letter-spacing: -0.011em;
 }
 
 nav a:hover {
   color: var(--color-text-primary);
-  background: var(--color-bg-hover);
+  background: var(--color-bg-secondary);
 }
 
 nav a.active {
   color: var(--color-primary);
   background: var(--color-primary-light);
+  font-weight: 600;
 }
 
-/* Buttons */
+/* Buttons - Minimalist SaaS Style */
 .btn {
   border: none;
-  padding: 0.625rem 1.25rem;
+  padding: 0.625rem 1.5rem;
   border-radius: var(--radius-lg);
   cursor: pointer;
   font-size: 0.9375rem;
@@ -231,19 +233,20 @@ nav a.active {
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
-  font-family: inherit;
+  font-family: 'Roboto', sans-serif;
   white-space: nowrap;
+  letter-spacing: -0.011em;
 }
 
 .btn-primary {
   background: var(--color-primary);
   color: white;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .btn-primary:hover {
   background: var(--color-primary-hover);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
   transform: translateY(-1px);
 }
 
@@ -251,13 +254,13 @@ nav a.active {
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .btn-secondary:hover {
-  background: var(--color-bg-hover);
+  background: var(--color-bg-secondary);
   border-color: var(--color-border-hover);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
   transform: translateY(-1px);
 }
 
@@ -266,9 +269,10 @@ nav a.active {
 }
 
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 .btn.loading {
