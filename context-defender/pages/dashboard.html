@@ -143,17 +143,6 @@
               href="#"
               class="nav-item"
               onclick="
-                showSection('schedule');
-                return false;
-              "
-            >
-              <i class="fas fa-calendar-alt"></i>
-              Schedule Optimizer
-            </a>
-            <a
-              href="#"
-              class="nav-item"
-              onclick="
                 showSection('calendar');
                 return false;
               "
@@ -504,7 +493,7 @@
               <div
                 class="action-card"
                 onclick="
-                  showSection('schedule');
+                  showSection('tasks');
                   return false;
                 "
                 style="
@@ -538,11 +527,11 @@
                 >
                   <i class="fas fa-bolt"></i>
                 </div>
-                <h3>Optimize Schedule</h3>
+                <h3>Optimize Tasks</h3>
                 <p
                   style="color: var(--color-text-secondary); font-size: 0.9rem"
                 >
-                  Let AI optimize your daily schedule
+                  Let AI batch tasks to reduce switching
                 </p>
               </div>
               <div
@@ -661,6 +650,12 @@
                 >
                   Pending
                 </button>
+                <button
+                  class="btn btn-secondary"
+                  onclick="completeSchedule()"
+                >
+                  <i class="fas fa-wand-magic-sparkles"></i> Complete Schedule
+                </button>
                 <button class="btn" onclick="openAddTaskModal()">
                   <i class="fas fa-plus"></i> Add Task
                 </button>
@@ -680,196 +675,37 @@
                 <!-- All tasks will be loaded here -->
               </div>
             </div>
-          </section>
 
-          <!-- Schedule Section -->
-          <section
-            id="scheduleSection"
-            class="dashboard-section"
-            style="display: none"
-          >
-            <div class="content-header">
-              <div>
-                <h2>AI Schedule Optimizer</h2>
-                <p style="color: var(--color-text-secondary)">
-                  Minimize context switching with AI-powered task batching
-                </p>
-              </div>
-            </div>
-
-            <!-- Step 1: Task Input -->
-            <div id="step1Container">
-              <div class="input-section">
-                <h3><i class="fas fa-tasks"></i> Add Tasks</h3>
-                <p
-                  style="
-                    color: var(--color-text-secondary);
-                    margin-bottom: 1rem;
-                  "
-                >
-                  Add your tasks with name and duration. Category is optional -
-                  AI will auto-categorize if left blank.
-                </p>
-
-                <div class="task-form">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label for="taskName">Task Name</label>
-                      <input
-                        type="text"
-                        id="taskName"
-                        placeholder="e.g., Review backend APIs"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="taskDuration">Duration (mins)</label>
-                      <input
-                        type="number"
-                        id="taskDuration"
-                        min="1"
-                        placeholder="30"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="taskCategory"
-                        >Category
-                        <span
-                          style="
-                            color: var(--color-text-tertiary);
-                            font-weight: 400;
-                          "
-                          >(optional)</span
-                        ></label
-                      >
-                      <select
-                        id="taskCategory"
-                        style="
-                          padding: 0.75rem;
-                          border: 1px solid var(--color-border);
-                          border-radius: 8px;
-                          font-size: 0.95rem;
-                          background: var(--color-bg-primary);
-                        "
-                      >
-                        <option value="">AI will decide</option>
-                        <option value="Deep Work">
-                          Deep Work (coding, writing, analysis)
-                        </option>
-                        <option value="Admin">
-                          Admin (email, scheduling, paperwork)
-                        </option>
-                        <option value="Calls">Calls (meetings, calls)</option>
-                        <option value="Communication">
-                          Communication (Slack, messages)
-                        </option>
-                        <option value="Errands">
-                          Errands (shopping, appointments)
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                  <button class="btn btn-secondary" onclick="addTask()">
-                    <i class="fas fa-plus"></i> Add Task
-                  </button>
-                </div>
-
-                <div
-                  id="taskListSection"
-                  style="display: none; margin-top: 2rem"
-                >
-                  <h3>Your Tasks (<span id="taskCount">0</span>)</h3>
-                  <div id="taskList" class="task-list-items"></div>
-                </div>
-
-                <div class="button-group" style="margin-top: 1.5rem">
-                  <button class="btn btn-secondary" onclick="clearAllTasks()">
-                    <i class="fas fa-eraser"></i> Clear All
-                  </button>
-                </div>
-                <!-- Optimization Status & View Button -->
-                <div
-                  id="optimizationStatus"
-                  style="
-                    margin-top: 1.5rem;
-                    padding: 1rem;
-                    border-radius: 12px;
-                    background: var(--color-bg-secondary);
-                    border: 1px solid var(--color-border);
-                  "
-                >
-                  <div
-                    id="statusContent"
-                    style="
-                      display: flex;
-                      align-items: center;
-                      justify-content: space-between;
-                      flex-wrap: wrap;
-                      gap: 1rem;
-                    "
-                  >
-                    <div
-                      style="display: flex; align-items: center; gap: 0.75rem"
-                    >
-                      <div id="statusIcon" style="font-size: 1.25rem">⏳</div>
-                      <div>
-                        <div
-                          id="statusText"
-                          style="
-                            font-weight: 600;
-                            color: var(--color-text-primary);
-                          "
-                        >
-                          Add 3+ tasks to optimize
-                        </div>
-                        <div
-                          id="statusSubtext"
-                          style="
-                            font-size: 0.8rem;
-                            color: var(--color-text-tertiary);
-                          "
-                        >
-                          AI will analyze your schedule automatically
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      id="viewSchedulesBtn"
-                      class="btn btn-primary"
-                      onclick="showStep2()"
-                      disabled
-                      style="opacity: 0.5"
-                    >
-                      <i class="fas fa-calendar-alt"></i> View Schedules
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Step 1 -->
-
-            <!-- Step 2: Schedule Results -->
-            <div id="step2Container" style="display: none">
-              <!-- Back to Edit Button -->
-              <div style="margin-bottom: 1.5rem">
-                <button
-                  class="btn btn-secondary"
-                  onclick="showStep1()"
-                  style="display: flex; align-items: center; gap: 0.5rem"
-                >
-                  <i class="fas fa-arrow-left"></i> Edit Tasks
-                </button>
-              </div>
-
-              <div id="loadingState" style="display: none">
-                <div class="loading-spinner">
-                  <div class="spinner"></div>
-                  <p style="margin-top: 1rem; color: #666">
-                    Analyzing your schedule...
+            <div
+              style="
+                margin-top: 2.5rem;
+                border-top: 1px solid var(--color-border);
+                padding-top: 2rem;
+              "
+              id="optimizerPanel"
+            >
+              <div class="content-header" style="margin-bottom: 1.5rem">
+                <div>
+                  <h2>Optimized Schedule Options</h2>
+                  <p style="color: var(--color-text-secondary)">
+                    Review the three AI-generated schedules after you complete
+                    your task list.
                   </p>
                 </div>
               </div>
 
-              <div id="resultsContainer" style="display: none">
+              <!-- Step 2: Schedule Results -->
+              <div id="step2Container" style="display: none">
+                <div id="loadingState" style="display: none">
+                  <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 1rem; color: #666">
+                      Analyzing your schedule...
+                    </p>
+                  </div>
+                </div>
+
+                <div id="resultsContainer" style="display: none">
                 <!-- Start Time Input -->
                 <div
                   class="start-time-picker"
@@ -1072,7 +908,8 @@
               </div>
             </div>
             <!-- End Step 2 -->
-          </section>
+          </div>
+        </section>
 
           <!-- Analytics Section -->
           <section
@@ -2040,7 +1877,15 @@
                 <button
                   class="btn btn-secondary"
                   onclick="importFromOptimizer()"
-                  style="width: 100%; margin-top: var(--space-md)"
+                  style="
+                    width: 100%;
+                    margin-top: var(--space-md);
+                    font-size: 0.8rem;
+                    line-height: 1.2;
+                    padding: 0.6rem 0.75rem;
+                    white-space: normal;
+                    text-align: center;
+                  "
                 >
                   <i class="fas fa-download"></i> Import from Optimizer
                 </button>
@@ -2084,7 +1929,15 @@
                   id="googleCalendarBtn"
                   class="btn btn-primary"
                   onclick="handleGoogleCalendar()"
-                  style="width: 100%; margin-bottom: var(--space-sm)"
+                  style="
+                    width: 100%;
+                    margin-bottom: var(--space-sm);
+                    font-size: 0.8rem;
+                    line-height: 1.2;
+                    padding: 0.6rem 0.75rem;
+                    white-space: normal;
+                    text-align: center;
+                  "
                 >
                   <i class="fab fa-google"></i> Connect Google Calendar
                 </button>
@@ -2092,7 +1945,15 @@
                   id="importCalendarBtn"
                   class="btn btn-secondary"
                   onclick="importGoogleCalendarEvents()"
-                  style="width: 100%; display: none"
+                  style="
+                    width: 100%;
+                    display: none;
+                    font-size: 0.8rem;
+                    line-height: 1.2;
+                    padding: 0.6rem 0.75rem;
+                    white-space: normal;
+                    text-align: center;
+                  "
                   disabled
                 >
                   <i class="fas fa-download"></i> Import Events
@@ -2663,11 +2524,12 @@
       let optimizationReady = false;
       const AUTO_OPTIMIZE_DELAY = 3000; // 3 second debounce
       const MIN_TASKS_FOR_AUTO_OPTIMIZE = 3;
+      const ENABLE_AUTO_OPTIMIZE = false;
 
       // Step Navigation
       window.showStep1 = function () {
-        document.getElementById("step1Container").style.display = "block";
-        document.getElementById("step2Container").style.display = "none";
+        const step2 = document.getElementById("step2Container");
+        if (step2) step2.style.display = "none";
       };
 
       window.showStep2 = function () {
@@ -2675,8 +2537,8 @@
           alert("Please wait for optimization to complete.");
           return;
         }
-        document.getElementById("step1Container").style.display = "none";
-        document.getElementById("step2Container").style.display = "block";
+        const step2 = document.getElementById("step2Container");
+        if (step2) step2.style.display = "block";
 
         // Render schedules
         const startTime =
@@ -2693,6 +2555,15 @@
         const statusSubtext = document.getElementById("statusSubtext");
         const viewBtn = document.getElementById("viewSchedulesBtn");
         const statusDiv = document.getElementById("optimizationStatus");
+        if (
+          !statusIcon ||
+          !statusText ||
+          !statusSubtext ||
+          !viewBtn ||
+          !statusDiv
+        ) {
+          return;
+        }
 
         if (tasks.length < MIN_TASKS_FOR_AUTO_OPTIMIZE) {
           statusIcon.textContent = "⏳";
@@ -2729,6 +2600,9 @@
 
       // Auto-optimize with debounce
       function scheduleAutoOptimize() {
+        if (!ENABLE_AUTO_OPTIMIZE) {
+          return;
+        }
         if (autoOptimizeTimer) {
           clearTimeout(autoOptimizeTimer);
         }
@@ -3235,9 +3109,6 @@
           duration: task.estimatedTime || 30,
           sourceTaskId: task.id,
         }));
-
-        renderTaskList();
-        scheduleAutoOptimize();
       }
 
       function saveManagedTasks() {
@@ -3686,9 +3557,31 @@
           saveUser();
           updateUserUI();
           alert(
-            "Schedule optimized! Check the Schedule Optimizer section for details.",
+            "Schedule optimized! Check the Tasks section for details.",
           );
         }, 1000);
+      };
+
+      window.completeSchedule = async function () {
+        if (typeof syncOptimizerTasksFromManaged === "function") {
+          syncOptimizerTasksFromManaged();
+        }
+        if (tasks.length === 0) {
+          alert("Add tasks to complete your schedule.");
+          return;
+        }
+        const step2 = document.getElementById("step2Container");
+        const loading = document.getElementById("loadingState");
+        const results = document.getElementById("resultsContainer");
+        if (step2) step2.style.display = "block";
+        if (loading) loading.style.display = "block";
+        if (results) results.style.display = "none";
+        isOptimizing = true;
+        optimizationReady = false;
+        await runOptimization();
+        if (optimizationReady) {
+          showStep2();
+        }
       };
 
       // Section navigation
@@ -3723,11 +3616,10 @@
         // Refresh section content
         if (section === "tasks") {
           renderManagedTasks();
+          syncOptimizerTasksFromManaged();
         } else if (section === "overview") {
           updateOverview();
           renderManagedTasks();
-        } else if (section === "schedule") {
-          syncOptimizerTasksFromManaged();
         } else if (section === "analytics") {
           updateCharts();
         } else if (section === "calendar") {
@@ -3779,6 +3671,9 @@
         const taskListSection = document.getElementById("taskListSection");
         const taskList = document.getElementById("taskList");
         const taskCount = document.getElementById("taskCount");
+        if (!taskListSection || !taskList || !taskCount) {
+          return;
+        }
 
         if (tasks.length === 0) {
           taskListSection.style.display = "none";
@@ -4471,9 +4366,9 @@
         console.log("lastOptimizedSchedule:", lastOptimizedSchedule);
 
         if (!lastOptimizedSchedule || !lastOptimizedSchedule.flow) {
-          alert(
-            "No optimized schedule found. Please run the Schedule Optimizer first.",
-          );
+        alert(
+            "No optimized schedule found. Please run AI Task Batching in Tasks.",
+        );
           return;
         }
 
