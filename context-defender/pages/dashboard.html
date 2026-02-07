@@ -830,203 +830,396 @@
           </section>
 
           <!-- Analytics Section -->
-          <section
-            id="analyticsSection"
-            class="dashboard-section"
-            style="display: none"
-          >
-            <div class="content-header">
-              <div>
-                <h2>Productivity Analytics</h2>
-                <p
-                  style="color: var(--color-text-secondary); margin-top: 0.5rem"
-                >
-                  Detailed insights into your productivity
-                </p>
-              </div>
-            </div>
+<section id="analyticsSection" class="dashboard-section" style="display: none">
+  <div class="content-header">
+    <div>
+      <h2>Productivity Analytics</h2>
+      <p style="color: var(--color-text-secondary); margin-top: 0.5rem">
+        Detailed insights into your productivity and optimizer performance
+      </p>
+    </div>
+    <button class="btn btn-secondary" onclick="refreshAnalytics()">
+      <i class="fas fa-sync-alt"></i> Refresh Data
+    </button>
+  </div>
 
-            <div
-              class="stats-grid"
-              style="
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 1.5rem;
-                margin-bottom: 2rem;
-              "
-            >
-              <div
-                class="stat-card"
-                style="
-                  background: white;
-                  padding: 1.5rem;
-                  border-radius: 12px;
-                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-                "
-              >
-                <h3
-                  style="
-                    color: #666;
-                    font-size: 0.9rem;
-                    margin-bottom: 0.5rem;
-                    text-transform: uppercase;
-                  "
-                >
-                  Weekly Average
-                </h3>
-                <div
-                  class="stat-value"
-                  style="
-                    font-size: 2rem;
-                    font-weight: bold;
-                    color: #000000;
-                    margin-bottom: 0.5rem;
-                  "
-                >
-                  82%
-                </div>
-                <div
-                  class="stat-change"
-                  style="font-size: 0.9rem; color: #28a745"
-                >
-                  +7% from last week
-                </div>
-              </div>
-              <div
-                class="stat-card"
-                style="
-                  background: white;
-                  padding: 1.5rem;
-                  border-radius: 12px;
-                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-                "
-              >
-                <h3
-                  style="
-                    color: #666;
-                    font-size: 0.9rem;
-                    margin-bottom: 0.5rem;
-                    text-transform: uppercase;
-                  "
-                >
-                  Focus Streak
-                </h3>
-                <div
-                  class="stat-value"
-                  style="
-                    font-size: 2rem;
-                    font-weight: bold;
-                    color: #000000;
-                    margin-bottom: 0.5rem;
-                  "
-                >
-                  14 days
-                </div>
-                <div
-                  class="stat-change"
-                  style="font-size: 0.9rem; color: #28a745"
-                >
-                  Personal best!
-                </div>
-              </div>
-              <div
-                class="stat-card"
-                style="
-                  background: white;
-                  padding: 1.5rem;
-                  border-radius: 12px;
-                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-                "
-              >
-                <h3
-                  style="
-                    color: #666;
-                    font-size: 0.9rem;
-                    margin-bottom: 0.5rem;
-                    text-transform: uppercase;
-                  "
-                >
-                  Task Completion
-                </h3>
-                <div
-                  class="stat-value"
-                  style="
-                    font-size: 2rem;
-                    font-weight: bold;
-                    color: #000000;
-                    margin-bottom: 0.5rem;
-                  "
-                >
-                  94%
-                </div>
-                <div
-                  class="stat-change"
-                  style="font-size: 0.9rem; color: #28a745"
-                >
-                  +4% this month
-                </div>
-              </div>
-              <div
-                class="stat-card"
-                style="
-                  background: white;
-                  padding: 1.5rem;
-                  border-radius: 12px;
-                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-                "
-              >
-                <h3
-                  style="
-                    color: #666;
-                    font-size: 0.9rem;
-                    margin-bottom: 0.5rem;
-                    text-transform: uppercase;
-                  "
-                >
-                  AI Effectiveness
-                </h3>
-                <div
-                  class="stat-value"
-                  style="
-                    font-size: 2rem;
-                    font-weight: bold;
-                    color: #000000;
-                    margin-bottom: 0.5rem;
-                  "
-                >
-                  92%
-                </div>
-                <div
-                  class="stat-change"
-                  style="font-size: 0.9rem; color: #28a745"
-                >
-                  High optimization rate
-                </div>
-              </div>
-            </div>
+  <div class="stats-grid" style="
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  ">
+    <div class="stat-card" style="
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    ">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+        <h3 style="
+          color: #666;
+          font-size: 0.9rem;
+          text-transform: uppercase;
+        ">
+          Optimizer Efficiency
+        </h3>
+        <i class="fas fa-bolt" style="color: #ff6600;"></i>
+      </div>
+      <div class="stat-value" style="
+        font-size: 2rem;
+        font-weight: bold;
+        color: #000000;
+        margin-bottom: 0.5rem;
+      ">
+        <span id="optimizerEfficiency">0</span>%
+      </div>
+      <div class="stat-change" id="optimizerEfficiencyChange" style="font-size: 0.9rem; color: #28a745">
+        +0% from last week
+      </div>
+    </div>
+    
+    <div class="stat-card" style="
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    ">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+        <h3 style="
+          color: #666;
+          font-size: 0.9rem;
+          text-transform: uppercase;
+        ">
+          Time Saved
+        </h3>
+        <i class="fas fa-clock" style="color: #28a745;"></i>
+      </div>
+      <div class="stat-value" style="
+        font-size: 2rem;
+        font-weight: bold;
+        color: #000000;
+        margin-bottom: 0.5rem;
+      ">
+        <span id="totalTimeSaved">0</span>h
+      </div>
+      <div class="stat-change" id="timeSavedChange" style="font-size: 0.9rem; color: #28a745">
+        +0h this week
+      </div>
+    </div>
+    
+    <div class="stat-card" style="
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    ">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+        <h3 style="
+          color: #666;
+          font-size: 0.9rem;
+          text-transform: uppercase;
+        ">
+          Context Switches Reduced
+        </h3>
+        <i class="fas fa-exchange-alt" style="color: #dc2626;"></i>
+      </div>
+      <div class="stat-value" style="
+        font-size: 2rem;
+        font-weight: bold;
+        color: #000000;
+        margin-bottom: 0.5rem;
+      ">
+        <span id="contextSwitchesReduced">0</span>
+      </div>
+      <div class="stat-change" id="switchesReducedChange" style="font-size: 0.9rem; color: #28a745">
+        -0 this week
+      </div>
+    </div>
+    
+    <div class="stat-card" style="
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    ">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+        <h3 style="
+          color: #666;
+          font-size: 0.9rem;
+          text-transform: uppercase;
+        ">
+          Optimization Success Rate
+        </h3>
+        <i class="fas fa-chart-line" style="color: #2563eb;"></i>
+      </div>
+      <div class="stat-value" style="
+        font-size: 2rem;
+        font-weight: bold;
+        color: #000000;
+        margin-bottom: 0.5rem;
+      ">
+        <span id="optimizationSuccessRate">0</span>%
+      </div>
+      <div class="stat-change" id="successRateChange" style="font-size: 0.9rem; color: #28a745">
+        +0% from last month
+      </div>
+    </div>
+  </div>
 
-            <div
-              class="chart-container"
-              style="
-                background: white;
-                padding: 1.5rem;
-                border-radius: 12px;
-                margin-bottom: 2rem;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-              "
-            >
-              <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
-                Monthly Performance
-              </h3>
-              <div
-                class="productivity-chart"
-                id="monthlyChart"
-                style="height: 200px; display: flex; padding: 1rem 0"
-              >
-                <!-- Monthly chart will be generated here -->
-              </div>
-            </div>
-          </section>
+  <div style="
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  ">
+    <!-- Optimizer Performance Chart -->
+    <div class="chart-container" style="
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    ">
+      <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
+        <i class="fas fa-chart-bar"></i> Optimizer Performance Over Time
+      </h3>
+      <div id="optimizerPerformanceChart" style="height: 300px; padding: 1rem 0">
+        <!-- Performance chart will be generated here -->
+      </div>
+    </div>
+
+    <!-- Category Optimization Effectiveness -->
+    <div class="chart-container" style="
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    ">
+      <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
+        <i class="fas fa-layer-group"></i> Category Optimization Effectiveness
+      </h3>
+      <div id="categoryEffectivenessChart" style="height: 300px; padding: 1rem 0">
+        <!-- Category effectiveness chart will be generated here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Optimizer Metrics -->
+  <div class="chart-container" style="
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  ">
+    <h3 style="color: var(--color-text-primary); margin-bottom: 1.5rem">
+      <i class="fas fa-cogs"></i> Detailed Optimizer Metrics
+    </h3>
+    
+    <div style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    ">
+      <!-- Algorithm Performance -->
+      <div class="metric-card" style="
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid #ff6600;
+      ">
+        <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem;">
+          <i class="fas fa-brain"></i> Algorithm Performance
+        </h4>
+        <div class="metric-item" style="margin-bottom: 0.75rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+            <span style="color: #666; font-size: 0.875rem;">Batch Grouping Accuracy</span>
+            <span style="font-weight: 600; color: #000;" id="batchAccuracy">0%</span>
+          </div>
+          <div style="
+            background: #e5e7eb;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+          ">
+            <div id="batchAccuracyBar" style="
+              height: 100%;
+              background: #ff6600;
+              width: 0%;
+              transition: width 0.3s ease;
+            "></div>
+          </div>
+        </div>
+        <div class="metric-item" style="margin-bottom: 0.75rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+            <span style="color: #666; font-size: 0.875rem;">Context Switch Prediction</span>
+            <span style="font-weight: 600; color: #000;" id="switchPrediction">0%</span>
+          </div>
+          <div style="
+            background: #e5e7eb;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+          ">
+            <div id="switchPredictionBar" style="
+              height: 100%;
+              background: #2563eb;
+              width: 0%;
+              transition: width 0.3s ease;
+            "></div>
+          </div>
+        </div>
+        <div class="metric-item">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+            <span style="color: #666; font-size: 0.875rem;">Task Sequencing Score</span>
+            <span style="font-weight: 600; color: #000;" id="sequencingScore">0%</span>
+          </div>
+          <div style="
+            background: #e5e7eb;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+          ">
+            <div id="sequencingScoreBar" style="
+              height: 100%;
+              background: #10b981;
+              width: 0%;
+              transition: width 0.3s ease;
+            "></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Time Optimization -->
+      <div class="metric-card" style="
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid #10b981;
+      ">
+        <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem;">
+          <i class="fas fa-clock"></i> Time Optimization
+        </h4>
+        <div class="metric-item" style="margin-bottom: 0.75rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #666; font-size: 0.875rem;">Average Time Saved per Session</span>
+            <span style="font-weight: 600; color: #000;" id="avgTimeSaved">0m</span>
+          </div>
+        </div>
+        <div class="metric-item" style="margin-bottom: 0.75rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #666; font-size: 0.875rem;">Total Optimized Tasks</span>
+            <span style="font-weight: 600; color: #000;" id="totalOptimizedTasks">0</span>
+          </div>
+        </div>
+        <div class="metric-item" style="margin-bottom: 0.75rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #666; font-size: 0.875rem;">Average Session Duration</span>
+            <span style="font-weight: 600; color: #000;" id="avgSessionDuration">0m</span>
+          </div>
+        </div>
+        <div class="metric-item">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #666; font-size: 0.875rem;">Peak Optimization Time</span>
+            <span style="font-weight: 600; color: #000;" id="peakOptimizationTime">N/A</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Engagement -->
+      <div class="metric-card" style="
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid #8b5cf6;
+      ">
+        <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem;">
+          <i class="fas fa-user-check"></i> User Engagement
+        </h4>
+        <div class="metric-item" style="margin-bottom: 0.75rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+            <span style="color: #666; font-size: 0.875rem;">Adoption Rate</span>
+            <span style="font-weight: 600; color: #000;" id="adoptionRate">0%</span>
+          </div>
+          <div style="
+            background: #e5e7eb;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+          ">
+            <div id="adoptionRateBar" style="
+              height: 100%;
+              background: #8b5cf6;
+              width: 0%;
+              transition: width 0.3s ease;
+            "></div>
+          </div>
+        </div>
+        <div class="metric-item" style="margin-bottom: 0.75rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #666; font-size: 0.875rem;">Weekly Optimizations</span>
+            <span style="font-weight: 600; color: #000;" id="weeklyOptimizations">0</span>
+          </div>
+        </div>
+        <div class="metric-item" style="margin-bottom: 0.75rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #666; font-size: 0.875rem;">Tasks Imported to Calendar</span>
+            <span style="font-weight: 600; color: #000;" id="tasksImported">0</span>
+          </div>
+        </div>
+        <div class="metric-item">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #666; font-size: 0.875rem;">User Satisfaction Score</span>
+            <span style="font-weight: 600; color: #000;" id="userSatisfaction">0/5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optimization History Table -->
+    <div style="margin-top: 2rem;">
+      <h4 style="color: #333; margin-bottom: 1rem; font-size: 1rem;">
+        <i class="fas fa-history"></i> Recent Optimization Sessions
+      </h4>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background: #f8f9fa;">
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Date</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Tasks</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Time Saved</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Switches Reduced</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Efficiency</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: #666; border-bottom: 2px solid #e5e7eb;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="optimizationHistory">
+            <!-- History rows will be generated here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Recommendations -->
+  <div class="chart-container" style="
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  ">
+    <h3 style="color: var(--color-text-primary); margin-bottom: 1rem">
+      <i class="fas fa-lightbulb"></i> AI Optimization Recommendations
+    </h3>
+    <div id="aiRecommendations" style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    ">
+      <!-- Recommendations will be generated here -->
+    </div>
+  </div>
+</section>
 
           <!-- Settings Section -->
           <section
