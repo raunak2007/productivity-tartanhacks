@@ -7,13 +7,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link rel="stylesheet" href="/src/styles/common.css" />
     <style>
       :root {
         --color-primary: #ff6600;
@@ -26,10 +27,10 @@
         --color-border: #e0e0e0;
         --color-border-hover: #9ca3af;
         --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.04);
-        --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.05);
-        --font-mono: 'DM Mono', monospace;
-        --font-sans: 'Instrument Sans', sans-serif;
+        --shadow-md:
+          0 2px 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.04);
+        --shadow-lg:
+          0 4px 12px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.05);
       }
 
       * {
@@ -42,82 +43,14 @@
       body {
         background: var(--color-bg-primary);
         color: var(--color-text-primary);
-        font-family: var(--font-mono);
-        font-weight: 400;
+        font-family:
+          "Roboto",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        font-weight: 500;
         background-image: radial-gradient(#2b2b2b 1px, transparent 1px);
         background-size: 35px 35px;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
-      }
-
-      /* Header */
-      header {
-        background: var(--color-bg-primary);
-        border-bottom: 1px solid var(--color-border);
-        padding: 1rem 0;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        backdrop-filter: blur(8px);
-      }
-
-      header .container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      header h1 {
-        font-family: var(--font-sans);
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--color-text-primary);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      header h1 i {
-        color: var(--color-primary);
-      }
-
-      nav {
-        display: flex;
-        gap: 2rem;
-      }
-
-      nav a {
-        font-family: var(--font-sans);
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--color-text-secondary);
-        text-decoration: none;
-        transition: color 0.2s;
-        padding: 0.5rem 0;
-        position: relative;
-      }
-
-      nav a:hover {
-        color: var(--color-text-primary);
-      }
-
-      nav a.active {
-        color: var(--color-primary);
-      }
-
-      nav a.active::after {
-        content: '';
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: var(--color-primary);
       }
 
       /* Hero Section */
@@ -445,12 +378,15 @@
     <div id="app">
       <header>
         <div class="container">
-          <h1 onclick="window.location.href = '/'">
+          <h1
+            onclick="window.location.href = '/pages/landing.html'"
+            style="cursor: pointer"
+          >
             <i class="fas fa-shield-alt"></i> Utilio
           </h1>
           <nav>
-            <a href="/" class="active">Home</a>
-            <a href="/dashboard">Dashboard</a>
+            <a href="/pages/landing.html" class="active">Home</a>
+            <a href="/pages/dashboard.html">Dashboard</a>
             <a href="#about">About</a>
             <a href="#features">Features</a>
           </nav>
@@ -463,23 +399,40 @@
             <div class="hero-grid">
               <div class="hero-content">
                 <h2>
-                  Stop losing time to <span class="highlight">context switching</span>
+                  Stop losing time to
+                  <span class="highlight">context switching</span>
                 </h2>
                 <p>
-                  Your brain wasn't built for chaos. Utilio uses AI to batch similar tasks, minimize switching costs, and maximize your deep work time.
+                  Your brain wasn't built for chaos. Utilio uses AI to batch
+                  similar tasks, minimize switching costs, and maximize your
+                  deep work time.
                 </p>
-                <a href="/dashboard" class="btn">
+                <a href="/pages/dashboard.html" class="btn">
                   Get Started <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
               <div class="hero-visual">
-                <div class="code-line"><span class="number">1</span>Tasks: [email, code, meeting, code, email]</div>
-                <div class="code-line"><span class="number">2</span>Context switches: 4</div>
-                <div class="code-line"><span class="number">3</span>Time lost: ~92 minutes</div>
+                <div class="code-line">
+                  <span class="number">1</span>Tasks: [email, code, meeting,
+                  code, email]
+                </div>
+                <div class="code-line">
+                  <span class="number">2</span>Context switches: 4
+                </div>
+                <div class="code-line">
+                  <span class="number">3</span>Time lost: ~92 minutes
+                </div>
                 <hr class="code-divider" />
-                <div class="code-line highlight"><span class="number">4</span>✓ Optimized: [code, code, email, email, meeting]</div>
-                <div class="code-line highlight"><span class="number">5</span>✓ Context switches: 2</div>
-                <div class="code-line highlight"><span class="number">6</span>✓ Time saved: ~46 minutes</div>
+                <div class="code-line highlight">
+                  <span class="number">4</span>✓ Optimized: [code, code, email,
+                  email, meeting]
+                </div>
+                <div class="code-line highlight">
+                  <span class="number">5</span>✓ Context switches: 2
+                </div>
+                <div class="code-line highlight">
+                  <span class="number">6</span>✓ Time saved: ~46 minutes
+                </div>
               </div>
             </div>
           </div>
@@ -495,32 +448,51 @@
               <div class="feature-card">
                 <i class="fas fa-brain feature-icon"></i>
                 <h3>AI-Powered Task Batching</h3>
-                <p>Our cognitive science consultant analyzes your tasks and groups similar work together, eliminating wasteful context switches.</p>
+                <p>
+                  Our cognitive science consultant analyzes your tasks and
+                  groups similar work together, eliminating wasteful context
+                  switches.
+                </p>
               </div>
               <div class="feature-card">
                 <i class="fas fa-bolt feature-icon"></i>
                 <h3>Real-Time Cost Analysis</h3>
-                <p>See exactly how much time you're losing to chaos vs. optimized flow. Every switch has a price.</p>
+                <p>
+                  See exactly how much time you're losing to chaos vs. optimized
+                  flow. Every switch has a price.
+                </p>
               </div>
               <div class="feature-card">
                 <i class="fas fa-bullseye feature-icon"></i>
                 <h3>Smart Scheduling</h3>
-                <p>Preserve cognitive flow by maintaining mental state. Deep work stays deep.</p>
+                <p>
+                  Preserve cognitive flow by maintaining mental state. Deep work
+                  stays deep.
+                </p>
               </div>
               <div class="feature-card">
                 <i class="fas fa-chart-line feature-icon"></i>
                 <h3>Visual Productivity Analytics</h3>
-                <p>Track your efficiency gains with side-by-side comparisons of chaotic vs. optimized schedules.</p>
+                <p>
+                  Track your efficiency gains with side-by-side comparisons of
+                  chaotic vs. optimized schedules.
+                </p>
               </div>
               <div class="feature-card">
                 <i class="fas fa-lightbulb feature-icon"></i>
                 <h3>Research-Backed</h3>
-                <p>Built on cognitive science principles of attention and mental state transitions.</p>
+                <p>
+                  Built on cognitive science principles of attention and mental
+                  state transitions.
+                </p>
               </div>
               <div class="feature-card">
                 <i class="fas fa-rocket feature-icon"></i>
                 <h3>Instant Results</h3>
-                <p>Paste your tasks, get an optimized schedule in seconds. Zero configuration.</p>
+                <p>
+                  Paste your tasks, get an optimized schedule in seconds. Zero
+                  configuration.
+                </p>
               </div>
             </div>
           </div>
@@ -553,16 +525,26 @@
             <div class="about-content">
               <h2 class="section-header">About Utilio</h2>
               <p>
-                Every time you switch between different types of tasks—from coding to email, writing to meetings—your brain pays a steep price. It can take up to 23 minutes to fully regain focus after an interruption.
+                Every time you switch between different types of tasks—from
+                coding to email, writing to meetings—your brain pays a steep
+                price. It can take up to 23 minutes to fully regain focus after
+                an interruption.
               </p>
               <p>
-                Research shows that multitasking reduces productivity by up to 40%. The constant task-switching drains mental energy, causes errors, and leaves you exhausted by the end of the day.
+                Research shows that multitasking reduces productivity by up to
+                40%. The constant task-switching drains mental energy, causes
+                errors, and leaves you exhausted by the end of the day.
               </p>
               <p>
-                Utilio solves this by intelligently batching similar tasks together. Instead of scattering your attention, it creates blocks of focused work time. The result? Deeper concentration, faster completion, and significantly less cognitive fatigue.
+                Utilio solves this by intelligently batching similar tasks
+                together. Instead of scattering your attention, it creates
+                blocks of focused work time. The result? Deeper concentration,
+                faster completion, and significantly less cognitive fatigue.
               </p>
               <p>
-                Built during TartanHacks 2025, Utilio transforms how knowledge workers approach their day—defending against the invisible costs of chaotic scheduling.
+                Built during TartanHacks 2025, Utilio transforms how knowledge
+                workers approach their day—defending against the invisible costs
+                of chaotic scheduling.
               </p>
             </div>
           </div>
@@ -573,7 +555,7 @@
             <div class="cta-content">
               <h2>Ready to reclaim your focus?</h2>
               <p>See how much time you could save with an optimized schedule</p>
-              <a href="/dashboard" class="btn">
+              <a href="/pages/dashboard.html" class="btn">
                 Try Utilio <i class="fas fa-arrow-right"></i>
               </a>
             </div>
@@ -590,85 +572,85 @@
 
     <script>
       // Smooth scroll for anchor links
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          const href = this.getAttribute('href');
-          if (href === '#') return;
-          
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          const href = this.getAttribute("href");
+          if (href === "#") return;
+
           e.preventDefault();
           const target = document.querySelector(href);
           if (target) {
             target.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
+              behavior: "smooth",
+              block: "start",
             });
           }
         });
       });
 
       // Header background on scroll
-      window.addEventListener('scroll', () => {
-        const header = document.querySelector('header');
+      window.addEventListener("scroll", () => {
+        const header = document.querySelector("header");
         if (window.scrollY > 100) {
-          header.style.background = 'rgba(255, 255, 255, 0.95)';
-          header.style.backdropFilter = 'blur(8px)';
-          header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+          header.style.background = "rgba(255, 255, 255, 0.95)";
+          header.style.backdropFilter = "blur(8px)";
+          header.style.boxShadow = "0 2px 20px rgba(0, 0, 0, 0.1)";
         } else {
-          header.style.background = 'var(--color-bg-primary)';
-          header.style.backdropFilter = 'none';
-          header.style.boxShadow = 'none';
+          header.style.background = "var(--color-bg-primary)";
+          header.style.backdropFilter = "none";
+          header.style.boxShadow = "none";
         }
       });
 
       // Animate stats counter
       const observerOptions = {
-        threshold: 0.5
+        threshold: 0.5,
       };
 
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const statNumber = entry.target.querySelector('.stat-number');
-            if (statNumber && !statNumber.classList.contains('animated')) {
+            const statNumber = entry.target.querySelector(".stat-number");
+            if (statNumber && !statNumber.classList.contains("animated")) {
               animateCounter(statNumber);
-              statNumber.classList.add('animated');
+              statNumber.classList.add("animated");
             }
           }
         });
       }, observerOptions);
 
-      document.querySelectorAll('.stat-card').forEach(card => {
+      document.querySelectorAll(".stat-card").forEach((card) => {
         observer.observe(card);
       });
 
       function animateCounter(element) {
         const finalValue = parseFloat(element.textContent);
-        const suffix = element.textContent.replace(/[0-9.]/g, '');
+        const suffix = element.textContent.replace(/[0-9.]/g, "");
         const duration = 2000;
         const startTime = performance.now();
-        
+
         function updateCounter(currentTime) {
           const elapsed = currentTime - startTime;
           const progress = Math.min(elapsed / duration, 1);
           const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-          
+
           let currentValue;
-          if (element.textContent.includes('$')) {
+          if (element.textContent.includes("$")) {
             currentValue = Math.floor(easeProgress * finalValue);
-          } else if (element.textContent.includes('min')) {
+          } else if (element.textContent.includes("min")) {
             currentValue = Math.floor(easeProgress * finalValue);
           } else {
             currentValue = easeProgress * finalValue;
             currentValue = currentValue.toFixed(currentValue % 1 === 0 ? 0 : 1);
           }
-          
+
           element.textContent = suffix ? currentValue + suffix : currentValue;
-          
+
           if (progress < 1) {
             requestAnimationFrame(updateCounter);
           }
         }
-        
+
         requestAnimationFrame(updateCounter);
       }
     </script>
