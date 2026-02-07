@@ -650,16 +650,83 @@
                 >
                   Pending
                 </button>
-                <button
-                  class="btn btn-secondary"
-                  onclick="completeSchedule()"
-                >
-                  <i class="fas fa-wand-magic-sparkles"></i> Complete Schedule
-                </button>
                 <button class="btn" onclick="openAddTaskModal()">
                   <i class="fas fa-plus"></i> Add Task
                 </button>
               </div>
+            </div>
+
+            <!-- Auto-optimize notification banner -->
+            <div
+              id="autoOptimizeNotice"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 0.85rem 1.25rem;
+                margin-bottom: 1rem;
+                border-radius: 10px;
+                font-size: 0.9rem;
+                background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+                border: 1px solid #93c5fd;
+                color: #1e40af;
+              "
+            >
+              <i class="fas fa-magic" style="font-size: 1.1rem"></i>
+              <span id="autoOptimizeNoticeText">
+                <strong>Auto-Optimize:</strong> Add 3 or more pending tasks and
+                AI will automatically generate optimized schedules for you.
+              </span>
+            </div>
+
+            <!-- Optimization status bar (hidden until optimization starts) -->
+            <div
+              id="optimizationStatus"
+              style="
+                display: none;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 0.85rem 1.25rem;
+                margin-bottom: 1rem;
+                border-radius: 10px;
+                font-size: 0.9rem;
+                background: var(--color-bg-secondary);
+                border: 1px solid var(--color-border);
+                cursor: pointer;
+              "
+              onclick="if(optimizationReady && lastOptimizedSchedule) showStep2();"
+            >
+              <span id="statusIcon" style="font-size: 1.2rem">⏳</span>
+              <div style="flex: 1">
+                <div
+                  id="statusText"
+                  style="
+                    font-weight: 600;
+                    color: var(--color-text-primary);
+                  "
+                ></div>
+                <div
+                  id="statusSubtext"
+                  style="
+                    font-size: 0.8rem;
+                    color: var(--color-text-secondary);
+                    margin-top: 0.15rem;
+                  "
+                ></div>
+              </div>
+              <button
+                id="viewSchedulesBtn"
+                class="btn btn-secondary"
+                onclick="event.stopPropagation(); showStep2();"
+                disabled
+                style="
+                  opacity: 0.5;
+                  font-size: 0.85rem;
+                  padding: 0.4rem 1rem;
+                "
+              >
+                <i class="fas fa-eye"></i> View Schedules
+              </button>
             </div>
 
             <div
@@ -688,8 +755,8 @@
                 <div>
                   <h2>Optimized Schedule Options</h2>
                   <p style="color: var(--color-text-secondary)">
-                    Review the three AI-generated schedules after you complete
-                    your task list.
+                    AI automatically generates three optimized schedules when
+                    you have 3 or more pending tasks.
                   </p>
                 </div>
               </div>
@@ -2524,7 +2591,7 @@
       let optimizationReady = false;
       const AUTO_OPTIMIZE_DELAY = 3000; // 3 second debounce
       const MIN_TASKS_FOR_AUTO_OPTIMIZE = 3;
-      const ENABLE_AUTO_OPTIMIZE = false;
+      const ENABLE_AUTO_OPTIMIZE = true;
 
       // Step Navigation
       window.showStep1 = function () {
@@ -2546,6 +2613,12 @@
         renderSchedules(lastOptimizedSchedule, startTime);
         document.getElementById("resultsContainer").style.display = "block";
         document.getElementById("loadingState").style.display = "none";
+
+        // Scroll down to the optimizer panel so the user sees the proposed plans
+        const optimizerPanel = document.getElementById("optimizerPanel");
+        if (optimizerPanel) {
+          optimizerPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       };
 
       // Update optimization status UI
@@ -2555,6 +2628,8 @@
         const statusSubtext = document.getElementById("statusSubtext");
         const viewBtn = document.getElementById("viewSchedulesBtn");
         const statusDiv = document.getElementById("optimizationStatus");
+        const noticeBanner = document.getElementById("autoOptimizeNotice");
+        const noticeText = document.getElementById("autoOptimizeNoticeText");
         if (
           !statusIcon ||
           !statusText ||
@@ -2566,19 +2641,23 @@
         }
 
         if (tasks.length < MIN_TASKS_FOR_AUTO_OPTIMIZE) {
-          statusIcon.textContent = "⏳";
-          statusText.textContent = `Add ${MIN_TASKS_FOR_AUTO_OPTIMIZE - tasks.length} more task${MIN_TASKS_FOR_AUTO_OPTIMIZE - tasks.length !== 1 ? "s" : ""} to optimize`;
-          statusSubtext.textContent =
-            "AI will analyze your schedule automatically";
-          viewBtn.disabled = true;
-          viewBtn.style.opacity = "0.5";
-          statusDiv.style.background = "var(--color-bg-secondary)";
-          statusDiv.style.borderColor = "var(--color-border)";
+          // Show the notice banner, hide the status bar
+          if (noticeBanner) {
+            noticeBanner.style.display = "flex";
+            const remaining = MIN_TASKS_FOR_AUTO_OPTIMIZE - tasks.length;
+            if (noticeText) {
+              noticeText.innerHTML = `<strong>Auto-Optimize:</strong> Add ${remaining} more pending task${remaining !== 1 ? "s" : ""} and AI will automatically generate optimized schedules for you.`;
+            }
+          }
+          statusDiv.style.display = "none";
           optimizationReady = false;
         } else if (isOptimizing) {
+          // Hide the notice, show the status bar as "analyzing"
+          if (noticeBanner) noticeBanner.style.display = "none";
+          statusDiv.style.display = "flex";
           statusIcon.innerHTML = '<div class="spinner-small"></div>';
           statusText.textContent = "Analyzing your schedule...";
-          statusSubtext.textContent = "AI is optimizing your tasks";
+          statusSubtext.textContent = "AI is generating 3 optimized schedules";
           viewBtn.disabled = true;
           viewBtn.style.opacity = "0.5";
           statusDiv.style.background =
@@ -2586,6 +2665,9 @@
           statusDiv.style.borderColor = "#93c5fd";
           optimizationReady = false;
         } else if (optimizationReady && lastOptimizedSchedule) {
+          // Hide the notice, show the status bar as "ready"
+          if (noticeBanner) noticeBanner.style.display = "none";
+          statusDiv.style.display = "flex";
           statusIcon.textContent = "✅";
           statusText.textContent = `${tasks.length} tasks optimized into 3 schedules`;
           statusSubtext.textContent =
@@ -2595,6 +2677,15 @@
           statusDiv.style.background =
             "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)";
           statusDiv.style.borderColor = "#bbf7d0";
+        } else {
+          // Tasks >= 3 but waiting to start optimization
+          if (noticeBanner) {
+            noticeBanner.style.display = "flex";
+            if (noticeText) {
+              noticeText.innerHTML = `<strong>Auto-Optimize:</strong> Optimization will begin shortly for your ${tasks.length} tasks...`;
+            }
+          }
+          statusDiv.style.display = "none";
         }
       }
 
@@ -3087,6 +3178,9 @@
               renderUnscheduledTasks();
             }
           }
+          // Sync optimizer tasks and trigger auto-optimize on load
+          syncOptimizerTasksFromManaged();
+          scheduleAutoOptimize();
         } catch (error) {
           console.error("Error loading tasks:", error);
           // Fallback to localStorage
@@ -3189,6 +3283,9 @@
             closeModal("addTaskModal");
             editingTaskId = null;
             updateOverview();
+            // Trigger auto-optimize after task update
+            syncOptimizerTasksFromManaged();
+            scheduleAutoOptimize();
             alert("Task updated successfully!");
             return;
           }
@@ -3225,6 +3322,9 @@
           alert("Task added successfully!");
           updateOverview();
           updateSyncStatus();
+          // Trigger auto-optimize after adding task
+          syncOptimizerTasksFromManaged();
+          scheduleAutoOptimize();
         } catch (error) {
           console.error("Error adding task:", error);
           alert("Task saved locally. Will sync when online.");
@@ -3237,6 +3337,9 @@
           document.getElementById("taskForm").reset();
           closeModal("addTaskModal");
           updateOverview();
+          // Trigger auto-optimize (fallback path)
+          syncOptimizerTasksFromManaged();
+          scheduleAutoOptimize();
         }
       };
 
@@ -3280,6 +3383,9 @@
               renderUnscheduledTasks();
             }
           }
+          // Re-trigger auto-optimize since pending tasks changed
+          syncOptimizerTasksFromManaged();
+          scheduleAutoOptimize();
         }
       };
 
@@ -3304,6 +3410,9 @@
               renderUnscheduledTasks();
             }
           }
+          // Re-trigger auto-optimize since tasks changed
+          syncOptimizerTasksFromManaged();
+          scheduleAutoOptimize();
         }
       };
 
@@ -3562,27 +3671,8 @@
         }, 1000);
       };
 
-      window.completeSchedule = async function () {
-        if (typeof syncOptimizerTasksFromManaged === "function") {
-          syncOptimizerTasksFromManaged();
-        }
-        if (tasks.length === 0) {
-          alert("Add tasks to complete your schedule.");
-          return;
-        }
-        const step2 = document.getElementById("step2Container");
-        const loading = document.getElementById("loadingState");
-        const results = document.getElementById("resultsContainer");
-        if (step2) step2.style.display = "block";
-        if (loading) loading.style.display = "block";
-        if (results) results.style.display = "none";
-        isOptimizing = true;
-        optimizationReady = false;
-        await runOptimization();
-        if (optimizationReady) {
-          showStep2();
-        }
-      };
+      // Auto-optimize handles schedule completion automatically
+      // The old completeSchedule button has been removed
 
       // Section navigation
       window.showSection = function (section) {
