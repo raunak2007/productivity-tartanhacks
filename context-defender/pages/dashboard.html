@@ -44,12 +44,6 @@
             <p id="userEmail" style="color: #666; font-size: 0.9rem">
               Productivity Optimizer
             </p>
-            <div class="productivity-score">
-              <p style="color: #666; margin-top: 0.5rem">
-                <i class="fas fa-chart-line" style="color: #000000"></i>
-                Productivity: <span id="productivityValue">85</span>/100
-              </p>
-            </div>
           </div>
 
           <nav class="sidebar-nav">
@@ -232,44 +226,6 @@
                   style="font-size: 0.9rem; color: #28a745"
                 >
                   <span id="completionRate">0</span>% completion rate
-                </div>
-              </div>
-              <div
-                class="stat-card"
-                style="
-                  background: white;
-                  padding: 1.5rem;
-                  border-radius: 12px;
-                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-                "
-              >
-                <h3
-                  style="
-                    color: #666;
-                    font-size: 0.9rem;
-                    margin-bottom: 0.5rem;
-                    text-transform: uppercase;
-                  "
-                >
-                  Productivity Score
-                </h3>
-                <div
-                  class="stat-value"
-                  style="
-                    font-size: 2rem;
-                    font-weight: bold;
-                    color: #000000;
-                    margin-bottom: 0.5rem;
-                  "
-                  id="overviewScore"
-                >
-                  85
-                </div>
-                <div
-                  class="stat-change"
-                  style="font-size: 0.9rem; color: #28a745"
-                >
-                  +5 this week
                 </div>
               </div>
               <div
@@ -1708,6 +1664,30 @@
                 color: #333;
                 font-weight: 500;
               "
+              >Due Date</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="taskDueDate"
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 1rem;
+              "
+            />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label
+              style="
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #333;
+                font-weight: 500;
+              "
               >Energy Level Required</label
             >
             <select
@@ -1754,6 +1734,9 @@
       // Task storage
       let tasks = [];
       let managedTasks = []; // For the task management section
+      let currentTaskFilter = "all";
+      let draggedManagedTaskId = null;
+      let managedDragState = null;
       let currentUser = {
         id: "user_" + Date.now(),
         name: "Context Defender",
@@ -1806,10 +1789,16 @@
         document.getElementById("userAvatar").textContent = currentUser.avatar;
         document.getElementById("userName").textContent = currentUser.name;
         document.getElementById("userEmail").textContent = currentUser.email;
-        document.getElementById("productivityValue").textContent =
-          currentUser.productivityScore;
-        document.getElementById("overviewScore").textContent =
-          currentUser.productivityScore;
+        const productivityValueEl =
+          document.getElementById("productivityValue");
+        if (productivityValueEl) {
+          productivityValueEl.textContent = currentUser.productivityScore;
+        }
+
+        const overviewScoreEl = document.getElementById("overviewScore");
+        if (overviewScoreEl) {
+          overviewScoreEl.textContent = currentUser.productivityScore;
+        }
 
         // Update settings form if elements exist
         if (document.getElementById("settingsName")) {
@@ -1858,6 +1847,9 @@
               category: "work",
               estimatedTime: 120,
               energyLevel: "high",
+              dueDate: new Date(Date.now() + 2 * 86400000)
+                .toISOString()
+                .split("T")[0],
               status: "pending",
               createdAt: new Date().toISOString(),
             },
@@ -1869,6 +1861,9 @@
               category: "learning",
               estimatedTime: 90,
               energyLevel: "medium",
+              dueDate: new Date(Date.now() + 5 * 86400000)
+                .toISOString()
+                .split("T")[0],
               status: "pending",
               createdAt: new Date().toISOString(),
             },
@@ -1895,6 +1890,7 @@
         const estimatedTime =
           parseInt(document.getElementById("taskTime").value) || 30;
         const energyLevel = document.getElementById("taskEnergy").value;
+        const dueDate = document.getElementById("taskDueDate").value;
 
         const newTask = {
           id: Date.now(),
@@ -1904,6 +1900,7 @@
           priority,
           estimatedTime,
           energyLevel,
+          dueDate: dueDate || null,
           status: "pending",
           createdAt: new Date().toISOString(),
         };
@@ -1963,10 +1960,12 @@
       };
 
       window.filterTasks = function (filter) {
+        currentTaskFilter = filter;
         renderManagedTasks(filter);
       };
 
       function renderManagedTasks(filter = "all") {
+        currentTaskFilter = filter;
         const todayTasksContainer = document.getElementById("todayTasks");
         const allTasksContainer = document.getElementById("allTasks");
 
@@ -2021,11 +2020,22 @@
         }
       }
 
+      function formatDueDate(dateStr) {
+        if (!dateStr) return "";
+        const parsed = new Date(dateStr);
+        if (Number.isNaN(parsed.getTime())) return dateStr;
+        return parsed.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        });
+      }
+
       function createTaskElement(task, showDelete = false) {
         const taskElement = document.createElement("div");
         taskElement.className = "task-item";
         taskElement.style.cssText =
           "display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #eee; transition: background 0.2s;";
+        taskElement.dataset.taskId = task.id;
 
         const priorityClass = `priority-${task.priority}`;
         const isCompleted = task.status === "completed";
@@ -2036,6 +2046,21 @@
           low: "background: #d4edda; color: #155724;",
         };
 
+        const dueDateDisplay = task.dueDate
+          ? `<div class="task-due" style="font-size: 0.85rem; color: #666; margin-top: 0.25rem; ${isCompleted ? "color: #999;" : ""}">Due ${formatDueDate(task.dueDate)}</div>`
+          : "";
+        const dueDateInput = `
+          <label style="font-size: 0.8rem; color: #666; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.35rem;">
+            Due
+            <input
+              type="date"
+              class="task-due-input"
+              value="${task.dueDate || ""}"
+              style="border: 1px solid #ddd; border-radius: 6px; padding: 0.2rem 0.4rem; font-size: 0.8rem;"
+            />
+          </label>
+        `;
+
         taskElement.innerHTML = `
           <div class="task-checkbox ${isCompleted ? "checked" : ""}" onclick="toggleTask(${task.id})" style="width: 20px; height: 20px; border: 2px solid #ddd; border-radius: 4px; margin-right: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; ${isCompleted ? "background: #000000; border-color: #000000; color: white;" : ""}">
             ${isCompleted ? '<i class="fas fa-check"></i>' : ""}
@@ -2045,6 +2070,7 @@
               ${task.title}
             </div>
             ${task.description ? `<div class="task-time" style="font-size: 0.9rem; color: #666; ${isCompleted ? "color: #999;" : ""}">${task.description}</div>` : ""}
+            ${showDelete ? dueDateInput : dueDateDisplay}
           </div>
           <div class="task-priority ${priorityClass}" style="padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; ${priorityColors[task.priority]}">
             ${task.priority}
@@ -2060,7 +2086,148 @@
           }
         `;
 
+        if (showDelete) {
+          taskElement.style.cursor = "grab";
+          taskElement.addEventListener("mousedown", (e) => {
+            if (
+              e.button !== 0 ||
+              e.target.closest("input, button, select, textarea, .task-checkbox")
+            ) {
+              return;
+            }
+            startManagedDrag(e, taskElement);
+          });
+
+          const dueInput = taskElement.querySelector(".task-due-input");
+          if (dueInput) {
+            dueInput.addEventListener("mousedown", (e) => {
+              e.stopPropagation();
+            });
+            dueInput.addEventListener("change", (e) => {
+              const updatedTask = managedTasks.find((t) => t.id === task.id);
+              if (!updatedTask) return;
+              updatedTask.dueDate = e.target.value || null;
+              saveManagedTasks();
+              renderManagedTasks(currentTaskFilter);
+            });
+          }
+        }
+
         return taskElement;
+      }
+
+      function startManagedDrag(e, taskElement) {
+        const allTasksContainer = document.getElementById("allTasks");
+        if (!allTasksContainer) return;
+
+        draggedManagedTaskId = Number(taskElement.dataset.taskId);
+        const rect = taskElement.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left;
+        const offsetY = e.clientY - rect.top;
+
+        const placeholder = document.createElement("div");
+        placeholder.className = "task-item task-placeholder";
+        placeholder.style.height = `${rect.height}px`;
+
+        taskElement.classList.add("dragging");
+        taskElement.style.position = "fixed";
+        taskElement.style.zIndex = "1000";
+        taskElement.style.width = `${rect.width}px`;
+        taskElement.style.left = `${rect.left}px`;
+        taskElement.style.top = `${rect.top}px`;
+        taskElement.style.pointerEvents = "none";
+        taskElement.style.background = "#e6f0ff";
+        taskElement.style.borderBottomColor = "#c7dcff";
+        taskElement.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.12)";
+
+        allTasksContainer.insertBefore(placeholder, taskElement.nextSibling);
+
+        managedDragState = {
+          taskElement,
+          placeholder,
+          offsetX,
+          offsetY,
+          container: allTasksContainer,
+        };
+
+        document.addEventListener("mousemove", handleManagedMouseMove);
+        document.addEventListener("mouseup", handleManagedMouseUp);
+      }
+
+      function handleManagedMouseMove(e) {
+        if (!managedDragState) return;
+        const { taskElement, placeholder, offsetX, offsetY, container } =
+          managedDragState;
+
+        taskElement.style.left = `${e.clientX - offsetX}px`;
+        taskElement.style.top = `${e.clientY - offsetY}px`;
+
+        const items = Array.from(
+          container.querySelectorAll(".task-item:not(.dragging)"),
+        );
+        const mouseY = e.clientY;
+
+        let inserted = false;
+        for (const item of items) {
+          const itemRect = item.getBoundingClientRect();
+          const midpoint = itemRect.top + itemRect.height / 2;
+          if (mouseY < midpoint) {
+            container.insertBefore(placeholder, item);
+            inserted = true;
+            break;
+          }
+        }
+
+        if (!inserted) {
+          container.appendChild(placeholder);
+        }
+      }
+
+      function handleManagedMouseUp() {
+        if (!managedDragState) return;
+        const { taskElement, placeholder, container } = managedDragState;
+
+        container.insertBefore(taskElement, placeholder);
+        placeholder.remove();
+
+        taskElement.classList.remove("dragging");
+        taskElement.style.position = "";
+        taskElement.style.zIndex = "";
+        taskElement.style.width = "";
+        taskElement.style.left = "";
+        taskElement.style.top = "";
+        taskElement.style.pointerEvents = "";
+        taskElement.style.background = "";
+        taskElement.style.borderBottomColor = "";
+        taskElement.style.boxShadow = "";
+
+        const orderedVisibleIds = Array.from(
+          container.querySelectorAll(".task-item"),
+        ).map((el) => Number(el.dataset.taskId));
+
+        if (orderedVisibleIds.length) {
+          const visibleSet = new Set(orderedVisibleIds);
+          const reorderedVisible = orderedVisibleIds.map((id) =>
+            managedTasks.find((task) => task.id === id),
+          );
+          let nextVisibleIndex = 0;
+          managedTasks = managedTasks.map((task) => {
+            if (visibleSet.has(task.id)) {
+              const replacement = reorderedVisible[nextVisibleIndex];
+              nextVisibleIndex += 1;
+              return replacement;
+            }
+            return task;
+          });
+        }
+
+        saveManagedTasks();
+        renderManagedTasks(currentTaskFilter);
+
+        document.removeEventListener("mousemove", handleManagedMouseMove);
+        document.removeEventListener("mouseup", handleManagedMouseUp);
+        managedDragState = null;
+        draggedManagedTaskId = null;
       }
 
       // Chart functions
@@ -2079,7 +2246,7 @@
             bar.style.cssText =
               "flex: 1; display: flex; flex-direction: column; align-items: center;";
             bar.innerHTML = `
-              <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #000000, #bcab79); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
+              <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #000000, #1f1f1f); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
               <div class="bar-label" style="margin-top: 0.5rem; color: #000000; font-size: 0.9rem;">${day}</div>
             `;
             chartContainer.appendChild(bar);
@@ -2099,7 +2266,7 @@
             bar.style.cssText =
               "flex: 1; display: flex; flex-direction: column; align-items: center;";
             bar.innerHTML = `
-              <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #000000, #bcab79); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
+              <div class="bar" style="width: 40px; height: ${barHeight}px; background: linear-gradient(to top, #000000, #1f1f1f); border-radius: 4px 4px 0 0; transition: height 0.3s ease;"></div>
               <div class="bar-label" style="margin-top: 0.5rem; color: #000000; font-size: 0.9rem;">${index + 1}</div>
             `;
             monthlyChart.appendChild(bar);

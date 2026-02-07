@@ -314,6 +314,19 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+.task-item.dragging {
+  background: #e6f0ff;
+  border-bottom-color: #c7dcff;
+  opacity: 1 !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  cursor: grabbing;
+}
+
+.task-placeholder {
+  border: 2px dashed #c7dcff;
+  background: transparent;
+}
+
 .task-item-content {
   flex: 1;
   display: grid;
